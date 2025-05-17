@@ -1,5 +1,10 @@
 import {correctBasicAuthData, req} from "../test-helpers";
-import {correctBlogInputData, correctBlogUpdateData} from "./common/blog-test-data";
+import {
+    correctCreateBlogInputData,
+    correctBlogUpdateData,
+    correctCreatedBlogViewModel,
+    correctUpdatedBlogViewModel
+} from "./common/blog-test-data";
 import {BlogViewModel} from "../../src/modules/blog_platform/blogs/models/blog-view-model";
 import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
 
@@ -25,7 +30,7 @@ describe('/blogs', () => {
 
     it("should return 401 trying create blog without auth data", async () => {
 
-        const res = await req.post('/blogs').send(correctBlogInputData)
+        const res = await req.post('/blogs').send(correctCreateBlogInputData)
 
         expect(res.status).toEqual(401)
 
@@ -45,11 +50,11 @@ describe('/blogs', () => {
 
         const res = await req.post('/blogs')
             .set('Authorization', correctBasicAuthData)
-            .send(correctBlogInputData)
+            .send(correctCreateBlogInputData)
 
         expect(res.status).toEqual(201)
 
-        expect(res.body).toEqual({id: expect.any(String), ...correctBlogInputData})
+        expect(res.body).toEqual(correctCreatedBlogViewModel)
 
         blogId = res.body.id
 
@@ -62,7 +67,7 @@ describe('/blogs', () => {
 
         expect(res.status).toEqual(200)
 
-        expect(res.body).toEqual({id: blogId, ...correctBlogInputData})
+        expect(res.body).toEqual(correctCreatedBlogViewModel)
 
     })
 
@@ -84,7 +89,7 @@ describe('/blogs', () => {
 
         expect(res.body.length).toEqual(1)
 
-        expect(res.body[0]).toEqual({id: expect.any(String), ...correctBlogInputData})
+        expect(res.body[0]).toEqual(correctCreatedBlogViewModel)
 
 
     })
@@ -93,7 +98,7 @@ describe('/blogs', () => {
 
         const requests = Array.from({length: 9}, () => req.post('/blogs')
             .set('Authorization', correctBasicAuthData)
-            .send(correctBlogInputData))
+            .send(correctCreateBlogInputData))
 
 
         const response = await Promise.all(requests)
@@ -101,7 +106,7 @@ describe('/blogs', () => {
         response.forEach(res => {
             expect(res.status).toEqual(201)
 
-            expect(res.body).toEqual({id: expect.any(String), ...correctBlogInputData})
+            expect(res.body).toEqual(correctCreatedBlogViewModel)
         })
 
 
@@ -116,7 +121,7 @@ describe('/blogs', () => {
         expect(response.body.length).toEqual(10)
 
        response.body.forEach((res:BlogViewModel) => {
-           expect(res).toEqual({id: expect.any(String), ...correctBlogInputData})
+           expect(res).toEqual(correctCreatedBlogViewModel)
        })
 
 
@@ -160,7 +165,7 @@ describe('/blogs', () => {
 
         const res = await req.get(`/blogs/${blogId}`).expect(200)
 
-        expect(res.body).toEqual({id: blogId, ...correctBlogUpdateData})
+        expect(res.body).toEqual(correctUpdatedBlogViewModel)
 
     })
 

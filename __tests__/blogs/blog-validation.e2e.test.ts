@@ -1,6 +1,6 @@
 import {generateRandomStr, reqWithAuth} from "../test-helpers";
 import {BlogViewModel} from "../../src/modules/blog_platform/blogs/models/blog-view-model";
-import {correctBlogInputData} from "./common/blog-test-data";
+import {correctCreateBlogInputData} from "./common/blog-test-data";
 import {createFieldsTests} from "../create-field-tests";
 
 
@@ -29,7 +29,7 @@ const invalidBlogUrlArr = [
 
 describe('"/blog_platform" POST validation tests', () => {
 
-    const createPostTests = createFieldsTests(correctBlogInputData, reqWithAuth, "post", '/blogs')
+    const createPostTests = createFieldsTests(correctCreateBlogInputData, reqWithAuth, "post", '/blogs')
 
 
     createPostTests('name', invalidBlogNameArr)
@@ -51,7 +51,7 @@ describe('"/blog" POST validation tests',  () => {
     beforeAll(async () => {
 
         const res = await reqWithAuth.post('/blogs')
-            .send(correctBlogInputData).expect(201)
+            .send(correctCreateBlogInputData).expect(201)
 
 
         blog = res.body
@@ -59,7 +59,7 @@ describe('"/blog" POST validation tests',  () => {
 
     })
 
-   const createTests = createFieldsTests(correctBlogInputData, reqWithAuth, "put", () => `/blogs/${blog?.id}`)
+   const createTests = createFieldsTests(correctCreateBlogInputData, reqWithAuth, "put", () => `/blogs/${blog?.id}`)
 
     createTests('name', invalidBlogNameArr)
 

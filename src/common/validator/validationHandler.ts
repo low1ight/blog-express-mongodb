@@ -21,7 +21,7 @@ export const validate = (...validationsArr: ValidationChain[][]) => {
         if (!result.isEmpty()) {
            const validationErrors: ValidationError[] = result.array({onlyFirstError: true})
 
-            console.log(validationErrors)
+
 
 
 
