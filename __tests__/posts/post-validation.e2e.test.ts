@@ -1,5 +1,5 @@
 import { generateRandomStr,  reqWithAuth} from "../test-helpers";
-import {correctBlogInputData} from "../blogs/common/blog-test-data";
+import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {correctPostInputData} from "./common/post-test-data";
 import {createFieldsTests} from "../create-field-tests";
 import {PostViewModel} from "../../src/modules/blog_platform/posts/models/post-view-model";
@@ -38,7 +38,7 @@ describe('"/posts" POST validation tests', () => {
 
     beforeAll(async () => {
 
-        const res = await reqWithAuth.post('/blogs').send(correctBlogInputData).expect(201)
+        const res = await reqWithAuth.post('/blogs').send(correctCreateBlogInputData).expect(201)
         correctBlogId = res.body.id
         createPostCorrectData = {...correctPostInputData,blogId:correctBlogId}
 
@@ -65,7 +65,7 @@ describe('"/posts" PUT validation tests', () => {
 
     beforeAll(async () => {
 
-        const res = await reqWithAuth.post('/blogs').send(correctBlogInputData).expect(201)
+        const res = await reqWithAuth.post('/blogs').send(correctCreateBlogInputData).expect(201)
         correctBlogId = res.body.id
         createPostCorrectData = {...correctPostInputData,blogId:correctBlogId}
 

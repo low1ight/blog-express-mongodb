@@ -1,6 +1,6 @@
 import {correctBasicAuthData, req} from "../test-helpers";
 import {correctPostInputData, correctPostUpdateData} from "./common/post-test-data";
-import {correctBlogInputData, correctBlogUpdateData} from "../blogs/common/blog-test-data";
+import {correctCreateBlogInputData, correctBlogUpdateData} from "../blogs/common/blog-test-data";
 import {PostInputModel} from "../../src/modules/blog_platform/posts/models/post-input-model";
 import {BlogViewModel} from "../../src/modules/blog_platform/blogs/models/blog-view-model";
 import {PostViewModel} from "../../src/modules/blog_platform/posts/models/post-view-model";
@@ -18,12 +18,15 @@ describe('/posts', () => {
 
     let post:PostViewModel
 
+    let correctCreatedPost:PostViewModel
+    let correctUpdatedPost:PostViewModel
+
     beforeAll(async () => {
 
         await testingRepository.deleteAllData()
 
         const createFirstBlogRes = await req.post('/blogs')
-            .send(correctBlogInputData)
+            .send(correctCreateBlogInputData)
             .set('Authorization', correctBasicAuthData);
 
         firstBlog = createFirstBlogRes.body
@@ -36,6 +39,21 @@ describe('/posts', () => {
 
         createPostData = {...correctPostInputData,blogId: createFirstBlogRes.body.id};
         updatePostData = {...correctPostUpdateData,blogId: createSecondBlogRes.body.id};
+
+
+         correctCreatedPost = {
+            id:expect.any(String),
+            blogName: firstBlog.name,
+            ...createPostData,
+            createdAt:expect.any(String)
+        }
+
+        correctUpdatedPost = {
+            id:expect.any(String),
+            blogName: secondBlog.name,
+            ...updatePostData,
+            createdAt:expect.any(String)
+        }
     })
 
 
@@ -77,11 +95,7 @@ describe('/posts', () => {
 
 
         expect(res.status).toEqual(201)
-        expect(res.body).toEqual({
-            id:expect.any(String),
-            blogName: firstBlog.name,
-            ...createPostData
-        })
+        expect(res.body).toEqual(correctCreatedPost)
 
 
 
@@ -94,11 +108,7 @@ describe('/posts', () => {
 
             expect(res.status).toEqual(200)
 
-            expect(res.body).toEqual({
-                id:expect.any(String),
-                blogName: firstBlog.name,
-                ...createPostData
-            })
+            expect(res.body).toEqual(correctCreatedPost)
 
     })
 
@@ -123,7 +133,7 @@ describe('/posts', () => {
         response.forEach(res => {
             expect(res.status).toEqual(201)
 
-            expect(res.body).toEqual({id: expect.any(String), blogName: firstBlog.name, ...createPostData})
+            expect(res.body).toEqual(correctCreatedPost)
 
         })
     })
@@ -136,7 +146,7 @@ describe('/posts', () => {
         expect(response.body.length).toEqual(10)
 
         response.body.forEach((res:PostViewModel) => {
-            expect(res).toEqual({id: expect.any(String),blogName: firstBlog.name, ...createPostData})
+            expect(res).toEqual(correctCreatedPost)
         })
 
     })
@@ -187,7 +197,7 @@ describe('/posts', () => {
 
         const updatedPost = await response.body.find((p:PostViewModel) => p.id === post.id)
 
-        expect(updatedPost).toEqual({id: expect.any(String), blogName: secondBlog.name, ...updatePostData})
+        expect(updatedPost).toEqual(correctUpdatedPost)
 
     })
 
