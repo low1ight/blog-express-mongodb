@@ -4,20 +4,22 @@ import {blogsQueryRepository} from "../../blogs/repositories/blogs.query.reposit
 import {postRepository} from "../repositories/post.repository";
 import {ObjectId} from "mongodb";
 import {PostInsertModel} from "../models/post-insert-model";
+import {CustomResponse} from "../../../../utils/customResponse/customResponse";
+import {CustomResponseEnum} from "../../../../utils/customResponse/customResponseEnum";
 
 
 export const postService = {
 
-    async createPost(postInputData:PostInputModel):Promise<string | null> {
+    async createPost(postInputData:PostInputModel):Promise<CustomResponse<string>> {
 
         if(!ObjectId.isValid(postInputData.blogId)) {
-            return null
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA,"Blog with this id dont exist")
         }
 
         const blog:BlogViewModel | null =  await blogsQueryRepository.getBlogById(postInputData.blogId)
 
         if(!blog){
-            return null
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA,"Blog with this id dont exist")
         }
 
         const postInsertDto:PostInsertModel = {
@@ -25,28 +27,30 @@ export const postService = {
             blogName: blog.name
         }
 
-        return  await postRepository.createPost(postInsertDto)
+        const createdPostId:string = await postRepository.createPost(postInsertDto)
+
+        return new CustomResponse(true,null,createdPostId)
 
 
     },
 
 
-    async updatePost(postInputData:PostInputModel,postId:string):Promise<boolean> {
+    async updatePost(postInputData:PostInputModel,postId:string):Promise<CustomResponse<string>> {
 
-        if(!ObjectId.isValid(postId)) return false
+        if(!ObjectId.isValid(postId)) return new CustomResponse(false,CustomResponseEnum.INVALID_URI, 'Post id dont exist')
 
         const isPostExist:boolean = await postRepository.isPostExist(postId)
 
-        if(!isPostExist) return false
+        if(!isPostExist) return new CustomResponse(false,CustomResponseEnum.INVALID_URI, 'Post id dont exist')
 
         if(!ObjectId.isValid(postInputData.blogId)) {
-            return false
+             return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'Incorrect blog id')
         }
 
         const blog:BlogViewModel | null =  await blogsQueryRepository.getBlogById(postInputData.blogId)
 
         if(!blog){
-            return false
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'Incorrect blog id')
         }
 
         //create update post dto
@@ -55,21 +59,25 @@ export const postService = {
             blogName: blog.name
         }
 
-        return await postRepository.updatePost(postInsertDto,postId)
+        await postRepository.updatePost(postInsertDto,postId)
+
+        return new CustomResponse(true,null,'ok')
 
 
     },
 
 
-    async deletePost(postId:string):Promise<boolean> {
+    async deletePost(postId:string):Promise<CustomResponse<null>> {
         const isPostExist:boolean = await postRepository.isPostExist(postId)
 
         if(!isPostExist){
 
-            return false
+            return new CustomResponse(false,CustomResponseEnum.INVALID_URI,null)
         }
 
-        return await postRepository.deletePost(postId)
+         await postRepository.deletePost(postId)
+
+        return new CustomResponse(true,null,null)
     }
 
 
