@@ -1,6 +1,4 @@
-
-
-export type PostInsertModel = {
+export type PostUpdateModel = {
     title: string;
     shortDescription: string;
     content: string;
