@@ -1,5 +1,5 @@
 export enum CustomResponseEnum {
     INVALID_INPUT_DATA = 1,
-    INVALID_ID,
+    INVALID_URI,
 
 }
