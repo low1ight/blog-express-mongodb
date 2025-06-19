@@ -3,9 +3,10 @@ import {BlogViewModel} from "../../blogs/models/blog-view-model";
 import {blogsQueryRepository} from "../../blogs/repositories/blogs.query.repository";
 import {postRepository} from "../repositories/post.repository";
 import {ObjectId} from "mongodb";
-import {PostInsertModel} from "../models/post-insert-model";
+import {PostCreateModel} from "../models/post-create-model";
 import {CustomResponse} from "../../../../utils/customResponse/customResponse";
 import {CustomResponseEnum} from "../../../../utils/customResponse/customResponseEnum";
+import {PostUpdateModel} from "../models/post-update-model";
 
 
 export const postService = {
@@ -22,9 +23,10 @@ export const postService = {
             return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA,"Blog with this id dont exist")
         }
 
-        const postInsertDto:PostInsertModel = {
+        const postInsertDto:PostCreateModel = {
             ...postInputData,
-            blogName: blog.name
+            blogName: blog.name,
+            createdAt: new Date().toISOString()
         }
 
         const createdPostId:string = await postRepository.createPost(postInsertDto)
@@ -54,7 +56,7 @@ export const postService = {
         }
 
         //create update post dto
-        const postInsertDto:PostInsertModel = {
+        const postInsertDto:PostUpdateModel = {
             ...postInputData,
             blogName: blog.name
         }

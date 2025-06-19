@@ -1,11 +1,12 @@
 import {postCollection} from "../../../../db/db.mongodb";
 import {PostDocumentModel} from "../models/post-document-model";
 import {ObjectId} from "mongodb";
-import {PostInsertModel} from "../models/post-insert-model";
+import {PostCreateModel} from "../models/post-create-model";
+import {PostUpdateModel} from "../models/post-update-model";
 
 export const postRepository = {
 
-    async createPost(dto:PostInsertModel):Promise<string> {
+    async createPost(dto:PostCreateModel):Promise<string> {
 
         const result = await postCollection.insertOne(dto as PostDocumentModel);
 
@@ -13,7 +14,7 @@ export const postRepository = {
     },
 
 
-   async updatePost(dto:PostInsertModel,postId:string) {
+   async updatePost(dto:PostUpdateModel,postId:string) {
 
         const result = await postCollection.updateOne({_id: new ObjectId(postId)},{$set: dto})
 
