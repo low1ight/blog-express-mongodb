@@ -8,6 +8,9 @@ import {blogInputValidator} from "../validators/create-blog-input-validator";
 import {validate} from "../../../../common/validator/validationHandler";
 import {postRepository} from "../../posts/repositories/post.repository";
 import {idParamValidator} from "../../../../common/validator/mongodb-id-validator";
+import {blogService} from "../application/blog.service";
+import {CustomResponse} from "../../../../utils/customResponse/customResponse";
+import {toHttpCode} from "../../../../utils/customResponse/toHttpCode";
 
 
 
@@ -36,7 +39,7 @@ blogRouter.get('/:id',validate(idParamValidator) ,async (req:Request, res:Respon
 
 blogRouter.post('/',basicAuthGuard, validate(blogInputValidator),async (req:Request, res:Response) => {
 
-    const createdBlogId = await blogsRepository.createBlog(req.body)
+    const createdBlogId = await blogService.createBlog(req.body)
     const blog = await blogsQueryRepository.getBlogById(createdBlogId)
     res.status(201).json(blog)
 })
@@ -45,15 +48,12 @@ blogRouter.post('/',basicAuthGuard, validate(blogInputValidator),async (req:Requ
 
 blogRouter.put('/:id',basicAuthGuard,validate(idParamValidator,blogInputValidator), async (req:Request, res:Response) => {
 
-    const isBlogExists = await blogsRepository.isBlogExists(req.params.id)
+    const result:CustomResponse<null> = await blogService.updateBlog(req.body,req.params.id)
 
-    if(!isBlogExists) {
-        res.status(404).json({error: "Don't exist"})
+    if(!result.isSuccessful) {
+        res.status(toHttpCode(result.errStatusCode))
         return
     }
-
-    await blogsRepository.updateBlog(req.params.id,req.body)
-    postRepository.updatePostsBlogName(req.params.id, req.body.name)
 
     res.sendStatus(204)
 })
@@ -62,14 +62,12 @@ blogRouter.put('/:id',basicAuthGuard,validate(idParamValidator,blogInputValidato
 
 blogRouter.delete('/:id',basicAuthGuard,validate(idParamValidator),async (req:Request, res:Response) => {
 
-    const isBlogExists = await blogsRepository.isBlogExists(req.params.id)
+    const result:CustomResponse<null> = await blogService.deleteBlog(req.params.id)
 
-    if(!isBlogExists) {
-        res.status(404).json({error: "Don't exist"})
+    if(!result.isSuccessful) {
+        res.status(toHttpCode(result.errStatusCode))
         return
     }
-
-    await blogsRepository.deleteBlog(req.params.id)
 
     res.sendStatus(204)
 })

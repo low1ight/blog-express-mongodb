@@ -12,15 +12,10 @@ import {ObjectId} from "mongodb";
 }
 
 export const blogsRepository = {
-   async createBlog(blog:BlogInputModel) {
+   async createBlog(blog:BlogInsertModel) {
 
-       const insertData: BlogInsertModel = {
-           ...blog,
-           createdAt: new Date().toISOString(),
-           isMembership: false
-       };
 
-       const result = await blogCollection.insertOne(insertData as BlogDocumentModel);
+       const result = await blogCollection.insertOne(blog as BlogDocumentModel);
 
        return result.insertedId.toString()
 
