@@ -27,10 +27,12 @@ export const blogService = {
 
         await blogsRepository.updateBlog(blogId,dto)
 
+        await postRepository.updatePostsBlogName(blogId, dto.name)
+
         return new CustomResponse(true,null,null)
 
-        //fix
-        //await postRepository.updatePostsBlogName(req.params.id, req.body.name)
+
+
     },
 
     async deleteBlog(blogId:string) {

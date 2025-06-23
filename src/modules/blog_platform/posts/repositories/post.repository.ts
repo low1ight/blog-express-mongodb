@@ -37,7 +37,7 @@ export const postRepository = {
 
 
     async updatePostsBlogName(id:string,blogName:string) {
-        const result = await postCollection.updateOne({_id:new ObjectId(id)},{$set:{blogName:blogName}})
+        const result = await postCollection.updateMany({blogId:new ObjectId(id)},{$set:{blogName:blogName}})
 
         return result.matchedCount === 1
     }

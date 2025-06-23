@@ -25,6 +25,7 @@ export const postService = {
 
         const postInsertDto:PostCreateModel = {
             ...postInputData,
+            blogId: new ObjectId(postInputData.blogId),
             blogName: blog.name,
             createdAt: new Date().toISOString()
         }
@@ -58,6 +59,7 @@ export const postService = {
         //create update post dto
         const postInsertDto:PostUpdateModel = {
             ...postInputData,
+            blogId: new ObjectId(postInputData.blogId),
             blogName: blog.name
         }
 

@@ -53,11 +53,12 @@ blogRouter.put('/:id',basicAuthGuard,validate(idParamValidator,blogInputValidato
     const result:CustomResponse<null> = await blogService.updateBlog(req.body,req.params.id)
 
     if(!result.isSuccessful) {
-        res.status(toHttpCode(result.errStatusCode))
+        res.sendStatus(toHttpCode(result.errStatusCode))
         return
     }
 
     res.sendStatus(204)
+    return
 })
 
 
@@ -67,7 +68,7 @@ blogRouter.delete('/:id',basicAuthGuard,validate(idParamValidator),async (req:Re
     const result:CustomResponse<null> = await blogService.deleteBlog(req.params.id)
 
     if(!result.isSuccessful) {
-        res.status(toHttpCode(result.errStatusCode))
+        res.sendStatus(toHttpCode(result.errStatusCode))
         return
     }
 
