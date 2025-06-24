@@ -1,9 +1,15 @@
-import {Request, Response} from "express";
+import {Response} from "express";
 import {BlogViewModel} from "../../models/blog-view-model";
 import {blogsQueryRepository} from "../../repositories/blogs.query.repository";
+import {RequestWithQuery} from "../../../../../common/types/RequestTypes";
+import {BlogQuery, BlogQueryMapper} from "../../features/blogQueryMapper";
+import {Paginator} from "../../../../../utils/paginator/paginator";
 
-export const getBlogsHandler = async (req:Request, res:Response<BlogViewModel[]>) => {
-    const blogs:BlogViewModel[] = await blogsQueryRepository.getBlogs()
+export const getBlogsHandler = async (req:RequestWithQuery<BlogQuery>, res:Response<Paginator<BlogViewModel>>) => {
+
+    const mappedQuery = new BlogQueryMapper(req.query);
+
+    const blogs:Paginator<BlogViewModel> = await blogsQueryRepository.getBlogs(mappedQuery)
 
     res
         .status(200)
