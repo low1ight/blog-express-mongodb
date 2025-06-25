@@ -1,6 +1,6 @@
 import {BlogViewModel} from "../models/blog-view-model";
 import {blogCollection} from "../../../../db/db.mongodb";
-import {ObjectId} from "mongodb";
+import {ObjectId, SortDirection} from "mongodb";
 import {toBlogViewModel} from "../features/toBlogViewModel";
 import {BlogDocumentModel} from "../models/blog-document-model";
 import {BlogQueryMapper} from "../features/blogQueryMapper";
@@ -8,10 +8,10 @@ import {Paginator} from "../../../../utils/paginator/paginator";
 
 export const blogsQueryRepository = {
 
-   async getBlogs({pageNumber,pageSize,searchNameTerm}:BlogQueryMapper):Promise<Paginator<BlogViewModel>> {
+   async getBlogs({sortDirection,sortBy,pageNumber,pageSize,searchNameTerm}:BlogQueryMapper):Promise<Paginator<BlogViewModel>> {
 
        const skipCount = (pageNumber - 1) * pageSize
-       const filter = searchNameTerm ? {name: searchNameTerm} : {}
+       const filter = searchNameTerm ? {name: { $regex: searchNameTerm, $options: "i" } } : {}
 
        const totalCount:number = await blogCollection
            .countDocuments(filter)
@@ -20,6 +20,7 @@ export const blogsQueryRepository = {
        const blogs:BlogDocumentModel[] = await blogCollection
            .find(filter)
            .skip(skipCount)
+           .sort({[sortBy]:sortDirection as SortDirection})
            .limit(pageSize)
            .toArray();
 
