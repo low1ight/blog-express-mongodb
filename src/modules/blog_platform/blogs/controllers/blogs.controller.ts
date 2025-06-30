@@ -8,6 +8,8 @@ import {getBlogByIdHandler} from "./handlers/getBlogByIdHandler";
 import {createBlogHandler} from "./handlers/createBlogHandler";
 import {updateBlogHandler} from "./handlers/updateBlogHandler";
 import {deleteBlogHandler} from "./handlers/deleteBlogHandler";
+import {postForBlogInputValidator} from "../../posts/vlidators/post-input-validator";
+import {createPostForBlog} from "./handlers/createPostForBlog";
 
 
 
@@ -23,3 +25,5 @@ blogRouter.post('/',basicAuthGuard, validate(blogInputValidator), createBlogHand
 blogRouter.put('/:id',basicAuthGuard,validate(idParamValidator,blogInputValidator), updateBlogHandler)
 
 blogRouter.delete('/:id',basicAuthGuard,validate(idParamValidator), deleteBlogHandler)
+
+blogRouter.post('/:id/posts',basicAuthGuard, validate(postForBlogInputValidator), createPostForBlog)

@@ -1,11 +1,11 @@
 import {body} from "express-validator";
 import {VALIDATION_ERR_MSG} from "../../../../common/validator/validation-error-messages";
 
-const fields = [ 'title', 'shortDescription', 'content', 'blogId']
+const fields = [ 'title', 'shortDescription', 'content']
 
 
 
-export const postInputValidator = [
+export const postForBlogInputValidator = [
 
     ...fields.map((i:string)=> body(i).trim().notEmpty().withMessage(VALIDATION_ERR_MSG.isEmpty)),
 
@@ -21,11 +21,24 @@ export const postInputValidator = [
         .isLength({min:3,max:30}).withMessage(VALIDATION_ERR_MSG.lengthMinMax(3,1000)),
 
 
-    // body('blogId')
-    //     .isUUID().withMessage(VALIDATION_ERR_MSG.isUUID)
-    //     .custom(isBlogExist).withMessage(VALIDATION_ERR_MSG.isBlogExist)
-    // ,
+
 
 
 ]
+
+
+export const postInputValidator = [
+
+    ...postForBlogInputValidator,
+
+
+    body('blogId')
+        .trim().notEmpty().withMessage(VALIDATION_ERR_MSG.isEmpty)
+        .isMongoId(),
+
+
+]
+
+
+
 
