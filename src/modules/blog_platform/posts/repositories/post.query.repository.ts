@@ -10,15 +10,18 @@ import {Paginator} from "../../../../utils/paginator/paginator";
 export const postQueryRepository = {
 
 
-    async getPosts({sortDirection,sortBy,pageNumber,pageSize}:BaseQueryMapper):Promise<Paginator<PostViewModel>> {
+    async getPosts({sortDirection,sortBy,pageNumber,pageSize}:BaseQueryMapper,id:string):Promise<Paginator<PostViewModel>> {
 
         const skipCount = (pageNumber - 1) * pageSize
 
         const totalCount:number = await postCollection.countDocuments()
 
 
+        const filter = ObjectId.isValid(id) ? {blogId: new ObjectId(id)} : {}
+
+
         const posts:PostDocumentModel[] = await postCollection
-            .find()
+            .find(filter)
             .skip(skipCount)
             .sort({[sortBy]:sortDirection as SortDirection})
             .limit(pageSize)

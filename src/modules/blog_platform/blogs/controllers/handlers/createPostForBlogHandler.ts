@@ -8,7 +8,7 @@ import {postQueryRepository} from "../../../posts/repositories/post.query.reposi
 import {PostForBlogInputModel} from "../../../posts/models/post-for-blog-input-model";
 
 
-export const createPostForBlog = async (req:RequestWithParamAndBody<Id,PostForBlogInputModel>, res:Response<PostViewModel>) => {
+export const createPostForBlogHandler = async (req:RequestWithParamAndBody<Id,PostForBlogInputModel>, res:Response<PostViewModel>) => {
 
     const response:CustomResponse<string> = await postService.createPost({blogId:req.params.id,...req.body});
 
