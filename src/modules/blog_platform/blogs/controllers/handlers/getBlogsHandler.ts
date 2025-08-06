@@ -9,8 +9,6 @@ export const getBlogsHandler = async (req:RequestWithQuery<BlogQuery>, res:Respo
 
     const mappedQuery = new BlogQueryMapper(req.query);
 
-    console.log(mappedQuery);
-
     const blogs:Paginator<BlogViewModel> = await blogsQueryRepository.getBlogs(mappedQuery)
 
     res

@@ -23,7 +23,9 @@ describe('/blogs', () => {
         const res = await req.get('/blogs')
             .expect(200)
 
-        expect(res.body).toEqual([])
+
+
+        expect(res.body.items).toEqual([])
 
     })
 
@@ -87,9 +89,9 @@ describe('/blogs', () => {
 
         expect(res.status).toEqual(200)
 
-        expect(res.body.length).toEqual(1)
+        expect(res.body.items.length).toEqual(1)
 
-        expect(res.body[0]).toEqual(correctCreatedBlogViewModel)
+        expect(res.body.items[0]).toEqual(correctCreatedBlogViewModel)
 
 
     })
@@ -118,9 +120,9 @@ describe('/blogs', () => {
 
         expect(response.status).toEqual(200)
 
-        expect(response.body.length).toEqual(10)
+        expect(response.body.items.length).toEqual(10)
 
-       response.body.forEach((res:BlogViewModel) => {
+       response.body.items.forEach((res:BlogViewModel) => {
            expect(res).toEqual(correctCreatedBlogViewModel)
        })
 
@@ -194,9 +196,9 @@ describe('/blogs', () => {
 
         expect(response.status).toEqual(200)
 
-        expect(response.body.length).toEqual(9)
+        expect(response.body.items.length).toEqual(9)
 
-        expect(response.body.find((i:BlogViewModel) => i.id === blogId)).toEqual(undefined)
+        expect(response.body.items.find((i:BlogViewModel) => i.id === blogId)).toEqual(undefined)
 
     })
 

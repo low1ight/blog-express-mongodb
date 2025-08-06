@@ -38,20 +38,20 @@ describe('/posts', () => {
         secondBlog = createSecondBlogRes.body
 
         createPostData = {...correctPostInputData,blogId: createFirstBlogRes.body.id};
-        updatePostData = {...correctPostUpdateData,blogId: createSecondBlogRes.body.id};
+        updatePostData = {...correctPostInputData,blogId: createSecondBlogRes.body.id};
 
 
          correctCreatedPost = {
             id:expect.any(String),
             blogName: firstBlog.name,
-            ...createPostData,
+            ...correctPostInputData,
             createdAt:expect.any(String)
         }
 
         correctUpdatedPost = {
             id:expect.any(String),
             blogName: secondBlog.name,
-            ...updatePostData,
+            ...correctPostInputData,
             createdAt:expect.any(String)
         }
     })
@@ -64,7 +64,7 @@ describe('/posts', () => {
 
       expect(res.status).toEqual(200)
 
-      expect(res.body).toEqual([])
+      expect(res.body.items).toEqual([])
 
     })
 
@@ -92,6 +92,7 @@ describe('/posts', () => {
 
         post = res.body
 
+       console.log(res.body)
 
 
         expect(res.status).toEqual(201)
@@ -143,9 +144,9 @@ describe('/posts', () => {
 
         expect(response.status).toEqual(200)
 
-        expect(response.body.length).toEqual(10)
+        expect(response.body.items.length).toEqual(10)
 
-        response.body.forEach((res:PostViewModel) => {
+        response.body.items.forEach((res:PostViewModel) => {
             expect(res).toEqual(correctCreatedPost)
         })
 
@@ -193,9 +194,9 @@ describe('/posts', () => {
 
         expect(response.status).toEqual(200)
 
-        expect(response.body.length).toEqual(10)
+        expect(response.body.items.length).toEqual(10)
 
-        const updatedPost = await response.body.find((p:PostViewModel) => p.id === post.id)
+        const updatedPost = await response.body.items.find((p:PostViewModel) => p.id === post.id)
 
         expect(updatedPost).toEqual(correctUpdatedPost)
 
@@ -234,7 +235,7 @@ describe('/posts', () => {
 
         expect(response.status).toEqual(200)
 
-        expect(response.body.length).toEqual(9)
+        expect(response.body.items.length).toEqual(9)
     })
 
 })

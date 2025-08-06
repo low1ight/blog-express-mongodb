@@ -10,14 +10,18 @@ import {Paginator} from "../../../../utils/paginator/paginator";
 export const postQueryRepository = {
 
 
-    async getPosts({sortDirection,sortBy,pageNumber,pageSize}:BaseQueryMapper,id:string):Promise<Paginator<PostViewModel>> {
+    async getPosts({sortDirection,sortBy,pageNumber,pageSize}:BaseQueryMapper,blogId?:string):Promise<Paginator<PostViewModel>> {
 
         const skipCount = (pageNumber - 1) * pageSize
 
         const totalCount:number = await postCollection.countDocuments()
 
+        let id:string | null
+        if(blogId && ObjectId.isValid(blogId)) id = blogId
+        else id = null
 
-        const filter = ObjectId.isValid(id) ? {blogId: new ObjectId(id)} : {}
+
+        const filter = id ? {blogId: new ObjectId(id)} : {}
 
 
         const posts:PostDocumentModel[] = await postCollection
