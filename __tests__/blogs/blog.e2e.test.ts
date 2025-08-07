@@ -3,7 +3,7 @@ import {
     correctCreateBlogInputData,
     correctBlogUpdateData,
     correctCreatedBlogViewModel,
-    correctUpdatedBlogViewModel
+    correctUpdatedBlogViewModel, correctPostForBlogInputData
 } from "./common/blog-test-data";
 import {BlogViewModel} from "../../src/modules/blog_platform/blogs/models/blog-view-model";
 import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
@@ -11,6 +11,7 @@ import {testingRepository} from "../../src/modules/testing/repositories/testing.
 describe('/blogs', () => {
 
     let blogId:string
+    let secondBlogId:string
 
 
     beforeAll(async () => {
@@ -200,7 +201,50 @@ describe('/blogs', () => {
 
         expect(response.body.items.find((i:BlogViewModel) => i.id === blogId)).toEqual(undefined)
 
+
+        blogId = response.body.items[0].id
+        secondBlogId = response.body.items[1].id
+
     })
+
+
+    it('should return 401 trying create post for blog without auth', async () => {
+
+        await req.post(`/blogs/${blogId}/posts`).expect(401)
+
+    })
+
+    it('should return 404 if delete non-existed blog', async () => {
+
+        await req.post(`/blogs/123asd/posts`).set('Authorization', correctBasicAuthData).send(correctPostForBlogInputData).expect(404)
+
+    })
+
+    it('should successful create post for blog', async () => {
+
+        await req.post(`/blogs/${blogId}/posts`).set('Authorization', correctBasicAuthData).send(correctPostForBlogInputData).expect(201)
+
+    })
+    it('should successful create post for blog', async () => {
+
+        await req.post(`/blogs/${secondBlogId}/posts`).set('Authorization', correctBasicAuthData).send(correctPostForBlogInputData).expect(201)
+
+    })
+    it('should return 404 if delete non-existed blog', async () => {
+
+
+       const response = await req.get(`/blogs/${blogId}/posts`)
+
+        expect(response.status).toEqual(200)
+
+        expect(response.body.items.length).toEqual(1)
+
+
+
+    })
+
+
+
 
 
 

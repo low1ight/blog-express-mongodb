@@ -15,6 +15,12 @@ export const correctCreatedBlogViewModel = {
 
 }
 
+export const correctPostForBlogInputData = {
+    title:"Title",
+    shortDescription:"description",
+    content:"content",
+}
+
 
 export const correctBlogUpdateData = {
     name: "Anny",
