@@ -16,6 +16,8 @@ export const blogsQueryRepository = {
        const totalCount:number = await blogCollection
            .countDocuments(filter)
 
+       console.log(totalCount)
+
 
        const blogs:BlogDocumentModel[] = await blogCollection
            .find(filter)

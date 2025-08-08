@@ -12,7 +12,7 @@ export class Paginator<T> {
         this.pageCount = Math.ceil(totalItemCount / pageSize)
         this.page = page
         this.pageSize = pageSize
-        this.totalCount = items.length
+        this.totalCount = totalItemCount
         this.items = items
 
 

@@ -34,7 +34,7 @@ describe('/blogs', () => {
         expect(result.pageCount).toEqual(2)
         expect(result.page).toEqual(1)
         expect(result.pageSize).toEqual(10)
-        expect(result.totalCount).toEqual(10)
+        expect(result.totalCount).toEqual(11)
 
         //correct blogs view model
         const correctBlogs = [...createdBlogsViewModelArr].reverse().slice(0,10)
@@ -55,7 +55,7 @@ describe('/blogs', () => {
         expect(result.pageCount).toEqual(3)
         expect(result.page).toEqual(3)
         expect(result.pageSize).toEqual(5)
-        expect(result.totalCount).toEqual(1)
+        expect(result.totalCount).toEqual(11)
 
         //  correct blogs view model
         const correctBlogs = [...createdBlogsViewModelArr].reverse().slice(10)
@@ -78,7 +78,7 @@ describe('/blogs', () => {
         expect(result.pageCount).toEqual(2)
         expect(result.page).toEqual(1)
         expect(result.pageSize).toEqual(10)
-        expect(result.totalCount).toEqual(10)
+        expect(result.totalCount).toEqual(11)
 
         // correct blogs view model
         const correctBlogs = [...createdBlogsViewModelArr].slice(0,10)
@@ -104,7 +104,7 @@ describe('/blogs', () => {
         expect(result.pageCount).toEqual(3)
         expect(result.page).toEqual(1)
         expect(result.pageSize).toEqual(5)
-        expect(result.totalCount).toEqual(5)
+        expect(result.totalCount).toEqual(11)
 
         //  correct blogs view model
         const correctBlogs = [...createdBlogsViewModelArr].sort((a,b) => a.name.localeCompare(b.name)).slice(0,5)
