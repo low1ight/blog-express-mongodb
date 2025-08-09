@@ -5,6 +5,7 @@ import {postsRouter} from "./modules/blog_platform/posts/controllers/posts.contr
 import {SETTINGS} from "./settings";
 import {runDB} from "./db/db.mongodb";
 import {testingRouter} from "./modules/testing/controller/testing.controller";
+import {userRouter} from "./modules/users_module/users/controllers/users.controller";
 
 
 
@@ -28,4 +29,5 @@ app.get('/', (req:any, res:any) => {
 
 app.use('/blogs', blogRouter)
 app.use('/posts', postsRouter)
+app.use('/users', userRouter)
 app.use('/testing', testingRouter)
