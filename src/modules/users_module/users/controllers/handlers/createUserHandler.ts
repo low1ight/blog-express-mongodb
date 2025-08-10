@@ -2,6 +2,7 @@ import {Response} from "express";
 import {RequestWithBody} from "../../../../../common/types/RequestTypes";
 import {UserInputModel} from "../../models/user-input-model";
 import {userService} from "../../application/user.service";
+import {userQueryRepository} from "../../repository/user.query.repository";
 
 export const createUserHandler = async (req:RequestWithBody<UserInputModel>, res:Response) => {
 
@@ -10,8 +11,11 @@ export const createUserHandler = async (req:RequestWithBody<UserInputModel>, res
 
    if(!result){
        res.status(400).json('This Email is already in use')
+       return
    }
 
-     res.status(201).json(result)
+   const user = await userQueryRepository.getUserById(result);
+
+     res.status(201).json(user)
 
 }
