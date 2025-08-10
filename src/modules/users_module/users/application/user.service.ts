@@ -1,6 +1,7 @@
 import {UserInputModel} from "../models/user-input-model";
 import {userRepository} from "../repository/user.repository";
 import {UserInsertModel} from "../models/user-insert-model";
+import {passwordHelper} from "../features/passwordHelper";
 
 export const userService = {
 
@@ -12,10 +13,12 @@ export const userService = {
             return null
         }
 
+        const hashedPassword = await passwordHelper.hashPassword(password)
+
         const userInsertModel:UserInsertModel = {
             login,
             email,
-            password,
+            password: hashedPassword,
             createdAt: new Date().toISOString()
 
         }
