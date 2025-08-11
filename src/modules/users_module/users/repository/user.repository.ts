@@ -1,10 +1,11 @@
 import {userCollection} from "../../../../db/db.mongodb";
 import {UserDocumentModel} from "../models/user-document-model";
 import {UserInsertModel} from "../models/user-insert-model";
+import {ObjectId} from "mongodb";
 
 export const userRepository = {
 
-    async isEmailExist(email:string):Promise<boolean> {
+    async isUserExistByEmail(email:string):Promise<boolean> {
         const result = await userCollection.findOne({email:email});
 
         return !!result
@@ -16,7 +17,19 @@ export const userRepository = {
         console.log(result.insertedId)
 
         return result.insertedId.toString()
+    },
+
+    async isUserExistById(id:string):Promise<boolean>  {
+        const result = await userCollection.findOne({_id:new ObjectId(id)});
+
+        return !!result
+    },
+
+    async deleteUser(id:string):Promise<void> {
+        await userCollection.deleteOne({_id:new ObjectId(id)});
     }
+
+
 
 
 
