@@ -27,6 +27,11 @@ export const userRepository = {
 
     async deleteUser(id:string):Promise<void> {
         await userCollection.deleteOne({_id:new ObjectId(id)});
+    },
+
+    async getUserByEmailOrLogin(loginOrEmail:string):Promise<UserDocumentModel | null> {
+        return await userCollection.findOne( { $or: [ { email: loginOrEmail }, { login: loginOrEmail } ] } )
+
     }
 
 

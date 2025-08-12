@@ -8,6 +8,11 @@ export const passwordHelper = {
 
         return  await bcrypt.hash(password, salt)
 
+    },
+
+    async comparePassword(inputPassword:string,correctPassword:string):Promise<boolean> {
+        return  await bcrypt.compare(inputPassword, correctPassword)
+
     }
 
 
