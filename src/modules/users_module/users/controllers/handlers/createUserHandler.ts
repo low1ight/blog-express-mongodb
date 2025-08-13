@@ -3,18 +3,20 @@ import {RequestWithBody} from "../../../../../common/types/RequestTypes";
 import {UserInputModel} from "../../models/user-input-model";
 import {userService} from "../../application/user.service";
 import {userQueryRepository} from "../../repository/user.query.repository";
+import {toHttpCode} from "../../../../../utils/customResponse/toHttpCode";
+import {CustomResponse} from "../../../../../utils/customResponse/customResponse";
 
 export const createUserHandler = async (req:RequestWithBody<UserInputModel>, res:Response) => {
 
-   const result:string | null = await userService.createUser(req.body)
+   const result:CustomResponse<string> = await userService.createUser(req.body)
 
 
-   if(!result){
-       res.status(400).json('This Email is already in use')
+   if(!result.isSuccessful){
+       res.status(toHttpCode(result.errStatusCode)).json(result.content)
        return
    }
 
-   const user = await userQueryRepository.getUserById(result);
+   const user = await userQueryRepository.getUserById(result.content!);
 
      res.status(201).json(user)
 

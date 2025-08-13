@@ -3,15 +3,23 @@ import {userRepository} from "../repository/user.repository";
 import {UserInsertModel} from "../models/user-insert-model";
 import {passwordHelper} from "../features/passwordHelper";
 import {ObjectId} from "mongodb";
+import {CustomResponse} from "../../../../utils/customResponse/customResponse";
+import {CustomResponseEnum} from "../../../../utils/customResponse/customResponseEnum";
 
 export const userService = {
 
-    async createUser({login,email,password}:UserInputModel):Promise<string | null>   {
+    async createUser({login,email,password}:UserInputModel):Promise<CustomResponse<string>>   {
 
         const isEmailExist = await userRepository.isUserExistByEmail(email)
 
         if(isEmailExist) {
-            return null
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'This email already exist')
+        }
+
+        const isLoginExist = await userRepository.isUserExistByLogin(login)
+
+        if(isLoginExist) {
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'This login already exist')
         }
 
         const hashedPassword = await passwordHelper.hashPassword(password)
@@ -24,7 +32,8 @@ export const userService = {
 
         }
 
-        return await userRepository.createUser(userInsertModel)
+        const result = await userRepository.createUser(userInsertModel)
+        return new CustomResponse(true,null,result)
 
     },
 

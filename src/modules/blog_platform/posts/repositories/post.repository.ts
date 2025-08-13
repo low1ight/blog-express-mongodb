@@ -40,6 +40,10 @@ export const postRepository = {
         const result = await postCollection.updateMany({blogId:new ObjectId(id)},{$set:{blogName:blogName}})
 
         return result.matchedCount === 1
+    },
+
+    async deleteAllBlogPosts(blogId:string) {
+        await postCollection.deleteMany({blogId: new ObjectId(blogId)})
     }
 
 

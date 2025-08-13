@@ -42,7 +42,9 @@ export const blogService = {
             return new CustomResponse(false,CustomResponseEnum.INVALID_URI,null)
         }
 
-         await blogsRepository.deleteBlog(blogId)
+        await blogsRepository.deleteBlog(blogId)
+
+        await postRepository.deleteAllBlogPosts(blogId)
 
         return new CustomResponse(true,null,null)
 

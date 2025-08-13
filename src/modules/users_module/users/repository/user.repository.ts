@@ -11,6 +11,12 @@ export const userRepository = {
         return !!result
     },
 
+    async isUserExistByLogin(login:string):Promise<boolean> {
+        const result = await userCollection.findOne({login:login});
+
+        return !!result
+    },
+
     async createUser(userDto:UserInsertModel) {
         const result = await userCollection.insertOne(userDto as UserDocumentModel);
 
