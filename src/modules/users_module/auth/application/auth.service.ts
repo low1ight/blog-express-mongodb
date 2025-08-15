@@ -1,6 +1,7 @@
 import {LoginInputModel} from "../models/login-input-model";
 import {userRepository} from "../../users/repository/user.repository";
 import {passwordHelper} from "../../users/features/passwordHelper";
+import {jwtService} from "./jwt.service";
 
 
 export const authService = {
@@ -10,11 +11,17 @@ export const authService = {
 
       const user = await userRepository.getUserByEmailOrLogin(loginOrEmail)
 
-      if(!user){
-          return false
-      }
+      if(!user) return null
 
-      return await passwordHelper.comparePassword(password, user.password)
+
+      const result = await passwordHelper.comparePassword(password, user.password)
+
+      if(!result) return null
+
+
+      return jwtService.sign(user._id.toString())
+
+
 
 
     }

@@ -12,6 +12,8 @@ export const loginHandler = async (req:RequestWithBody<LoginInputModel>, res:Res
         return
     }
 
-     res.sendStatus(204)
+
+
+     res.status(201).json(result)
 
 }
