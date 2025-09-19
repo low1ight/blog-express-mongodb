@@ -7,6 +7,7 @@ import {runDB} from "./db/db.mongodb";
 import {testingRouter} from "./modules/testing/controller/testing.controller";
 import {userRouter} from "./modules/users_module/users/controllers/users.controller";
 import {authRouter} from "./modules/users_module/auth/controllers/auth.controller";
+import {commentsRouter} from "./modules/blog_platform/comments/controllers/comments.controller";
 
 
 
@@ -31,5 +32,6 @@ app.get('/', (req:any, res:any) => {
 app.use('/blogs', blogRouter)
 app.use('/posts', postsRouter)
 app.use('/users', userRouter)
+app.use('/comments', commentsRouter)
 app.use('/testing', testingRouter)
 app.use('/auth', authRouter)

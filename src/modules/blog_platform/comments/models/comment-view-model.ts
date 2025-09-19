@@ -1,7 +1,7 @@
 import {ObjectId} from "mongodb";
 
 export type CommentViewModel = {
-    id: ObjectId
+    id: string
     content:string
     commentatorInfo:{
         userId: ObjectId

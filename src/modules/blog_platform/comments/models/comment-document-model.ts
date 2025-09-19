@@ -1,7 +1,7 @@
 import {ObjectId} from "mongodb";
 
 export type  CommentDocumentModel = {
-    id: ObjectId
+    _id: ObjectId
     content:string
     userId: ObjectId
     userLogin: string
