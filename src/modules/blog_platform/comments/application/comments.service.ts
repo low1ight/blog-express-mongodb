@@ -40,15 +40,11 @@ export const commentsService = {
     },
 
 
-
-
     async deleteComment(id:string,userId:string) {
 
         const comment = await commentRepository.getCommentById(id)
 
         if(!comment) return new CustomResponse(false,CustomResponseEnum.INVALID_URI, `comment id: ${id} not found`);
-
-        console.log(userId)
 
         if(comment.userId.toString() !== userId) return new CustomResponse(false, CustomResponseEnum.NO_ACCESS,'Cant delete the comment that is not user own')
 
@@ -56,6 +52,20 @@ export const commentsService = {
 
         return new CustomResponse(true,null,'successful deleted')
 
+
+    },
+
+    async updateComment(commentId:string, commentUpdateData:CommentInputModel, userId:string) {
+
+        const comment = await commentRepository.getCommentById(commentId)
+
+        if(!comment) return new CustomResponse(false,CustomResponseEnum.INVALID_URI, `comment id: ${commentId} not found`);
+
+        if(comment.userId.toString() !== userId) return new CustomResponse(false, CustomResponseEnum.NO_ACCESS,'Cant delete the comment that is not user own')
+
+        await commentRepository.commentUpdate(commentId, commentUpdateData.content)
+
+        return new CustomResponse(true,null,'successful updated')
 
     }
 

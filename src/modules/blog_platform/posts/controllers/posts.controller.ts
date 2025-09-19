@@ -9,7 +9,7 @@ import {createPostHandler} from "./handlers/createPostHandler";
 import {updatePostHandler} from "./handlers/updatePostHandler";
 import {deletePostHandler} from "./handlers/deletePostHandler";
 import {createPostCommentHandler} from "./handlers/createPostCommentHandler";
-import {commentInputValidator} from "../../comments/validators/create-comment-input-validator";
+import {commentInputValidator} from "../../comments/validators/comment-input-validator";
 import {jwtAuthGuard} from "../../../users_module/auth/guards/jwt.auth.guard";
 
 
