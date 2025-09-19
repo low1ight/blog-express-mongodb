@@ -2,6 +2,7 @@ import {LoginInputModel} from "../models/login-input-model";
 import {userRepository} from "../../users/repository/user.repository";
 import {passwordHelper} from "../../users/features/passwordHelper";
 import {jwtService} from "./jwt.service";
+import {toMeViewModel} from "../features/toMeViewModel";
 
 
 export const authService = {
@@ -22,8 +23,16 @@ export const authService = {
       return jwtService.sign(user._id.toString())
 
 
+    },
 
 
+    async me(userId:string) {
+
+        const user = await userRepository.getUserById(userId)
+
+        if(!user) return null
+
+        return toMeViewModel(user)
     }
 
 
