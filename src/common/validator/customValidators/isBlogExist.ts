@@ -2,6 +2,6 @@ import {blogsRepository} from "../../../modules/blog_platform/blogs/repositories
 
 
 
-export const isBlogExist = (value:string):boolean => {
+export const isBlogExist = async (value:string):Promise<boolean> => {
     return blogsRepository.isBlogExists(value)
 }

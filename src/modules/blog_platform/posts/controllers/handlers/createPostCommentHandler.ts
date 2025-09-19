@@ -9,19 +9,22 @@ import {CommentViewModel} from "../../../comments/models/comment-view-model";
 
 export const createPostCommentHandler = async (req:RequestWithParamAndBody<Id,CommentInputModel>, res:Response<CommentViewModel>) => {
 
-    const response:CustomResponse<string> = await commentsService.createComment(req.body,req.params.id,req.user.userId)
+
+
+
+    const response:CustomResponse<string> = await commentsService.createComment(req.body,req.params.id,req.user.id)
 
     if(!response.isSuccessful){
         res.sendStatus(toHttpCode(response.errStatusCode))
         return
     }
 
-    const comment:CommentViewModel = await commentQueryRepository.getCommentById(response.content!)
+    const comment:CommentViewModel | null = await commentQueryRepository.getCommentById(response.content!)
 
 
 
 
-    res.status(201).send(comment)
+    res.status(201).send(comment!)
 
 
 }

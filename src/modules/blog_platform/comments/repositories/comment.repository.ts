@@ -17,6 +17,20 @@ export const commentRepository = {
 
         return result.insertedId.toString()
 
+    },
+
+    async deleteComment(id:string) {
+        await commentCollection.deleteOne({_id:new ObjectId(id)})
+
+    },
+
+
+
+    async getCommentById(id:string):Promise<CommentDocumentModel | null> {
+         return await commentCollection.findOne({_id:new ObjectId(id)})
+
+
+
     }
 
 

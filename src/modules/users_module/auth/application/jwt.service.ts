@@ -6,7 +6,7 @@ export const jwtService = {
 
        sign(userId:string) {
            return jwt.sign(
-               { userId },
+               { id: userId },
                '1111',
                { expiresIn: "1h" }
            );
@@ -18,7 +18,7 @@ export const jwtService = {
            let payload
            try {
                payload = jwt.verify(token, '1111') as JwtPayloadModel;
-               return {userId: payload.userId};
+               return {id: payload.id};
 
            }
            catch(err) {
