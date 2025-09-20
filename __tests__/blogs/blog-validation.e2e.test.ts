@@ -43,7 +43,7 @@ describe('"/blog_platform" POST validation tests', () => {
 
 
 
-describe('"/blog" POST validation tests',  () => {
+describe('"/blog" PUT validation tests',  () => {
 
     let blog: BlogViewModel | undefined
 
