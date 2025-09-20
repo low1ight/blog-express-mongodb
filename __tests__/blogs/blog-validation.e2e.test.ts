@@ -29,14 +29,14 @@ const invalidBlogUrlArr = [
 
 describe('"/blog_platform" POST validation tests', () => {
 
-    const createPostTests = createFieldsTests(correctCreateBlogInputData, reqWithAuth, "post", '/blogs')
+    const createBlogsTest = createFieldsTests(correctCreateBlogInputData, reqWithAuth, "post", '/blogs')
 
 
-    createPostTests('name', invalidBlogNameArr)
+    createBlogsTest('name', invalidBlogNameArr)
 
-    createPostTests('description', invalidBlogDescriptionArr)
+    createBlogsTest('description', invalidBlogDescriptionArr)
 
-    createPostTests('websiteUrl', invalidBlogUrlArr)
+    createBlogsTest('websiteUrl', invalidBlogUrlArr)
 })
 
 
