@@ -83,7 +83,6 @@ describe('/blogs', () => {
         // correct blogs view model
         const correctBlogs = [...createdBlogsViewModelArr].slice(0,10)
 
-        //console.log()
 
 
         expect(result.items).toEqual(correctBlogs)
@@ -132,7 +131,6 @@ describe('/blogs', () => {
         //  correct blogs view model
         const correctBlogs = [...createdBlogsViewModelArr].reverse().filter(i => i.name.toLowerCase().includes('tech'))
 
-         console.log(result.items)
         expect(result.items).toEqual(correctBlogs)
 
 

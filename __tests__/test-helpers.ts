@@ -9,7 +9,8 @@ export const req = agent(app)
 export const correctBasicAuthData =
     "Basic " + Buffer.from(`${SETTINGS.AUTH.BASIC_AUTH_LOGIN}:${SETTINGS.AUTH.BASIC_AUTH_PASSWORD}`).toString("base64");
 
-export const reqWithAuth = agent(app).set('Authorization', correctBasicAuthData)
+export const reqWithBasicAuth = agent(app).set('Authorization', correctBasicAuthData)
+export const reqWithBearerAuth = (token:string) => agent(app).set('Authorization', `Bearer ${token}`)
 
 
 

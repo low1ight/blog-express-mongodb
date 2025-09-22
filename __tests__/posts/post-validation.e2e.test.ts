@@ -1,4 +1,4 @@
-import { generateRandomStr,  reqWithAuth} from "../test-helpers";
+import { generateRandomStr,  reqWithBasicAuth} from "../test-helpers";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {correctPostInputData} from "./common/post-test-data";
 import {createFieldsTests} from "../create-field-tests";
@@ -38,14 +38,14 @@ describe('"/posts" POST validation tests', () => {
 
     beforeAll(async () => {
 
-        const res = await reqWithAuth.post('/blogs').send(correctCreateBlogInputData).expect(201)
+        const res = await reqWithBasicAuth.post('/blogs').send(correctCreateBlogInputData).expect(201)
         correctBlogId = res.body.id
         createPostCorrectData = {...correctPostInputData,blogId:correctBlogId}
 
     })
 
 
-    const createTests = createFieldsTests(() => createPostCorrectData,reqWithAuth,"post","/posts")
+    const createTests = createFieldsTests(() => createPostCorrectData,reqWithBasicAuth,"post","/posts")
 
     createTests('title',invalidPostTitleArr)
     createTests('shortDescription',invalidPostShortDescriptionArr)
@@ -65,12 +65,12 @@ describe('"/posts" PUT validation tests', () => {
 
     beforeAll(async () => {
 
-        const res = await reqWithAuth.post('/blogs').send(correctCreateBlogInputData).expect(201)
+        const res = await reqWithBasicAuth.post('/blogs').send(correctCreateBlogInputData).expect(201)
         correctBlogId = res.body.id
         createPostCorrectData = {...correctPostInputData,blogId:correctBlogId}
 
 
-        const postRes = await reqWithAuth.post('/posts').send(createPostCorrectData).expect(201)
+        const postRes = await reqWithBasicAuth.post('/posts').send(createPostCorrectData).expect(201)
         createdPost = postRes.body
 
 
@@ -78,7 +78,7 @@ describe('"/posts" PUT validation tests', () => {
 
 
     const createTests = createFieldsTests(() => createPostCorrectData,
-        reqWithAuth,"put",() => `/posts/${createdPost.id}`)
+        reqWithBasicAuth,"put",() => `/posts/${createdPost.id}`)
 
     createTests('title',invalidPostTitleArr)
     createTests('shortDescription',invalidPostShortDescriptionArr)

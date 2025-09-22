@@ -1,5 +1,5 @@
 import {correctBasicAuthData, req} from "../test-helpers";
-import {correctPostInputData, correctPostUpdateData} from "./common/post-test-data";
+import {correctPostInputData} from "./common/post-test-data";
 import {correctCreateBlogInputData, correctBlogUpdateData} from "../blogs/common/blog-test-data";
 import {PostInputModel} from "../../src/modules/blog_platform/posts/models/post-input-model";
 import {BlogViewModel} from "../../src/modules/blog_platform/blogs/models/blog-view-model";
@@ -91,8 +91,6 @@ describe('/posts', () => {
             .set('Authorization', correctBasicAuthData)
 
         post = res.body
-
-       console.log(res.body)
 
 
         expect(res.status).toEqual(201)

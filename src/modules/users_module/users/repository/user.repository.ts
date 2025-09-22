@@ -20,7 +20,6 @@ export const userRepository = {
     async createUser(userDto:UserInsertModel) {
         const result = await userCollection.insertOne(userDto as UserDocumentModel);
 
-        console.log(result.insertedId)
 
         return result.insertedId.toString()
     },

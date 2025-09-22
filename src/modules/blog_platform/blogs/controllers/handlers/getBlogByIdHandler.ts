@@ -4,7 +4,7 @@ import {BlogViewModel} from "../../models/blog-view-model";
 import {blogsQueryRepository} from "../../repositories/blogs.query.repository";
 
 export const getBlogByIdHandler =  async (req:RequestWithParam<Id>, res:Response<BlogViewModel>) => {
-    console.log('in')
+
     const blog:BlogViewModel | null = await blogsQueryRepository.getBlogById(req.params.id)
     if(!blog) {
         res.status(404)
