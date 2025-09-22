@@ -1,10 +1,23 @@
-export const correctCreateUserData = {
+export const correctCreateFirstUserData = {
     login: "qwerty",
     email: "qwerty@gmail.com",
     password: "qwerty"
 }
 
-export const correctLoginData = {
+export const correctCreateSecondUserData = {
+    login: "second",
+    email: "second@gmail.com",
+    password: "qwerty"
+}
+
+
+
+export const correctFirstUserLoginData = {
     loginOrEmail: "qwerty@gmail.com",
+    password: "qwerty"
+}
+
+export const correctSecondUserLoginData = {
+    loginOrEmail: "second@gmail.com",
     password: "qwerty"
 }

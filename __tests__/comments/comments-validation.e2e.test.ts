@@ -1,9 +1,9 @@
 import {correctBasicAuthData, generateRandomStr, req, reqWithBearerAuth} from "../test-helpers";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {correctPostInputData} from "../posts/common/post-test-data";
-import {correctCreateUserData, correctLoginData} from "../auth/common/auth-test-data";
+import {correctCreateFirstUserData, correctFirstUserLoginData} from "../auth/common/auth-test-data";
 import {createFieldsTests} from "../create-field-tests";
-import {correctCommentInputData} from "./common/correctCommentInputData";
+import {commentCorrectCreateInputData} from "./common/comment-test-data";
 
 const invalidContent = [
     {value: "message", case: "cant be less than 20 symbols"},
@@ -14,11 +14,12 @@ const invalidContent = [
 
 describe('POST/PUT comments validation tests', () => {
 
-    let userId: string
+
     let blogId: string
     let postId: string
     let jwtAccessToken:string
     let commentId:string
+
 
 
     beforeAll(async () => {
@@ -31,10 +32,7 @@ describe('POST/PUT comments validation tests', () => {
         //create user
         const user = await req.post('/users')
             .set('Authorization', correctBasicAuthData)
-            .send(correctCreateUserData)
-
-        userId = user.body.id
-
+            .send(correctCreateFirstUserData)
 
         //create blog
 
@@ -56,24 +54,27 @@ describe('POST/PUT comments validation tests', () => {
         //get jwt login token
 
         const login = await req.post(`/auth/login`)
-            .send(correctLoginData)
+            .send(correctFirstUserLoginData)
 
         jwtAccessToken = login.body
 
 
+       //create comment
 
         const comment = await req.post(`/posts/${postId}/comments`)
             .set('Authorization', `Bearer ${jwtAccessToken}`)
-            .send(correctCommentInputData)
+            .send(commentCorrectCreateInputData)
 
         commentId = comment.body.id
+
+
 
 
     })
 
 
     const createCommentTests = createFieldsTests(
-        correctCommentInputData,
+        commentCorrectCreateInputData,
         () => reqWithBearerAuth(jwtAccessToken),
         "post", () => `/posts/${postId}/comments`)
 
@@ -81,7 +82,7 @@ describe('POST/PUT comments validation tests', () => {
 
 
     const updateCommentTests = createFieldsTests(
-        correctCommentInputData,
+        commentCorrectCreateInputData,
         () => reqWithBearerAuth(jwtAccessToken),
         "put", () => `/comments/${commentId}`)
 

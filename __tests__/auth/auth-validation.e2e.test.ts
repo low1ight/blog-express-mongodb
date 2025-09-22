@@ -1,6 +1,6 @@
 import {createFieldsTests} from "../create-field-tests";
 import {correctBasicAuthData, req} from "../test-helpers";
-import {correctCreateUserData, correctLoginData} from "./common/auth-test-data";
+import {correctCreateFirstUserData, correctFirstUserLoginData} from "./common/auth-test-data";
 
 const invalidLoginOrEmailValues = [
     {value: "", case: "cant be an empty"},
@@ -25,7 +25,7 @@ describe('"/blog_platform" POST validation tests', () => {
 
             const res = await req.post('/users')
                 .set('Authorization', correctBasicAuthData)
-                .send(correctCreateUserData)
+                .send(correctCreateFirstUserData)
 
             expect(res.status).toEqual(201)
 
@@ -33,7 +33,7 @@ describe('"/blog_platform" POST validation tests', () => {
     })
 
 
-    const createBlogsTest = createFieldsTests(correctLoginData, req , "post", '/auth/login')
+    const createBlogsTest = createFieldsTests(correctFirstUserLoginData, req , "post", '/auth/login')
 
 
     createBlogsTest('loginOrEmail', invalidLoginOrEmailValues)

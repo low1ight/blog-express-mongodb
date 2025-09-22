@@ -8,6 +8,7 @@ export const updateCommentByIdHandler = async (req: Request, res: Response) => {
 
     const response:CustomResponse<string> = await commentsService.updateComment(req.params.id, req.body, req.user.id);
 
+
     if(!response.isSuccessful){
         res.sendStatus(toHttpCode(response.errStatusCode))
         return

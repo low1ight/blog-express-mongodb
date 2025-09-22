@@ -8,7 +8,7 @@ export const toCommentViewModel = ({ _id,
         id:_id.toString(),
         content,
         commentatorInfo:{
-            userId,
+            userId:userId.toString(),
             userLogin
         },
         createdAt

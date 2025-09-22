@@ -1,5 +1,5 @@
 import {correctBasicAuthData, req} from "../test-helpers";
-import {correctCreateUserData, correctLoginData} from "./common/auth-test-data";
+import {correctCreateFirstUserData, correctFirstUserLoginData} from "./common/auth-test-data";
 
 describe('"/blog_platform" POST validation tests', () => {
 
@@ -11,7 +11,7 @@ describe('"/blog_platform" POST validation tests', () => {
 
             const res = await req.post('/users')
                 .set('Authorization', correctBasicAuthData)
-                .send(correctCreateUserData)
+                .send(correctCreateFirstUserData)
 
             expect(res.status).toEqual(201)
 
@@ -34,7 +34,7 @@ describe('"/blog_platform" POST validation tests', () => {
 
         const res = await req.post('/auth/login')
             .set('Authorization', correctBasicAuthData)
-            .send({...correctLoginData,password: 'wrong'})
+            .send({...correctFirstUserLoginData,password: 'wrong'})
 
 
         expect(res.status).toEqual(401)
@@ -45,7 +45,7 @@ describe('"/blog_platform" POST validation tests', () => {
     it("login with  correct data should return 201 and return jwt access token in body", async () => {
 
         const res = await req.post('/auth/login')
-            .send(correctLoginData)
+            .send(correctFirstUserLoginData)
 
 
         expect(res.status).toEqual(201)

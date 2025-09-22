@@ -1,10 +1,9 @@
-import {ObjectId} from "mongodb";
 
 export type CommentViewModel = {
     id: string
     content:string
     commentatorInfo:{
-        userId: ObjectId
+        userId: string
         userLogin: string
     }
     createdAt:string
