@@ -11,6 +11,7 @@ import {deletePostHandler} from "./handlers/deletePostHandler";
 import {createPostCommentHandler} from "./handlers/createPostCommentHandler";
 import {commentInputValidator} from "../../comments/validators/comment-input-validator";
 import {jwtAuthGuard} from "../../../users_module/auth/guards/jwt.auth.guard";
+import {getPostCommentsHandler} from "./handlers/getPostsCommentsHandler";
 
 
 
@@ -27,4 +28,7 @@ postsRouter.put('/:id',basicAuthGuard,validate(idParamValidator,postInputValidat
 
 postsRouter.delete('/:id',basicAuthGuard,validate(idParamValidator), deletePostHandler)
 
+postsRouter.get('/:id/comments',validate(idParamValidator), getPostCommentsHandler)
+
 postsRouter.post('/:id/comments',jwtAuthGuard, validate(idParamValidator,commentInputValidator), createPostCommentHandler)
+

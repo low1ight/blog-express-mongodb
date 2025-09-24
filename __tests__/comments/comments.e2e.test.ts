@@ -128,7 +128,7 @@ describe('POST/PUT comments validation tests', () => {
 
     it('should return 404 trying create comment for non existing post',async () => {
 
-        const comment = await req.post(`/posts/${randomUUID()}/comments`)
+        await req.post(`/posts/${randomUUID()}/comments`)
             .set('Authorization', `Bearer ${firstJwtAccessToken}`)
             .send(commentCorrectCreateInputData)
 
@@ -206,13 +206,16 @@ describe('POST/PUT comments validation tests', () => {
     })
 
 
-    it('should return 400 trying update without update content', async () => {
 
-        const comment = await req.put(`/comments/${commentId}`)
+
+    it('should return 404 trying update non existed comment', async () => {
+
+        const comment = await req.put(`/comments/${randomUUID()}`)
             .set('Authorization', `Bearer ${firstJwtAccessToken}`)
+            .send(commentCorrectUpdateInputData)
 
 
-        expect(comment.status).toEqual(400)
+        expect(comment.status).toEqual(404)
 
     })
 
@@ -232,16 +235,70 @@ describe('POST/PUT comments validation tests', () => {
     it('should successful return updated comment with 200 status code', async () => {
 
         const comment = await req.get(`/comments/${commentId}`)
-            .send(commentCorrectCreateInputData)
 
         expect(comment.status).toEqual(200)
 
         const correctComment = {...commentCorrectViewModel,...commentCorrectUpdateInputData}
-        console.log(correctComment)
 
         expect(comment.body).toEqual(correctComment)
 
     })
+
+
+
+    it('should return 401 trying delete comment without bearer auth', async () => {
+
+        const comment = await req.delete(`/comments/${commentId}`)
+
+
+        expect(comment.status).toEqual(401)
+
+
+    })
+
+
+    it('should return 403 trying delete comment that not in your own', async () => {
+
+        const comment = await req.delete(`/comments/${commentId}`)
+            .set('Authorization', `Bearer ${secondJwtAccessToken}`)
+
+        expect(comment.status).toEqual(403)
+
+
+    })
+
+
+    it('should return 404 trying update non existed comment', async () => {
+
+        const comment = await req.delete(`/comments/${randomUUID()}`)
+            .set('Authorization', `Bearer ${firstJwtAccessToken}`)
+
+
+        expect(comment.status).toEqual(404)
+
+    })
+
+
+
+    it('should successful delete comment', async () => {
+
+        const comment = await req.delete(`/comments/${commentId}`)
+            .set('Authorization', `Bearer ${firstJwtAccessToken}`)
+
+        expect(comment.status).toEqual(204)
+
+    })
+
+
+
+    it('should return 404 for deleted comment', async () => {
+
+        const comment = await req.get(`/comments/${commentId}`)
+
+        expect(comment.status).toEqual(404)
+
+    })
+
 
 
 
