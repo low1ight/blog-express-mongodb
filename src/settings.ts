@@ -6,6 +6,11 @@ export const SETTINGS = {
         BASIC_AUTH_LOGIN: process.env.BASIC_AUTH_LOGIN || 'admin',
         BASIC_AUTH_PASSWORD: process.env.BASIC_AUTH_PASSWORD || 'qwerty'
     },
+    USER:{
+        CONFIRMATION_CODE_EXPIRATION_DATE_TIME: Number(process.env.USER_CONFIRMATION_CODE_EXPIRATION_DATE_TIME) ?
+            Number(process.env.USER_CONFIRMATION_CODE_EXPIRATION_DATE_TIME) : 5
+    },
+
     DB: {
         PORT:27017,
         NAME: "Blog",
