@@ -28,7 +28,12 @@ export const userService = {
             login,
             email,
             password: hashedPassword,
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            confirmationData:{
+                isConfirmed: true,
+                confirmationCode:'createdByAdmin',
+                confirmationCodeExpirationDate:new Date().toISOString()
+            }
 
         }
 

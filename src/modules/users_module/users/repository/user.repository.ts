@@ -34,6 +34,17 @@ export const userRepository = {
         await userCollection.deleteOne({_id:new ObjectId(id)});
     },
 
+    async getUserByConfirmationCode(code:string):Promise<UserDocumentModel | null> {
+        console.log(code);
+        return await userCollection.findOne({'confirmationData.confirmationCode':code});
+
+    },
+
+    async confirmEmailByConfirmationCode(code:string) {
+        return await userCollection.updateOne({'confirmationData.confirmationCode':code},{$set:{'confirmationData.isConfirmed':true}});
+    },
+
+
     async getUserById(id:string):Promise<UserDocumentModel | null> {
         return await userCollection.findOne({_id:new ObjectId(id)});
     },

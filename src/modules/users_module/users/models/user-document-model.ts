@@ -6,4 +6,9 @@ export type UserDocumentModel = {
     password:string,
     email:string,
     createdAt:string
+    confirmationData:{
+        isConfirmed: boolean,
+        confirmationCode:string
+        confirmationCodeExpirationDate:string
+    }
 }
