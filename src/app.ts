@@ -1,3 +1,4 @@
+import './dotenv-settings'
 import express from 'express'
 import cors from 'cors'
 import {blogRouter} from "./modules/blog_platform/blogs/controllers/blogs.controller";
