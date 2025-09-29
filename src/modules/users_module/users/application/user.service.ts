@@ -10,7 +10,7 @@ export const userService = {
 
     async createUser({login,email,password}:UserInputModel):Promise<CustomResponse<string>>   {
 
-        const isEmailExist = await userRepository.isUserExistByEmail(email)
+        const isEmailExist = await userRepository.getUserByEmail(email)
 
         if(isEmailExist) {
             return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'This email already exist')

@@ -10,13 +10,14 @@ import {UserInsertModel} from "../../users/models/user-insert-model";
 import {randomUUID} from "node:crypto";
 import {emailManager} from "./email.manager";
 import {expirationDateHelper} from "../features/expirationDateHelper";
+import {EmailCodeResendingInputModel} from "../models/emailCodeResending-input-model";
 
 
 export const authService = {
 
     async registration({login,email,password}:UserInputModel) {
 
-        const isEmailExist = await userRepository.isUserExistByEmail(email)
+        const isEmailExist = await userRepository.getUserByEmail(email)
 
         if(isEmailExist) {
             return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'This email already exist')
@@ -53,6 +54,34 @@ export const authService = {
 
          return new CustomResponse(true, null, 'successful create user')
 
+
+
+
+    },
+
+    async emailCodeResending({email}:EmailCodeResendingInputModel) {
+
+
+        const user = await userRepository.getUserByEmail(email)
+
+        if(!user) {
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'Incorrect email')
+        }
+
+
+        if(user.confirmationData.isConfirmed) {
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'Email has already confirmed')
+        }
+
+        const expirationDate:string = expirationDateHelper.createExpirationDate()
+        const confirmationCode:string = randomUUID()
+
+        await userRepository.setNewConfirmationCodeByEmail(email,confirmationCode,expirationDate)
+
+        await emailManager.sendRegistrationCode(email,confirmationCode)
+
+
+        return new CustomResponse(true, null, 'successful sent')
 
 
 

@@ -5,58 +5,63 @@ import {ObjectId} from "mongodb";
 
 export const userRepository = {
 
-    async isUserExistByEmail(email:string):Promise<boolean> {
-        const result = await userCollection.findOne({email:email});
+    async getUserByEmail(email: string): Promise<UserDocumentModel | null> {
+        return await userCollection.findOne({email: email});
+    },
+
+    async isUserExistByLogin(login: string): Promise<boolean> {
+        const result = await userCollection.findOne({login: login});
 
         return !!result
     },
 
-    async isUserExistByLogin(login:string):Promise<boolean> {
-        const result = await userCollection.findOne({login:login});
-
-        return !!result
-    },
-
-    async createUser(userDto:UserInsertModel) {
+    async createUser(userDto: UserInsertModel) {
         const result = await userCollection.insertOne(userDto as UserDocumentModel);
 
 
         return result.insertedId.toString()
     },
 
-    async isUserExistById(id:string):Promise<boolean>  {
-        const result = await userCollection.findOne({_id:new ObjectId(id)});
+    async isUserExistById(id: string): Promise<boolean> {
+        const result = await userCollection.findOne({_id: new ObjectId(id)});
 
         return !!result
     },
 
-    async deleteUser(id:string):Promise<void> {
-        await userCollection.deleteOne({_id:new ObjectId(id)});
+    async deleteUser(id: string): Promise<void> {
+        await userCollection.deleteOne({_id: new ObjectId(id)});
     },
 
-    async getUserByConfirmationCode(code:string):Promise<UserDocumentModel | null> {
+    async getUserByConfirmationCode(code: string): Promise<UserDocumentModel | null> {
         console.log(code);
-        return await userCollection.findOne({'confirmationData.confirmationCode':code});
+        return await userCollection.findOne({'confirmationData.confirmationCode': code});
 
     },
 
-    async confirmEmailByConfirmationCode(code:string) {
-        return await userCollection.updateOne({'confirmationData.confirmationCode':code},{$set:{'confirmationData.isConfirmed':true}});
+    async confirmEmailByConfirmationCode(code: string) {
+        return await userCollection.updateOne({'confirmationData.confirmationCode': code}, {$set: {'confirmationData.isConfirmed': true}});
+    },
+
+    async setNewConfirmationCodeByEmail(email: string, code: string, date: string) {
+        return await userCollection.updateOne(
+            {email: email},
+            {
+                $set: {
+                    'confirmationData.confirmationCode': code,
+                    'confirmationData.confirmationCodeExpirationDate': date
+                }
+            });
     },
 
 
-    async getUserById(id:string):Promise<UserDocumentModel | null> {
-        return await userCollection.findOne({_id:new ObjectId(id)});
+    async getUserById(id: string): Promise<UserDocumentModel | null> {
+        return await userCollection.findOne({_id: new ObjectId(id)});
     },
 
-    async getUserByEmailOrLogin(loginOrEmail:string):Promise<UserDocumentModel | null> {
-        return await userCollection.findOne( { $or: [ { email: loginOrEmail }, { login: loginOrEmail } ] } )
+    async getUserByEmailOrLogin(loginOrEmail: string): Promise<UserDocumentModel | null> {
+        return await userCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
 
     }
-
-
-
-
 
 
 }
