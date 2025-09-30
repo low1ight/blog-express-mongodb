@@ -7,9 +7,24 @@ export const SETTINGS = {
         BASIC_AUTH_PASSWORD: process.env.BASIC_AUTH_PASSWORD || 'qwerty'
     },
     USER:{
-        CONFIRMATION_CODE_EXPIRATION_DATE_TIME: Number(process.env.USER_CONFIRMATION_CODE_EXPIRATION_DATE_TIME) ?
-            Number(process.env.USER_CONFIRMATION_CODE_EXPIRATION_DATE_TIME) : 5
+        CONFIRMATION_CODE_EXPIRATION_DATE_TIME: Number(process.env.USER_CONFIRMATION_CODE_EXPIRATION_DATE_TIME) || 5
     },
+    JWT: {
+        ACCESS_TOKEN: {
+            LIFETIME: Number(process.env.JWT_ACCESS_TOKEN_LIFETIME) ?
+                Number(process.env.JWT_ACCESS_TOKEN_LIFETIME) + 'm' : '15m',
+            SECRET_KEY: process.env.JWT_ACCESS_TOKEN_SECRET_KEY || '1111'
+
+        },
+        REFRESH_TOKEN: {
+            LIFETIME: Number(process.env.JWT_REFRESH_TOKEN_LIFETIME) ?
+                Number(process.env.JWT_REFRESH_TOKEN_LIFETIME) + 'd' : '7d',
+            SECRET_KEY: process.env.JWT_REFRESH_TOKEN_SECRET_KEY || '1212'
+
+        }
+
+    },
+
 
     DB: {
         PORT:27017,
