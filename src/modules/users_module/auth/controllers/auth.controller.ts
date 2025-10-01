@@ -10,12 +10,14 @@ import {emailConfirmationInputValidator} from "../validators/emailConfirmation-i
 import {emailConfirmationHandler} from "./handlers/emailConfirmationHandler";
 import {emailRegistrationCodeResendingHandler} from "./handlers/emailRegistrationCodeResendingHandler";
 import {emailCodeResendingInputValidator} from "../validators/emailCodeResending-input-validator";
+import {refreshTokenHandler} from "./handlers/refreshTokenHandler";
 
 
 export const authRouter = Router()
 
 
 authRouter.post('/login', validate(loginInputValidator),loginHandler)
+authRouter.post('/refresh-token', refreshTokenHandler)
 authRouter.get('/me', jwtAuthGuard, meHandler)
 authRouter.post('/registration', validate(userInputValidator), registrationHandler)
 authRouter.post('/registration-confirmation',validate(emailConfirmationInputValidator), emailConfirmationHandler)

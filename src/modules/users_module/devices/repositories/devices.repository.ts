@@ -1,6 +1,7 @@
 import {DeviceInsertModel} from "../models/device-insert-model";
 import {devicesCollection} from "../../../../db/db.mongodb";
 import {DeviceDocumentModel} from "../models/device-document-model";
+import {ObjectId} from "mongodb";
 
 
 export const devicesRepository = {
@@ -11,6 +12,23 @@ export const devicesRepository = {
 
         return result.insertedId.toString()
 
+    },
+
+    async updateDeviceSessionCodeById(deviceId:string,sessionCode:string,newDate:string)  {
+        await devicesCollection.updateOne(
+            {_id:new ObjectId(deviceId)},
+            {$set: {
+                    sessionCode:sessionCode,
+                    lastSeenDate:newDate
+                }
+
+            })
+
+
+    },
+
+    async getDeviceById(deviceId:string):Promise<DeviceDocumentModel | null> {
+        return await devicesCollection.findOne({_id:new ObjectId(deviceId)})
     }
 
 

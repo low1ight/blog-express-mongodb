@@ -1,7 +1,7 @@
 export type JwtRefreshTokenPayloadModel = {
-    id: string,
-    sessionId:string,
-    sessionCode:string
+    userId: string,
+    deviceId:string,
+    deviceSessionCode:string
     iat: number,
     exp: number
 }

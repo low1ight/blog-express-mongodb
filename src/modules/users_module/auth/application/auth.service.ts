@@ -12,6 +12,7 @@ import {emailManager} from "./email.manager";
 import {expirationDateHelper} from "../features/expirationDateHelper";
 import {EmailCodeResendingInputModel} from "../models/emailCodeResending-input-model";
 import {devicesService} from "../../devices/application/devices.service";
+import {DeviceDocumentModel} from "../../devices/models/device-document-model";
 
 
 export const authService = {
@@ -108,6 +109,34 @@ export const authService = {
     },
 
 
+    async refreshToken(refreshToken: string) {
+
+        const refreshTokenPayload = jwtService.verifyRefreshToken(refreshToken)
+
+        if(!refreshTokenPayload) return null
+
+        const {userId,deviceId,deviceSessionCode} = refreshTokenPayload
+
+        //get device for this session
+
+        const device: DeviceDocumentModel | null = await devicesService.getDeviceById(deviceId)
+
+        if(!device) return null
+
+        if(device.sessionCode !== deviceSessionCode) return null
+
+        //update device and refresh token returns new couple of tokens
+
+        const newSessionCode = randomUUID()
+
+        await devicesService.updateDeviceSessionCode(deviceId, newSessionCode)
+
+        return  jwtService.sign(userId,deviceId,newSessionCode)
+
+
+    },
+
+
 
     async login({loginOrEmail, password}: LoginInputModel, ip:string) {
 
@@ -115,7 +144,6 @@ export const authService = {
         const user = await userRepository.getUserByEmailOrLogin(loginOrEmail)
 
         if (!user) return null
-
 
         const result = await passwordHelper.comparePassword(password, user.password)
 

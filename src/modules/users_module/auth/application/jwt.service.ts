@@ -1,20 +1,20 @@
 import jwt from "jsonwebtoken";
-import {UserPayloadModel} from "../models/user-payload-model";
 import {JwtAccessTokenPayloadModel} from "../models/jwt-access-token-payload-model";
 import {SETTINGS} from "../../../../settings";
 import {Tokens} from "../models/Tokens";
+import {JwtRefreshTokenPayloadModel} from "../models/jwt-refresh-token-payload-model";
 
 export const jwtService = {
 
     sign(userId: string, deviceId:string,deviceSessionCode:string,):Tokens {
         const accessToken = jwt.sign(
-            {id: userId},
+            {userId},
             SETTINGS.JWT.ACCESS_TOKEN.SECRET_KEY,
             {expiresIn: SETTINGS.JWT.ACCESS_TOKEN.LIFETIME as jwt.SignOptions['expiresIn']}
         );
 
         const refreshToken = jwt.sign(
-            {id: userId, deviceId, deviceSessionCode},
+            {userId, deviceId, deviceSessionCode},
             SETTINGS.JWT.REFRESH_TOKEN.SECRET_KEY,
             {expiresIn: SETTINGS.JWT.REFRESH_TOKEN.LIFETIME as jwt.SignOptions['expiresIn']}
         );
@@ -24,11 +24,22 @@ export const jwtService = {
     },
 
 
-    verifyAccessToken(token: string): UserPayloadModel | null {
-        let payload
+    verifyAccessToken(token: string): JwtAccessTokenPayloadModel | null {
         try {
-            payload = jwt.verify(token, SETTINGS.JWT.ACCESS_TOKEN.SECRET_KEY) as JwtAccessTokenPayloadModel;
-            return {id: payload.id};
+            return  jwt.verify(token, SETTINGS.JWT.ACCESS_TOKEN.SECRET_KEY) as JwtAccessTokenPayloadModel;
+
+        } catch (err) {
+            return null
+        }
+
+
+    },
+
+
+    verifyRefreshToken(token: string): JwtRefreshTokenPayloadModel | null {
+
+        try {
+            return jwt.verify(token, SETTINGS.JWT.REFRESH_TOKEN.SECRET_KEY) as JwtRefreshTokenPayloadModel;
 
         } catch (err) {
             return null

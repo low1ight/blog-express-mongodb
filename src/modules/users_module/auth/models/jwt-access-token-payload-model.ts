@@ -1,5 +1,5 @@
 export type JwtAccessTokenPayloadModel = {
-    id: string,
+    userId: string,
     iat: number,
     exp: number
 }

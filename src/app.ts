@@ -9,6 +9,7 @@ import {testingRouter} from "./modules/testing/controller/testing.controller";
 import {userRouter} from "./modules/users_module/users/controllers/users.controller";
 import {authRouter} from "./modules/users_module/auth/controllers/auth.controller";
 import {commentsRouter} from "./modules/blog_platform/comments/controllers/comments.controller";
+import cookieParser from "cookie-parser";
 
 
 
@@ -16,7 +17,7 @@ export const app = express()
 
 app.use(express.json())
 app.use(cors())
-
+app.use(cookieParser())
 
 //console.log(SETTINGS)
 

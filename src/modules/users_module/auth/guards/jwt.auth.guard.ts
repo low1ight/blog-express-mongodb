@@ -1,6 +1,6 @@
 import {Request, Response, NextFunction} from 'express'
 import {jwtService} from "../application/jwt.service";
-import {UserPayloadModel} from "../models/user-payload-model";
+import {JwtAccessTokenPayloadModel} from "../models/jwt-access-token-payload-model";
 
 export const jwtAuthGuard = (req:Request , res:Response , next:NextFunction): void  => {
 
@@ -19,7 +19,7 @@ export const jwtAuthGuard = (req:Request , res:Response , next:NextFunction): vo
         return
     }
 
-    const payload:UserPayloadModel | null = jwtService.verifyAccessToken(token)
+    const payload:JwtAccessTokenPayloadModel | null = jwtService.verifyAccessToken(token)
 
     if(!payload) {
         res.sendStatus(401);
