@@ -6,12 +6,16 @@ import {Tokens} from "../../models/Tokens";
 
 export const loginHandler = async (req: RequestWithBody<LoginInputModel>, res: Response) => {
 
-    const result:Tokens | null = await authService.login(req.body)
+    let ip = req.ip || 'unknown';
+
+    const result:Tokens | null = await authService.login(req.body,ip)
 
     if (!result) {
         res.sendStatus(401)
         return
     }
+
+
 
     const [accessToken, refreshToken] = result
 
