@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(cors())
 
 
-
+//console.log(SETTINGS)
 
 
 runDB(SETTINGS.DB.URL);

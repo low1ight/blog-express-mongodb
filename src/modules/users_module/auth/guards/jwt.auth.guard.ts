@@ -19,7 +19,7 @@ export const jwtAuthGuard = (req:Request , res:Response , next:NextFunction): vo
         return
     }
 
-    const payload:UserPayloadModel | null = jwtService.verify(token)
+    const payload:UserPayloadModel | null = jwtService.verifyAccessToken(token)
 
     if(!payload) {
         res.sendStatus(401);

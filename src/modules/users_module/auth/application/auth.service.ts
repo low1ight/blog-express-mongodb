@@ -11,35 +11,35 @@ import {randomUUID} from "node:crypto";
 import {emailManager} from "./email.manager";
 import {expirationDateHelper} from "../features/expirationDateHelper";
 import {EmailCodeResendingInputModel} from "../models/emailCodeResending-input-model";
+import {devicesService} from "../../devices/application/devices.service";
 
 
 export const authService = {
 
-    async registration({login,email,password}:UserInputModel) {
+    async registration({login, email, password}: UserInputModel) {
 
         const isEmailExist = await userRepository.getUserByEmail(email)
 
-        if(isEmailExist) {
-            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'This email already exist')
+        if (isEmailExist) {
+            return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'This email already exist')
         }
 
         const isLoginExist = await userRepository.isUserExistByLogin(login)
 
-        if(isLoginExist) {
-            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'This login already exist')
+        if (isLoginExist) {
+            return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'This login already exist')
         }
 
         const hashedPassword = await passwordHelper.hashPassword(password)
-        const confirmationCode:string = randomUUID()
+        const confirmationCode: string = randomUUID()
 
 
-
-        const userInsertModel:UserInsertModel = {
+        const userInsertModel: UserInsertModel = {
             login,
             email,
             password: hashedPassword,
             createdAt: new Date().toISOString(),
-            confirmationData:{
+            confirmationData: {
                 isConfirmed: false,
                 confirmationCode: confirmationCode,
                 confirmationCodeExpirationDate: expirationDateHelper.createExpirationDate()
@@ -48,59 +48,56 @@ export const authService = {
         }
 
         const result = await userRepository.createUser(userInsertModel)
-        if(result) {
-            await emailManager.sendRegistrationCode(email,confirmationCode)
+        if (result) {
+            await emailManager.sendRegistrationCode(email, confirmationCode)
         }
 
-         return new CustomResponse(true, null, 'successful create user')
-
-
+        return new CustomResponse(true, null, 'successful create user')
 
 
     },
 
-    async emailCodeResending({email}:EmailCodeResendingInputModel) {
+    async emailCodeResending({email}: EmailCodeResendingInputModel) {
 
 
         const user = await userRepository.getUserByEmail(email)
 
-        if(!user) {
-            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'Incorrect email')
+        if (!user) {
+            return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'Incorrect email')
         }
 
 
-        if(user.confirmationData.isConfirmed) {
-            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'Email has already confirmed')
+        if (user.confirmationData.isConfirmed) {
+            return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'Email has already confirmed')
         }
 
-        const expirationDate:string = expirationDateHelper.createExpirationDate()
-        const confirmationCode:string = randomUUID()
+        const expirationDate: string = expirationDateHelper.createExpirationDate()
+        const confirmationCode: string = randomUUID()
 
-        await userRepository.setNewConfirmationCodeByEmail(email,confirmationCode,expirationDate)
+        await userRepository.setNewConfirmationCodeByEmail(email, confirmationCode, expirationDate)
 
-        await emailManager.sendRegistrationCode(email,confirmationCode)
+        await emailManager.sendRegistrationCode(email, confirmationCode)
 
 
         return new CustomResponse(true, null, 'successful sent')
 
 
-
     },
 
-    async emailConfirmation(code:string){
+    async emailConfirmation(code: string) {
 
         const user = await userRepository.getUserByConfirmationCode(code)
 
-        if(!user) {
-            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'confirmation code is incorrect')
+        if (!user) {
+            return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'confirmation code is incorrect')
         }
 
-        if(user.confirmationData.isConfirmed) {
-            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'the email is already confirmed')
+        if (user.confirmationData.isConfirmed) {
+            return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'the email is already confirmed')
         }
 
-        if(expirationDateHelper.isDateExpired(user.confirmationData.confirmationCodeExpirationDate)) {
-            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, 'confirmation code is expired')
+        if (expirationDateHelper.isDateExpired(user.confirmationData.confirmationCodeExpirationDate)) {
+            return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'confirmation code is expired')
         }
 
         await userRepository.confirmEmailByConfirmationCode(code)
@@ -111,36 +108,36 @@ export const authService = {
     },
 
 
-
-
     async login({loginOrEmail, password}: LoginInputModel) {
 
 
-      const user = await userRepository.getUserByEmailOrLogin(loginOrEmail)
+        const user = await userRepository.getUserByEmailOrLogin(loginOrEmail)
 
-      if(!user) return null
-
-
-      const result = await passwordHelper.comparePassword(password, user.password)
-
-      if(!result) return null
+        if (!user) return null
 
 
-      return jwtService.sign(user._id.toString())
+        const result = await passwordHelper.comparePassword(password, user.password)
+
+        if (!result) return null
+
+        const sessionCode = randomUUID()
+
+        const deviceId = await devicesService.createDevice('ip', sessionCode)
+
+        return jwtService.sign(user._id.toString(), deviceId, sessionCode)
 
 
     },
 
 
-    async me(userId:string) {
+    async me(userId: string) {
 
         const user = await userRepository.getUserById(userId)
 
-        if(!user) return null
+        if (!user) return null
 
         return toMeViewModel(user)
     }
-
 
 
 }

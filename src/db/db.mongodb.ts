@@ -4,18 +4,21 @@ import {BlogDocumentModel} from "../modules/blog_platform/blogs/models/blog-docu
 import {PostDocumentModel} from "../modules/blog_platform/posts/models/post-document-model";
 import {UserDocumentModel} from "../modules/users_module/users/models/user-document-model";
 import {CommentDocumentModel} from "../modules/blog_platform/comments/models/comment-document-model";
+import {DeviceDocumentModel} from "../modules/users_module/devices/models/device-document-model";
 
 
 const BLOG_COLLECTION_NAME = 'blogs';
 const POST_COLLECTION_NAME = 'posts';
 const USER_COLLECTION_NAME = 'users';
 const COMMENT_COLLECTION_NAME = 'comments';
+const DEVICE_COLLECTION_NAME = 'devices';
 
 export let client: MongoClient;
 export let blogCollection: Collection<BlogDocumentModel>;
 export let postCollection: Collection<PostDocumentModel>;
 export let userCollection: Collection<UserDocumentModel>;
 export let commentCollection: Collection<CommentDocumentModel>;
+export let devicesCollection: Collection<DeviceDocumentModel>;
 
 
 export async function runDB(url: string): Promise<void> {
@@ -23,14 +26,15 @@ export async function runDB(url: string): Promise<void> {
     const db: Db = client.db(SETTINGS.DB.NAME);
 
 
-   blogCollection = db.collection<BlogDocumentModel>(BLOG_COLLECTION_NAME);
-   postCollection = db.collection<PostDocumentModel>(POST_COLLECTION_NAME);
-   userCollection = db.collection<UserDocumentModel>(USER_COLLECTION_NAME);
-   commentCollection = db.collection<CommentDocumentModel>(COMMENT_COLLECTION_NAME);
+    blogCollection = db.collection<BlogDocumentModel>(BLOG_COLLECTION_NAME);
+    postCollection = db.collection<PostDocumentModel>(POST_COLLECTION_NAME);
+    userCollection = db.collection<UserDocumentModel>(USER_COLLECTION_NAME);
+    commentCollection = db.collection<CommentDocumentModel>(COMMENT_COLLECTION_NAME);
+    devicesCollection = db.collection<DeviceDocumentModel>(DEVICE_COLLECTION_NAME);
 
     try {
         await client.connect();
-        await db.command({ ping: 1 });
+        await db.command({ping: 1});
         console.log('✅ Connected to the database');
     } catch (e) {
         await client.close();
