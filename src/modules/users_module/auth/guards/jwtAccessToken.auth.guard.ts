@@ -2,7 +2,7 @@ import {Request, Response, NextFunction} from 'express'
 import {jwtService} from "../application/jwt.service";
 import {JwtAccessTokenPayloadModel} from "../models/jwt-access-token-payload-model";
 
-export const jwtAuthGuard = (req:Request , res:Response , next:NextFunction): void  => {
+export const jwtAccessTokenAuthGuard = (req:Request , res:Response , next:NextFunction): void  => {
 
     const auth:string | undefined = req.headers['authorization'];
 

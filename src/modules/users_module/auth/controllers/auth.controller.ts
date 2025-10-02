@@ -2,7 +2,7 @@ import {Router} from "express";
 import {loginHandler} from "./handlers/loginHandler";
 import {validate} from "../../../../common/validator/validationHandler";
 import {loginInputValidator} from "../validators/login-input-validator";
-import {jwtAuthGuard} from "../guards/jwt.auth.guard";
+import {jwtAccessTokenAuthGuard} from "../guards/jwtAccessToken.auth.guard";
 import {meHandler} from "./handlers/meHandler";
 import {registrationHandler} from "./handlers/registrationHandler";
 import {userInputValidator} from "../../users/validators/create-users-input-validator";
@@ -18,7 +18,7 @@ export const authRouter = Router()
 
 authRouter.post('/login', validate(loginInputValidator),loginHandler)
 authRouter.post('/refresh-token', refreshTokenHandler)
-authRouter.get('/me', jwtAuthGuard, meHandler)
+authRouter.get('/me', jwtAccessTokenAuthGuard, meHandler)
 authRouter.post('/registration', validate(userInputValidator), registrationHandler)
 authRouter.post('/registration-confirmation',validate(emailConfirmationInputValidator), emailConfirmationHandler)
 authRouter.post('/registration-email-resending',validate(emailCodeResendingInputValidator), emailRegistrationCodeResendingHandler)

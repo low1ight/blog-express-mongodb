@@ -1,4 +1,10 @@
-import {blogCollection, postCollection, userCollection} from "../../../db/db.mongodb";
+import {
+    blogCollection,
+    commentCollection,
+    devicesCollection,
+    postCollection,
+    userCollection
+} from "../../../db/db.mongodb";
 
 
 export const testingRepository = {
@@ -8,6 +14,9 @@ export const testingRepository = {
         await blogCollection.deleteMany({});
         await postCollection.deleteMany({});
         await userCollection.deleteMany({});
+        await commentCollection.deleteMany({});
+        await devicesCollection.deleteMany({});
+
     }
 
 

@@ -8,7 +8,8 @@ export const devicesRepository = {
 
     async create(dto:DeviceInsertModel): Promise<string> {
 
-        const result = await devicesCollection.insertOne(dto as DeviceDocumentModel)
+        const result = await devicesCollection.insertOne(
+            {...dto,userId:new ObjectId(dto.userId)} as DeviceDocumentModel)
 
         return result.insertedId.toString()
 
@@ -29,6 +30,16 @@ export const devicesRepository = {
 
     async getDeviceById(deviceId:string):Promise<DeviceDocumentModel | null> {
         return await devicesCollection.findOne({_id:new ObjectId(deviceId)})
+    },
+
+    async deleteDeviceById(deviceId:string) {
+        await devicesCollection.deleteOne({_id:new ObjectId(deviceId)})
+    },
+
+    async deleteAllOtherUserDevices(deviceId:string,userId:string) {
+        await devicesCollection.deleteMany({
+            _id:{$ne:new ObjectId(deviceId)},
+            userId: new ObjectId(userId)})
     }
 
 

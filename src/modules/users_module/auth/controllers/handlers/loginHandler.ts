@@ -7,8 +7,10 @@ import {Tokens} from "../../models/Tokens";
 export const loginHandler = async (req: RequestWithBody<LoginInputModel>, res: Response) => {
 
     let ip = req.ip || 'unknown';
+    const userAgent = req.headers['user-agent'] || 'unknown';
 
-    const result:Tokens | null = await authService.login(req.body,ip)
+
+    const result:Tokens | null = await authService.login(req.body,ip,userAgent)
 
     if (!result) {
         res.sendStatus(401)

@@ -138,7 +138,7 @@ export const authService = {
 
 
 
-    async login({loginOrEmail, password}: LoginInputModel, ip:string) {
+    async login({loginOrEmail, password}: LoginInputModel, ip:string,title:string) {
 
 
         const user = await userRepository.getUserByEmailOrLogin(loginOrEmail)
@@ -149,11 +149,13 @@ export const authService = {
 
         if (!result) return null
 
+        const userId = user._id.toString()
+
         const sessionCode = randomUUID()
 
-        const deviceId = await devicesService.createDevice(ip, sessionCode)
+        const deviceId = await devicesService.createDevice(ip, sessionCode, userId, title)
 
-        return jwtService.sign(user._id.toString(), deviceId, sessionCode)
+        return jwtService.sign(userId, deviceId, sessionCode)
 
 
     },

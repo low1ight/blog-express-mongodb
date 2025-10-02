@@ -10,7 +10,7 @@ import {updatePostHandler} from "./handlers/updatePostHandler";
 import {deletePostHandler} from "./handlers/deletePostHandler";
 import {createPostCommentHandler} from "./handlers/createPostCommentHandler";
 import {commentInputValidator} from "../../comments/validators/comment-input-validator";
-import {jwtAuthGuard} from "../../../users_module/auth/guards/jwt.auth.guard";
+import {jwtAccessTokenAuthGuard} from "../../../users_module/auth/guards/jwtAccessToken.auth.guard";
 import {getPostCommentsHandler} from "./handlers/getPostsCommentsHandler";
 
 
@@ -30,5 +30,5 @@ postsRouter.delete('/:id',basicAuthGuard,validate(idParamValidator), deletePostH
 
 postsRouter.get('/:id/comments',validate(idParamValidator), getPostCommentsHandler)
 
-postsRouter.post('/:id/comments',jwtAuthGuard, validate(idParamValidator,commentInputValidator), createPostCommentHandler)
+postsRouter.post('/:id/comments',jwtAccessTokenAuthGuard, validate(idParamValidator,commentInputValidator), createPostCommentHandler)
 

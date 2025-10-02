@@ -10,6 +10,7 @@ import {userRouter} from "./modules/users_module/users/controllers/users.control
 import {authRouter} from "./modules/users_module/auth/controllers/auth.controller";
 import {commentsRouter} from "./modules/blog_platform/comments/controllers/comments.controller";
 import cookieParser from "cookie-parser";
+import {deviceRouter} from "./modules/users_module/devices/controllers/devices.controller";
 
 
 
@@ -37,3 +38,4 @@ app.use('/users', userRouter)
 app.use('/comments', commentsRouter)
 app.use('/testing', testingRouter)
 app.use('/auth', authRouter)
+app.use('/security/devices', deviceRouter)
