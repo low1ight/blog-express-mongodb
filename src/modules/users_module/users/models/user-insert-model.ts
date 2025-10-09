@@ -8,4 +8,8 @@ export type UserInsertModel = {
         confirmationCode:string
         confirmationCodeExpirationDate:string
     }
+    passwordRecovery: {
+        code:string
+        expirationDate:string
+    }
 }

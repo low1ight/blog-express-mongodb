@@ -11,4 +11,8 @@ export type UserDocumentModel = {
         confirmationCode:string
         confirmationCodeExpirationDate:string
     }
+    passwordRecovery: {
+        code:string
+        expirationDate:string
+    }
 }
