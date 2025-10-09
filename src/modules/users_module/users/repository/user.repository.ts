@@ -54,6 +54,18 @@ export const userRepository = {
     },
 
 
+    async setNewPasswordRecoveryCode(email: string, code: string, date: string) {
+        return await userCollection.updateOne(
+            {email: email},
+            {
+                $set: {
+                    'passwordRecovery.code': code,
+                    'passwordRecovery.expirationDate': date
+                }
+            });
+    },
+
+
     async getUserById(id: string): Promise<UserDocumentModel | null> {
         return await userCollection.findOne({_id: new ObjectId(id)});
     },

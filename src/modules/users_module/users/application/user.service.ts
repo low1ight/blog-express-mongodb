@@ -33,6 +33,10 @@ export const userService = {
                 isConfirmed: true,
                 confirmationCode:'createdByAdmin',
                 confirmationCodeExpirationDate:new Date().toISOString()
+            },
+            passwordRecovery: {
+                code:'',
+                expirationDate:new Date().toISOString()
             }
 
         }

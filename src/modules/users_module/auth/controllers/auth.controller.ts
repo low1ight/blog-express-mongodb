@@ -11,6 +11,8 @@ import {emailConfirmationHandler} from "./handlers/emailConfirmationHandler";
 import {emailRegistrationCodeResendingHandler} from "./handlers/emailRegistrationCodeResendingHandler";
 import {emailCodeResendingInputValidator} from "../validators/emailCodeResending-input-validator";
 import {refreshTokenHandler} from "./handlers/refreshTokenHandler";
+import {passwordRecoveryInputValidator} from "../validators/password-recovery-input-validator";
+import {passwordRecoveryHandler} from "./handlers/passwordRecoveryHandler";
 
 
 export const authRouter = Router()
@@ -20,5 +22,6 @@ authRouter.post('/login', validate(loginInputValidator),loginHandler)
 authRouter.post('/refresh-token', refreshTokenHandler)
 authRouter.get('/me', jwtAccessTokenAuthGuard, meHandler)
 authRouter.post('/registration', validate(userInputValidator), registrationHandler)
+authRouter.post('/password-recovery', validate(passwordRecoveryInputValidator), passwordRecoveryHandler)
 authRouter.post('/registration-confirmation',validate(emailConfirmationInputValidator), emailConfirmationHandler)
 authRouter.post('/registration-email-resending',validate(emailCodeResendingInputValidator), emailRegistrationCodeResendingHandler)

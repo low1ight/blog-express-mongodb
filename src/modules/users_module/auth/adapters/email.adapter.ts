@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 export const emailAdapter = {
 
 
-    async sendEmail(email:string,subject:string,html:string) {
+     async sendEmail(email:string,subject:string,html:string) {
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -14,13 +14,13 @@ export const emailAdapter = {
         });
 
 
-         await transporter.sendMail({
+          transporter.sendMail({
             from: 'Blog API',
             to: email,
             subject: subject,
             text: 'Blog API',
             html: html, // HTML body
-        });
+        }).then();
 
 
     }

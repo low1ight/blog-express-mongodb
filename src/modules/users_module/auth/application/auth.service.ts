@@ -44,6 +44,10 @@ export const authService = {
                 isConfirmed: false,
                 confirmationCode: confirmationCode,
                 confirmationCodeExpirationDate: expirationDateHelper.createExpirationDate()
+            },
+            passwordRecovery: {
+                code:'',
+                expirationDate:new Date().toISOString()
             }
 
         }
@@ -77,7 +81,7 @@ export const authService = {
 
         await userRepository.setNewConfirmationCodeByEmail(email, confirmationCode, expirationDate)
 
-        await emailManager.sendRegistrationCode(email, confirmationCode)
+        emailManager.sendRegistrationCode(email, confirmationCode)
 
 
         return new CustomResponse(true, null, 'successful sent')
@@ -105,6 +109,25 @@ export const authService = {
 
         return new CustomResponse(true, null, 'email successfully confirmed')
 
+
+    },
+
+    async passwordRecovery(email:string) {
+
+        const user = await userRepository.getUserByEmail(email)
+
+        if (!user) {
+            return
+        }
+
+        const code = randomUUID()
+        const date = new Date().toISOString()
+
+       await userRepository.setNewPasswordRecoveryCode(email,code,date)
+
+       emailManager.sendPasswordRecoveryCode(email,code)
+
+        return
 
     },
 
