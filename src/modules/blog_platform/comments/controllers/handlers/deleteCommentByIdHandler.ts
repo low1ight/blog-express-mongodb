@@ -6,7 +6,7 @@ import {toHttpCode} from "../../../../../utils/customResponse/toHttpCode";
 
 export const deleteCommentByIdHandler = async (req: Request, res: Response) => {
 
-    const response:CustomResponse<string> = await commentsService.deleteComment(req.params.id,req.user.id);
+    const response:CustomResponse<string> = await commentsService.deleteComment(req.params.id,req.user.userId);
 
     if(!response.isSuccessful){
         res.sendStatus(toHttpCode(response.errStatusCode))

@@ -6,7 +6,7 @@ import {toHttpCode} from "../../../../../utils/customResponse/toHttpCode";
 
 export const updateCommentByIdHandler = async (req: Request, res: Response) => {
 
-    const response:CustomResponse<string> = await commentsService.updateComment(req.params.id, req.body, req.user.id);
+    const response:CustomResponse<string> = await commentsService.updateComment(req.params.id, req.body, req.user.userId);
 
 
     if(!response.isSuccessful){

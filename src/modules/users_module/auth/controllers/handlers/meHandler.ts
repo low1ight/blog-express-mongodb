@@ -3,7 +3,7 @@ import {authService} from "../../application/auth.service";
 
 export const meHandler = async (req:Request, res:Response) => {
 
-    const user = await authService.me(req.user.id)
+    const user = await authService.me(req.user.userId)
 
     if(!user) {
         res.sendStatus(404)

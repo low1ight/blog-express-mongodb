@@ -12,7 +12,7 @@ export const createPostCommentHandler = async (req:RequestWithParamAndBody<Id,Co
 
 
 
-    const response:CustomResponse<string> = await commentsService.createComment(req.body,req.params.id,req.user.id)
+    const response:CustomResponse<string> = await commentsService.createComment(req.body,req.params.id,req.user.userId)
 
     if(!response.isSuccessful){
         res.sendStatus(toHttpCode(response.errStatusCode))
