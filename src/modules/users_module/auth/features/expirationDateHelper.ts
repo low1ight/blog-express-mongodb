@@ -2,8 +2,12 @@ import {SETTINGS} from "../../../../settings";
 
 export const expirationDateHelper = {
 
-    createExpirationDate() {
-        return new Date(new Date().getTime() + SETTINGS.USER.CONFIRMATION_CODE_EXPIRATION_DATE_TIME * 60000).toISOString();
+    createEmailConfirmationExpirationDate() {
+        return new Date(new Date().getTime() + SETTINGS.USER.EMAIL_CONFIRMATION_CODE_EXPIRATION_TIME * 60000).toISOString();
+    },
+
+    createPasswordRecoveryExpirationDate() {
+        return new Date(new Date().getTime() + SETTINGS.USER.PASSWORD_RECOVERY_CODE_EXPIRATION_TIME * 60000).toISOString();
     },
 
     isDateExpired(isoDate:string) {
