@@ -1,5 +1,6 @@
 import {config} from 'dotenv'
 config()
+
 export const SETTINGS = {
     PORT: process.env.APP_PORT || 3000,
     AUTH: {
@@ -7,7 +8,8 @@ export const SETTINGS = {
         BASIC_AUTH_PASSWORD: process.env.BASIC_AUTH_PASSWORD || 'qwerty'
     },
     USER:{
-        CONFIRMATION_CODE_EXPIRATION_DATE_TIME: Number(process.env.USER_CONFIRMATION_CODE_EXPIRATION_DATE_TIME) || 5
+        EMAIL_CONFIRMATION_CODE_EXPIRATION_TIME: Number(process.env.USER_CONFIRMATION_CODE_EXPIRATION_DATE_TIME) || 10,
+        PASSWORD_RECOVERY_CODE_EXPIRATION_TIME: Number(process.env.USER_PASSWORD_RECOVERY_CODE_EXPIRATION_TIME) || 20
     },
     JWT: {
         ACCESS_TOKEN: {
