@@ -32,10 +32,25 @@ export const userRepository = {
         await userCollection.deleteOne({_id: new ObjectId(id)});
     },
 
-    async getUserByConfirmationCode(code: string): Promise<UserDocumentModel | null> {
+    async getUserByEmailConfirmationCode(code: string): Promise<UserDocumentModel | null> {
         console.log(code);
         return await userCollection.findOne({'confirmationData.confirmationCode': code});
 
+    },
+
+    async getUserByPasswordConfirmationCode(code: string): Promise<UserDocumentModel | null> {
+
+        return  await userCollection.findOne({'passwordRecovery.code': code});
+
+
+
+
+    },
+
+    async setNewPasswordById(userId: string, newPassword: string) {
+        return await userCollection.updateOne(
+            {_id: new ObjectId(userId)},
+            {$set: {password: newPassword}})
     },
 
     async confirmEmailByConfirmationCode(code: string) {

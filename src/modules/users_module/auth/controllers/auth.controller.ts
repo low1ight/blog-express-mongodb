@@ -13,6 +13,8 @@ import {emailCodeResendingInputValidator} from "../validators/emailCodeResending
 import {refreshTokenHandler} from "./handlers/refreshTokenHandler";
 import {passwordRecoveryInputValidator} from "../validators/password-recovery-input-validator";
 import {passwordRecoveryHandler} from "./handlers/passwordRecoveryHandler";
+import {newPasswordInputValidator} from "../validators/newPassword-input-validator";
+import {newPasswordHandler} from "./handlers/newPasswordHandler";
 
 
 export const authRouter = Router()
@@ -21,6 +23,7 @@ export const authRouter = Router()
 authRouter.post('/login', validate(loginInputValidator),loginHandler)
 authRouter.post('/refresh-token', refreshTokenHandler)
 authRouter.get('/me', jwtAccessTokenAuthGuard, meHandler)
+authRouter.post('/new-password', validate(newPasswordInputValidator) , newPasswordHandler)
 authRouter.post('/registration', validate(userInputValidator), registrationHandler)
 authRouter.post('/password-recovery', validate(passwordRecoveryInputValidator), passwordRecoveryHandler)
 authRouter.post('/registration-confirmation',validate(emailConfirmationInputValidator), emailConfirmationHandler)

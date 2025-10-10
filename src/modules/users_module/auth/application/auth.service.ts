@@ -13,6 +13,7 @@ import {expirationDateHelper} from "../features/expirationDateHelper";
 import {EmailCodeResendingInputModel} from "../models/emailCodeResending-input-model";
 import {devicesService} from "../../devices/application/devices.service";
 import {DeviceDocumentModel} from "../../devices/models/device-document-model";
+import {NewPasswordInputModel} from "../models/newPassword-input-model";
 
 
 export const authService = {
@@ -43,7 +44,7 @@ export const authService = {
             confirmationData: {
                 isConfirmed: false,
                 confirmationCode: confirmationCode,
-                confirmationCodeExpirationDate: expirationDateHelper.createExpirationDate()
+                confirmationCodeExpirationDate: expirationDateHelper.createEmailConfirmationExpirationDate()
             },
             passwordRecovery: {
                 code:'',
@@ -54,7 +55,7 @@ export const authService = {
 
         const result = await userRepository.createUser(userInsertModel)
         if (result) {
-            await emailManager.sendRegistrationCode(email, confirmationCode)
+             emailManager.sendRegistrationCode(email, confirmationCode)
         }
 
         return new CustomResponse(true, null, 'successful create user')
@@ -76,7 +77,7 @@ export const authService = {
             return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'Email has already confirmed')
         }
 
-        const expirationDate: string = expirationDateHelper.createExpirationDate()
+        const expirationDate: string = expirationDateHelper.createEmailConfirmationExpirationDate()
         const confirmationCode: string = randomUUID()
 
         await userRepository.setNewConfirmationCodeByEmail(email, confirmationCode, expirationDate)
@@ -91,7 +92,7 @@ export const authService = {
 
     async emailConfirmation(code: string) {
 
-        const user = await userRepository.getUserByConfirmationCode(code)
+        const user = await userRepository.getUserByEmailConfirmationCode(code)
 
         if (!user) {
             return new CustomResponse(false, CustomResponseEnum.INVALID_INPUT_DATA, 'confirmation code is incorrect')
@@ -121,14 +122,33 @@ export const authService = {
         }
 
         const code = randomUUID()
-        const date = new Date().toISOString()
+        const expirationDate = expirationDateHelper.createPasswordRecoveryExpirationDate()
 
-       await userRepository.setNewPasswordRecoveryCode(email,code,date)
+       await userRepository.setNewPasswordRecoveryCode(email,code,expirationDate)
 
        emailManager.sendPasswordRecoveryCode(email,code)
 
         return
 
+    },
+
+    async setNewPasswordByRecoveryCode({newPassword,recoveryCode}:NewPasswordInputModel):Promise<CustomResponse<string>> {
+
+        const user = await userRepository.getUserByPasswordConfirmationCode(recoveryCode)
+
+        if(!user) {
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, "Incorrect recovery code")
+        }
+
+        if(expirationDateHelper.isDateExpired(user.passwordRecovery.expirationDate)) {
+            return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, "Recovery code has already expired")
+        }
+
+        const hashedPassword = await passwordHelper.hashPassword(newPassword)
+
+        await userRepository.setNewPasswordById(user._id.toString(), hashedPassword)
+
+        return new CustomResponse(true, null ,"successful")
     },
 
 
