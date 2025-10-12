@@ -1,4 +1,4 @@
-import {req, reqWithBasicAuth} from "../test-helpers";
+import {req,reqWithoutState, reqWithBasicAuth} from "../test-helpers";
 import {
     correctCreateFirstUserData,
     correctCreateSecondUserData, correctCreateThirdUserData,
@@ -7,12 +7,14 @@ import {
 import {emailManager} from "../../src/modules/users_module/auth/application/email.manager";
 import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
 
+
 describe('auth tests', () => {
 
     let fistUserAccessToken: string
     let secondUserAccessToken: string
     let correctConfirmationCode :string
     const changedPassword = 'newPassword1356'
+    let firstRefreshToken:string
 
     beforeAll(async () => {
 
@@ -22,6 +24,7 @@ describe('auth tests', () => {
             .send(correctCreateFirstUserData)
 
     })
+
 
 
     it("login without data", async () => {
@@ -320,6 +323,65 @@ describe('auth tests', () => {
         expect(res.status).toEqual(201)
 
         fistUserAccessToken = res.body
+
+        firstRefreshToken = res.headers['set-cookie'][0]
+
+
+    })
+
+
+    it("should return 401 trying get new pair of tokens without refresh token in cookie", async () => {
+
+
+        const res = await reqWithoutState.post('/auth/refresh-token')
+
+
+        expect(res.status).toEqual(401)
+
+    })
+
+    it("should return 201 and new pair of refresh/access tokens", async () => {
+
+
+        const res = await req.post('/auth/refresh-token')
+
+
+        expect(res.status).toEqual(201)
+
+        expect(res.body).toEqual(expect.any(String))
+
+        expect(res.headers['set-cookie']).toBeDefined()
+        expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=/)
+
+    })
+
+    it("should return 401 trying get new pair of tokens using old/invalid refresh token", async () => {
+
+
+        const res = await reqWithoutState.post('/auth/refresh-token')
+            .set('Cookie', [firstRefreshToken])
+
+
+        expect(res.status).toEqual(401)
+
+    })
+
+
+    it("should successful logout and make current refresh token incorrect", async () => {
+
+
+        const res = await req.post('/auth/logout')
+
+        expect(res.status).toEqual(204)
+
+    })
+
+    it("should return 401 trying logout using old/invalid refresh token", async () => {
+
+
+        const res = await req.post('/auth/logout')
+
+        expect(res.status).toEqual(401)
 
     })
 
