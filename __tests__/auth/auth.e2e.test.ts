@@ -1,28 +1,32 @@
-import {correctBasicAuthData, req} from "../test-helpers";
-import {correctCreateFirstUserData, correctFirstUserLoginData} from "./common/auth-test-data";
+import {req, reqWithBasicAuth} from "../test-helpers";
+import {
+    correctCreateFirstUserData,
+    correctCreateSecondUserData, correctCreateThirdUserData,
+    correctFirstUserLoginData, correctSecondUserLoginData
+} from "./common/auth-test-data";
+import {emailManager} from "../../src/modules/users_module/auth/application/email.manager";
+import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
 
-describe('"/blog_platform" POST validation tests', () => {
+describe('auth tests', () => {
 
-    let accessToken: string
+    let fistUserAccessToken: string
+    let secondUserAccessToken: string
+    let correctConfirmationCode :string
+    const changedPassword = 'newPassword1356'
 
     beforeAll(async () => {
 
-        it("create user for auth tests", async () => {
+        await testingRepository.deleteAllData()
 
-            const res = await req.post('/users')
-                .set('Authorization', correctBasicAuthData)
-                .send(correctCreateFirstUserData)
+        await reqWithBasicAuth.post('/users')
+            .send(correctCreateFirstUserData)
 
-            expect(res.status).toEqual(201)
-
-        })
     })
 
 
     it("login without data", async () => {
 
         const res = await req.post('/auth/login')
-            .set('Authorization', correctBasicAuthData)
 
 
         expect(res.status).toEqual(400)
@@ -30,11 +34,11 @@ describe('"/blog_platform" POST validation tests', () => {
     })
 
 
-    it("400 if login with wrong password", async () => {
+    it("401 if login with wrong password", async () => {
 
         const res = await req.post('/auth/login')
-            .set('Authorization', correctBasicAuthData)
-            .send({...correctFirstUserLoginData,password: 'wrong'})
+
+            .send({...correctFirstUserLoginData, password: 'wrong'})
 
 
         expect(res.status).toEqual(401)
@@ -42,7 +46,7 @@ describe('"/blog_platform" POST validation tests', () => {
     })
 
 
-    it("login with  correct data should return 201 and return jwt access token in body", async () => {
+    it("login with  correct data should return 201 and jwt access token in body", async () => {
 
         const res = await req.post('/auth/login')
             .send(correctFirstUserLoginData)
@@ -51,7 +55,11 @@ describe('"/blog_platform" POST validation tests', () => {
         expect(res.status).toEqual(201)
         expect(res.body).toEqual(expect.any(String))
 
-        accessToken = res.body
+        expect(res.headers['set-cookie']).toBeDefined()
+        expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=/)
+
+
+        fistUserAccessToken = res.body
 
     })
 
@@ -68,19 +76,252 @@ describe('"/blog_platform" POST validation tests', () => {
     it("try to get auth/me without bearer auth should return 401", async () => {
 
         const res = await req.get('/auth/me')
-            .set('Authorization', `Bearer ${accessToken}`)
+            .set('Authorization', `Bearer ${fistUserAccessToken}`)
 
 
         expect(res.status).toEqual(201)
         expect(res.body).toEqual({
-            email: "qwerty@gmail.com",
-            login: "qwerty",
+            email: correctCreateFirstUserData.email,
+            login: correctCreateFirstUserData.login,
             userId: expect.any(String),
         })
 
 
     })
 
+
+    it("registration new user", async () => {
+
+        jest.spyOn(emailManager, 'sendRegistrationCode')
+            .mockImplementation(async () => Promise.resolve())
+
+        const res = await req.post('/auth/registration')
+            .send(correctCreateSecondUserData)
+
+
+        correctConfirmationCode = await testingRepository.getUserEmailConfirmationCodeByEmail(correctCreateSecondUserData.email)
+
+        expect(res.status).toEqual(204)
+
+
+    })
+
+    it("401 if login with wrong password", async () => {
+
+        const res = await req.post('/auth/login')
+            .send({...correctSecondUserLoginData, password: 'wrong'})
+
+
+        expect(res.status).toEqual(401)
+
+    })
+
+
+    it("login with  correct data should return 201 and jwt access token in body", async () => {
+
+        const res = await req.post('/auth/login')
+            .send(correctSecondUserLoginData)
+
+
+        expect(res.status).toEqual(201)
+        expect(res.body).toEqual(expect.any(String))
+
+
+        expect(res.headers['set-cookie']).toBeDefined()
+        expect(res.headers['set-cookie'][0]).toMatch(/refreshToken=/)
+
+        secondUserAccessToken = res.body
+
+
+    })
+
+
+
+    it("should return 201 status and current user info object", async () => {
+
+        const res = await req.get('/auth/me')
+            .set('Authorization', `Bearer ${secondUserAccessToken}`)
+
+
+        expect(res.status).toEqual(201)
+        expect(res.body).toEqual({
+            email: correctCreateSecondUserData.email,
+            login: correctCreateSecondUserData.login,
+            userId: expect.any(String),
+        })
+
+
+    })
+
+
+
+    it("should return 400 for an empty body", async () => {
+
+        const res = await req.post('/auth/registration-confirmation')
+
+        expect(res.status).toEqual(400)
+
+
+    })
+
+
+
+    it("should return 400 for incorrect email confirmation code", async () => {
+
+        const res = await req.post('/auth/registration-confirmation')
+            .send({code:'random wrong code'})
+
+        expect(res.status).toEqual(400)
+
+
+    })
+
+
+    it("should return 204 and confirm email", async () => {
+
+
+        const res = await req.post('/auth/registration-confirmation')
+            .send({code:correctConfirmationCode})
+
+        expect(res.status).toEqual(204)
+
+    })
+
+
+    it("should return 400 for already confirmed email", async () => {
+
+
+        const res = await req.post('/auth/registration-confirmation')
+            .send({code:correctConfirmationCode})
+
+        expect(res.status).toEqual(400)
+
+    })
+
+    it("registration new user", async () => {
+
+        jest.spyOn(emailManager, 'sendRegistrationCode')
+            .mockImplementation(async () => Promise.resolve())
+
+        const res = await req.post('/auth/registration')
+            .send(correctCreateThirdUserData)
+
+        correctConfirmationCode = await testingRepository.getUserEmailConfirmationCodeByEmail(correctCreateThirdUserData.email)
+
+        expect(res.status).toEqual(204)
+
+    })
+
+
+    it("should return 400 sending without body", async () => {
+
+
+        const res = await req.post('/auth/registration-email-resending')
+
+
+        expect(res.status).toEqual(400)
+
+    })
+
+
+    it("should return 204 and send new email confirmation code on email", async () => {
+
+        jest.spyOn(emailManager, 'sendRegistrationCode')
+            .mockImplementation(async () => Promise.resolve())
+
+        const res = await req.post('/auth/registration-email-resending')
+            .send({email:correctCreateThirdUserData.email})
+
+        expect(res.status).toEqual(204)
+
+    })
+
+
+    it("should return 400 for old(wrong) confirmation code", async () => {
+
+        const res = await req.post('/auth/registration-confirmation')
+            .send({code:'random wrong code'})
+
+        expect(res.status).toEqual(400)
+
+
+    })
+
+
+    it("should return 204 and confirm email", async () => {
+
+
+        correctConfirmationCode = await testingRepository.getUserEmailConfirmationCodeByEmail(correctCreateThirdUserData.email)
+
+        const res = await req.post('/auth/registration-confirmation')
+            .send({code:correctConfirmationCode})
+
+        expect(res.status).toEqual(204)
+
+    })
+
+
+    it("should return 400 sending without body", async () => {
+
+        const res = await req.post('/auth/password-recovery')
+
+        expect(res.status).toEqual(400)
+
+
+    })
+
+
+    it("should send recovery code on email end return 204 ", async () => {
+
+        jest.spyOn(emailManager, 'sendPasswordRecoveryCode')
+            .mockImplementation(async () => Promise.resolve())
+
+        const res = await req.post('/auth/password-recovery').send({email:correctCreateFirstUserData.email})
+
+        expect(res.status).toEqual(204)
+
+    })
+
+
+    it("should return 400 sending without body", async () => {
+
+        const res = await req.post('/auth/new-password')
+
+        expect(res.status).toEqual(400)
+
+
+    })
+
+    it("should successful set new password and return 204 status code", async () => {
+
+        const recoveryCode = await testingRepository.getUserPasswordRecoveryCodeByEmail(correctCreateFirstUserData.email)
+
+        const res = await req.post('/auth/new-password').send({newPassword:changedPassword,recoveryCode:recoveryCode})
+
+        expect(res.status).toEqual(204)
+
+    })
+
+
+    it("should return 401 trying login with old password", async () => {
+
+        const res = await req.post('/auth/login')
+            .send(correctFirstUserLoginData)
+
+        expect(res.status).toEqual(401)
+
+    })
+
+    it("login with  correct data should return 201 and jwt access token in body", async () => {
+
+        const res = await req.post('/auth/login')
+            .send({...correctFirstUserLoginData,password:changedPassword})
+
+        expect(res.status).toEqual(201)
+
+        fistUserAccessToken = res.body
+
+    })
 
 
 })
