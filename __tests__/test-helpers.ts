@@ -1,4 +1,4 @@
-import {agent} from "supertest";
+import request,{agent} from "supertest";
 import {app} from "../src/app";
 import {SETTINGS} from "../src/settings";
 
@@ -9,6 +9,7 @@ export const req = agent(app)
 export const correctBasicAuthData =
     "Basic " + Buffer.from(`${SETTINGS.AUTH.BASIC_AUTH_LOGIN}:${SETTINGS.AUTH.BASIC_AUTH_PASSWORD}`).toString("base64");
 
+export const reqWithoutState = request(app)
 export const reqWithBasicAuth = agent(app).set('Authorization', correctBasicAuthData)
 export const reqWithBearerAuth = (token:string) => agent(app).set('Authorization', `Bearer ${token}`)
 
