@@ -17,6 +17,21 @@ export const testingRepository = {
         await commentCollection.deleteMany({});
         await devicesCollection.deleteMany({});
 
+    },
+
+
+    async getUserEmailConfirmationCodeByEmail(email:string):Promise<string> {
+        const user =  await userCollection.findOne({email});
+        return user?.confirmationData?.confirmationCode || ""
+
+
+    },
+
+    async getUserPasswordRecoveryCodeByEmail(email:string):Promise<string> {
+        const user =  await userCollection.findOne({email});
+        return user?.passwordRecovery?.code || ""
+
+
     }
 
 
