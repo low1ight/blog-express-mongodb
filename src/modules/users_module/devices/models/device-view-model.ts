@@ -1,6 +1,6 @@
 
 export type DeviceViewModel = {
-    id: string
+    deviceId: string
     title:string
     ip:string
     lastSeenDate: string
