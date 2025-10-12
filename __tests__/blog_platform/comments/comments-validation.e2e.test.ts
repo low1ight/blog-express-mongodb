@@ -1,8 +1,8 @@
-import {correctBasicAuthData, generateRandomStr, req, reqWithBasicAuth, reqWithBearerAuth} from "../test-helpers";
+import {generateRandomStr, req, reqWithBasicAuth, reqWithBearerAuth} from "../../test-helpers";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
-import {correctPostInputData} from "../posts/common/post-test-data";
-import {correctCreateFirstUserData, correctFirstUserLoginData} from "../auth/common/auth-test-data";
-import {createFieldsTests} from "../create-field-tests";
+import {correctPostInputData} from "../../posts/common/post-test-data";
+import {correctCreateFirstUserData, correctFirstUserLoginData} from "../../auth/common/auth-test-data";
+import {createFieldsTests} from "../../create-field-tests";
 import {commentCorrectCreateInputData} from "./common/comment-test-data";
 
 const invalidContent = [
@@ -28,7 +28,7 @@ describe('POST/PUT comments validation tests', () => {
         await reqWithBasicAuth.delete('/testing/all-data')
 
         //create user
-        const user = await reqWithBasicAuth.post('/users')
+         await reqWithBasicAuth.post('/users')
             .send(correctCreateFirstUserData)
 
         //create blog

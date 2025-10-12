@@ -1,12 +1,12 @@
-import {correctBasicAuthData, req} from "../test-helpers";
+import {correctBasicAuthData, req} from "../../test-helpers";
 import {
     correctCreateBlogInputData,
     correctBlogUpdateData,
     correctCreatedBlogViewModel,
     correctUpdatedBlogViewModel, correctPostForBlogInputData
 } from "./common/blog-test-data";
-import {BlogViewModel} from "../../src/modules/blog_platform/blogs/models/blog-view-model";
-import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
+import {BlogViewModel} from "../../../src/modules/blog_platform/blogs/models/blog-view-model";
+import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
 
 describe('/blogs', () => {
 

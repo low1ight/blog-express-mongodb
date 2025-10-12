@@ -1,5 +1,5 @@
-import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
-import {correctBasicAuthData, req, reqWithBasicAuth} from "../test-helpers";
+import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
+import {req, reqWithBasicAuth} from "../../test-helpers";
 import {
     correctBlogsInputDataArr, createdBlogsViewModelArr,
 } from "./common/blog-test-data";

@@ -20,7 +20,7 @@ describe('"/blog_platform" POST validation tests', () => {
 
         await testingRepository.deleteAllData()
 
-        const res = await req.post('/users')
+         await req.post('/users')
             .set('Authorization', correctBasicAuthData)
             .send(correctCreateFirstUserData)
 
