@@ -15,7 +15,6 @@ describe('/blogs', () => {
 
 
     beforeAll(async () => {
-
         await testingRepository.deleteAllData()
     })
 

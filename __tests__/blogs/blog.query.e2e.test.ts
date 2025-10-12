@@ -1,5 +1,5 @@
 import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
-import {correctBasicAuthData, req} from "../test-helpers";
+import {correctBasicAuthData, req, reqWithBasicAuth} from "../test-helpers";
 import {
     correctBlogsInputDataArr, createdBlogsViewModelArr,
 } from "./common/blog-test-data";
@@ -17,8 +17,7 @@ describe('/blogs', () => {
     it('should create 11 blogs', async () => {
 
         for(const data of correctBlogsInputDataArr) {
-            await req.post('/blogs')
-                .set('Authorization', correctBasicAuthData)
+            await reqWithBasicAuth.post('/blogs')
                 .send(data)
         }
 

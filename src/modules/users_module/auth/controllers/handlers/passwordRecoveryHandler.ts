@@ -5,8 +5,6 @@ import {PasswordRecoveryInputModel} from "../../models/passwordRecovery-input-mo
 
 export const passwordRecoveryHandler = async (req:RequestWithBody<PasswordRecoveryInputModel>, res:Response) => {
 
-    console.log(req.body.email);
-
      await authService.passwordRecovery(req.body.email);
 
      res.sendStatus(204)

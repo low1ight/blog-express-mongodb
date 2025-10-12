@@ -1,4 +1,4 @@
-import {correctBasicAuthData, req} from "../test-helpers";
+import {correctBasicAuthData, req, reqWithBasicAuth} from "../test-helpers";
 import {correctPostInputData} from "./common/post-test-data";
 import {correctCreateBlogInputData, correctBlogUpdateData} from "../blogs/common/blog-test-data";
 import {PostInputModel} from "../../src/modules/blog_platform/posts/models/post-input-model";
@@ -25,15 +25,15 @@ describe('/posts', () => {
 
         await testingRepository.deleteAllData()
 
-        const createFirstBlogRes = await req.post('/blogs')
+        const createFirstBlogRes = await reqWithBasicAuth.post('/blogs')
             .send(correctCreateBlogInputData)
-            .set('Authorization', correctBasicAuthData);
+
 
         firstBlog = createFirstBlogRes.body
 
-        const createSecondBlogRes = await req.post('/blogs')
+        const createSecondBlogRes = await reqWithBasicAuth.post('/blogs')
             .send(correctBlogUpdateData)
-            .set('Authorization', correctBasicAuthData);
+
 
         secondBlog = createSecondBlogRes.body
 

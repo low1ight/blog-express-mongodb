@@ -1,4 +1,4 @@
-import {correctBasicAuthData, req, } from "../test-helpers";
+import {req, reqWithBasicAuth,} from "../test-helpers";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {correctPostInputData} from "../posts/common/post-test-data";
 import {
@@ -32,20 +32,16 @@ describe('POST/PUT comments validation tests', () => {
     beforeAll(async () => {
 
         //delete all data
-        await req.delete('/testing/all-data')
-            .set('Authorization', correctBasicAuthData)
-
+        await reqWithBasicAuth.delete('/testing/all-data')
 
         //create users
-        const firstUser = await req.post('/users')
-            .set('Authorization', correctBasicAuthData)
+        const firstUser = await reqWithBasicAuth.post('/users')
             .send(correctCreateFirstUserData)
 
         firstUserId = firstUser.body.id
 
 
-        const secondUser = await req.post('/users')
-            .set('Authorization', correctBasicAuthData)
+        const secondUser = await reqWithBasicAuth.post('/users')
             .send(correctCreateSecondUserData)
 
         secondUserId = secondUser.body.id
@@ -53,23 +49,20 @@ describe('POST/PUT comments validation tests', () => {
 
         //create blog
 
-        const blog = await req.post('/blogs')
-            .set('Authorization', correctBasicAuthData)
+        const blog = await reqWithBasicAuth.post('/blogs')
             .send(correctCreateBlogInputData)
 
         blogId = blog.body.id
 
         //create first and second posts
 
-        const post1 = await req.post(`/blogs/${blogId}/posts`)
-            .set('Authorization', correctBasicAuthData)
+        const post1 = await reqWithBasicAuth.post(`/blogs/${blogId}/posts`)
             .send(correctPostInputData)
 
         firstPost = post1.body.id
 
 
-        const post2 = await req.post(`/blogs/${blogId}/posts`)
-            .set('Authorization', correctBasicAuthData)
+        const post2 = await reqWithBasicAuth.post(`/blogs/${blogId}/posts`)
             .send(correctPostInputData)
 
         secondPost = post2.body.id
@@ -80,7 +73,6 @@ describe('POST/PUT comments validation tests', () => {
             .send(correctFirstUserLoginData)
 
         firstJwtAccessToken = firstLogin.body
-
 
 
         const secondLogin = await req.post(`/auth/login`)

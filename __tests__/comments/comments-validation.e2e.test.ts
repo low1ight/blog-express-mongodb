@@ -1,4 +1,4 @@
-import {correctBasicAuthData, generateRandomStr, req, reqWithBearerAuth} from "../test-helpers";
+import {correctBasicAuthData, generateRandomStr, req, reqWithBasicAuth, reqWithBearerAuth} from "../test-helpers";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {correctPostInputData} from "../posts/common/post-test-data";
 import {correctCreateFirstUserData, correctFirstUserLoginData} from "../auth/common/auth-test-data";
@@ -25,19 +25,15 @@ describe('POST/PUT comments validation tests', () => {
     beforeAll(async () => {
 
         //delete all data
-        await req.delete('/testing/all-data')
-            .set('Authorization', correctBasicAuthData)
-
+        await reqWithBasicAuth.delete('/testing/all-data')
 
         //create user
-        const user = await req.post('/users')
-            .set('Authorization', correctBasicAuthData)
+        const user = await reqWithBasicAuth.post('/users')
             .send(correctCreateFirstUserData)
 
         //create blog
 
-        const blog = await req.post('/blogs')
-            .set('Authorization', correctBasicAuthData)
+        const blog = await reqWithBasicAuth.post('/blogs')
             .send(correctCreateBlogInputData)
 
         blogId = blog.body.id
@@ -45,8 +41,7 @@ describe('POST/PUT comments validation tests', () => {
 
         //create post
 
-        const post = await req.post(`/blogs/${blogId}/posts`)
-            .set('Authorization', correctBasicAuthData)
+        const post = await reqWithBasicAuth.post(`/blogs/${blogId}/posts`)
             .send(correctPostInputData)
 
         postId = post.body.id
