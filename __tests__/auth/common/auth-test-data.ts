@@ -10,6 +10,12 @@ export const correctCreateSecondUserData = {
     password: "qwerty"
 }
 
+export const correctCreateThirdUserData = {
+    login: "ThirdUser",
+    email: "thrd@gmail.com",
+    password: "qwerty"
+}
+
 
 
 export const correctFirstUserLoginData = {
@@ -17,7 +23,14 @@ export const correctFirstUserLoginData = {
     password: "qwerty"
 }
 
+
 export const correctSecondUserLoginData = {
     loginOrEmail: "second@gmail.com",
+    password: "qwerty"
+}
+
+
+export const correctThirdUserLoginData = {
+    loginOrEmail: "ThirdUser",
     password: "qwerty"
 }
