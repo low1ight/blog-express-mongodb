@@ -63,6 +63,11 @@ export const authService = {
 
     },
 
+
+    async logout(deviceId:string,userId:string) {
+        await devicesService.deleteDeviceById(deviceId,userId)
+    },
+
     async emailCodeResending({email}: EmailCodeResendingInputModel) {
 
 

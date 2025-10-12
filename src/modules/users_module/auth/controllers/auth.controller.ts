@@ -15,13 +15,16 @@ import {passwordRecoveryInputValidator} from "../validators/password-recovery-in
 import {passwordRecoveryHandler} from "./handlers/passwordRecoveryHandler";
 import {newPasswordInputValidator} from "../validators/newPassword-input-validator";
 import {newPasswordHandler} from "./handlers/newPasswordHandler";
+import {jwtRefreshTokenAuthGuard} from "../guards/jwtRefreshToken.auth.guard";
+import {logoutHandler} from "./handlers/logoutHandler";
 
 
 export const authRouter = Router()
 
 
 authRouter.post('/login', validate(loginInputValidator),loginHandler)
-authRouter.post('/refresh-token', refreshTokenHandler)
+authRouter.post('/logout', jwtRefreshTokenAuthGuard, logoutHandler)
+authRouter.post('/refresh-token',jwtRefreshTokenAuthGuard, refreshTokenHandler)
 authRouter.get('/me', jwtAccessTokenAuthGuard, meHandler)
 authRouter.post('/new-password', validate(newPasswordInputValidator) , newPasswordHandler)
 authRouter.post('/registration', validate(userInputValidator), registrationHandler)

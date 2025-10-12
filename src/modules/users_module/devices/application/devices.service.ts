@@ -50,6 +50,8 @@ export const devicesService = {
     },
 
 
+
+
     async getDeviceById(deviceId:string):Promise<DeviceDocumentModel | null> {
         return await devicesRepository.getDeviceById(deviceId)
 
