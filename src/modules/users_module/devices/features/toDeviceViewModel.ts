@@ -12,7 +12,7 @@ export const toDeviceViewModel = ({
 
 
     return {
-        id: _id.toString(),
+        deviceId: _id.toString(),
         title,
         ip,
         lastSeenDate
