@@ -1,8 +1,9 @@
 import {Request, Response, NextFunction} from 'express'
 import {jwtService} from "../application/jwt.service";
-import {JwtAccessTokenPayloadModel} from "../models/jwt-access-token-payload-model";
+import {JwtRefreshTokenPayloadModel} from "../models/jwt-refresh-token-payload-model";
+import {devicesService} from "../../devices/application/devices.service";
 
-export const jwtRefreshTokenAuthGuard = (req:Request , res:Response , next:NextFunction): void  => {
+export const jwtRefreshTokenAuthGuard = async (req:Request , res:Response , next:NextFunction)  => {
 
 
     if(!req.cookies.refreshToken) {
@@ -10,14 +11,28 @@ export const jwtRefreshTokenAuthGuard = (req:Request , res:Response , next:NextF
         return
     }
 
-    const payload:JwtAccessTokenPayloadModel | null = jwtService.verifyRefreshToken(req.cookies.refreshToken)
+    const payload:JwtRefreshTokenPayloadModel | null = jwtService.verifyRefreshToken(req.cookies.refreshToken)
+
+
 
     if(!payload) {
-        res.sendStatus(401);
+        res.status(401).json('Invalid token was expired')
         return
     }
 
-    req.user =  payload
+    const currentDevice = await devicesService.getDeviceById(payload.deviceId)
+
+    if(!currentDevice) {
+        res.status(401).json('Invalid token was expired')
+        return
+    }
+
+    if(currentDevice.sessionCode !== payload.deviceSessionCode) {
+        res.status(401).json('refresh token was expired')
+        return
+    }
+
+    req.user = payload
     next()
 
 }
