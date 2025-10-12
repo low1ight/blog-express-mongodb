@@ -1,11 +1,13 @@
-import {req,reqWithoutState, reqWithBasicAuth} from "../test-helpers";
+
 import {
     correctCreateFirstUserData,
     correctCreateSecondUserData, correctCreateThirdUserData,
     correctFirstUserLoginData, correctSecondUserLoginData
 } from "./common/auth-test-data";
-import {emailManager} from "../../src/modules/users_module/auth/application/email.manager";
-import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
+import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
+import {emailManager} from "../../../src/modules/users_module/auth/application/email.manager";
+import {req, reqWithBasicAuth, reqWithoutState} from "../../test-helpers";
+
 
 
 describe('auth tests', () => {

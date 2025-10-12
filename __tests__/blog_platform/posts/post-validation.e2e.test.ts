@@ -1,9 +1,10 @@
-import { generateRandomStr,  reqWithBasicAuth} from "../test-helpers";
-import {correctCreateBlogInputData} from "../blog_platform/blogs/common/blog-test-data";
+import {generateRandomStr, reqWithBasicAuth} from "../../test-helpers";
+import {PostInputModel} from "../../../src/modules/blog_platform/posts/models/post-input-model";
 import {correctPostInputData} from "./common/post-test-data";
-import {createFieldsTests} from "../create-field-tests";
-import {PostViewModel} from "../../src/modules/blog_platform/posts/models/post-view-model";
-import {PostInputModel} from "../../src/modules/blog_platform/posts/models/post-input-model";
+import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
+import {createFieldsTests} from "../../create-field-tests";
+import {PostViewModel} from "../../../src/modules/blog_platform/posts/models/post-view-model";
+
 
 const invalidPostTitleArr = [
     {value: "", case: "an empty name"},

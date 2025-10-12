@@ -1,14 +1,16 @@
 import {req, reqWithBasicAuth,} from "../../test-helpers";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
-import {correctPostInputData} from "../../posts/common/post-test-data";
-import {
-    correctCreateFirstUserData, correctCreateSecondUserData,
-    correctFirstUserLoginData,
-    correctSecondUserLoginData
-} from "../../auth/common/auth-test-data";
+
+
 import {commentCorrectCreateInputData, commentCorrectUpdateInputData} from "./common/comment-test-data";
 import {randomUUID} from "node:crypto";
 import {CommentViewModel} from "../../../src/modules/blog_platform/comments/models/comment-view-model";
+import {
+    correctCreateFirstUserData,
+    correctCreateSecondUserData,
+    correctFirstUserLoginData, correctSecondUserLoginData
+} from "../../users_module/auth/common/auth-test-data";
+import {correctPostInputData} from "../posts/common/post-test-data";
 
 
 
@@ -17,7 +19,6 @@ describe('POST/PUT comments validation tests', () => {
 
     let firstUserId:string
     let secondUserId:string
-    let secondUser:string
     let blogId: string
     let firstPost: string
     let secondPost: string

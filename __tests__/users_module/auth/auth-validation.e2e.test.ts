@@ -1,7 +1,9 @@
-import {createFieldsTests} from "../create-field-tests";
-import {correctBasicAuthData, req} from "../test-helpers";
+
 import {correctCreateFirstUserData, correctFirstUserLoginData} from "./common/auth-test-data";
-import {testingRepository} from "../../src/modules/testing/repositories/testing.repository";
+import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
+import {correctBasicAuthData, req} from "../../test-helpers";
+import {createFieldsTests} from "../../create-field-tests";
+
 
 const invalidLoginOrEmailValues = [
     {value: "", case: "cant be an empty"},

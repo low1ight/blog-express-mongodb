@@ -1,9 +1,9 @@
 import {generateRandomStr, req, reqWithBasicAuth, reqWithBearerAuth} from "../../test-helpers";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
-import {correctPostInputData} from "../../posts/common/post-test-data";
-import {correctCreateFirstUserData, correctFirstUserLoginData} from "../../auth/common/auth-test-data";
 import {createFieldsTests} from "../../create-field-tests";
 import {commentCorrectCreateInputData} from "./common/comment-test-data";
+import {correctCreateFirstUserData, correctFirstUserLoginData} from "../../users_module/auth/common/auth-test-data";
+import {correctPostInputData} from "../posts/common/post-test-data";
 
 const invalidContent = [
     {value: "message", case: "cant be less than 20 symbols"},

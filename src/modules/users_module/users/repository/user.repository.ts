@@ -33,7 +33,7 @@ export const userRepository = {
     },
 
     async getUserByEmailConfirmationCode(code: string): Promise<UserDocumentModel | null> {
-        console.log(code);
+
         return await userCollection.findOne({'confirmationData.confirmationCode': code});
 
     },
