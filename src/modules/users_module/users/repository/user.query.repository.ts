@@ -22,7 +22,6 @@ export const userQueryRepository = {
             filter = {...filter,login: { $regex: searchLoginTerm, $options: "i" }}
         }
 
-        console.log(filter)
 
         const totalCount:number = await userCollection
             .countDocuments(filter)

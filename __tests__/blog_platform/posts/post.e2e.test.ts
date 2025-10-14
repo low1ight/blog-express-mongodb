@@ -1,7 +1,7 @@
 import {PostInputModel} from "../../../src/modules/blog_platform/posts/models/post-input-model";
 import {BlogViewModel} from "../../../src/modules/blog_platform/blogs/models/blog-view-model";
 import {PostViewModel} from "../../../src/modules/blog_platform/posts/models/post-view-model";
-import {correctBasicAuthData, req, reqWithBasicAuth} from "../../test-helpers";
+import {correctBasicAuthData, req, reqWithBasicAuth} from "../../common/test-helpers";
 import {correctBlogUpdateData, correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {correctPostInputData} from "./common/post-test-data";
 import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";

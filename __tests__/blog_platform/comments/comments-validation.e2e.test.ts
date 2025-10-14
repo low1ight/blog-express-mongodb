@@ -1,6 +1,6 @@
-import {generateRandomStr, req, reqWithBasicAuth, reqWithBearerAuth} from "../../test-helpers";
+import {generateRandomStr, req, reqWithBasicAuth, reqWithBearerAuth} from "../../common/test-helpers";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
-import {createFieldsTests} from "../../create-field-tests";
+import {createFieldsTests} from "../../common/create-field-tests";
 import {commentCorrectCreateInputData} from "./common/comment-test-data";
 import {correctCreateFirstUserData, correctFirstUserLoginData} from "../../users_module/auth/common/auth-test-data";
 import {correctPostInputData} from "../posts/common/post-test-data";

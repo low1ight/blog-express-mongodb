@@ -1,7 +1,7 @@
-import {generateRandomStr, reqWithBasicAuth} from "../../test-helpers";
+import {generateRandomStr, reqWithBasicAuth} from "../../common/test-helpers";
 import {BlogViewModel} from "../../../src/modules/blog_platform/blogs/models/blog-view-model";
 import {correctCreateBlogInputData} from "./common/blog-test-data";
-import {createFieldsTests} from "../../create-field-tests";
+import {createFieldsTests} from "../../common/create-field-tests";
 
 
 const invalidBlogNameArr = [

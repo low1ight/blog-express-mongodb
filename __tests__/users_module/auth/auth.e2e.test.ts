@@ -6,7 +6,7 @@ import {
 } from "./common/auth-test-data";
 import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
 import {emailManager} from "../../../src/modules/users_module/auth/application/email.manager";
-import {req, reqWithBasicAuth, reqWithoutState} from "../../test-helpers";
+import {req, reqWithBasicAuth, reqWithoutState} from "../../common/test-helpers";
 
 
 

@@ -10,6 +10,6 @@ import {deleteUserHandler} from "./handlers/deleteUserHandler";
 export const userRouter = Router()
 
 
-userRouter.get('/', getUsersHandler)
+userRouter.get('/',basicAuthGuard, getUsersHandler)
 userRouter.post('/', basicAuthGuard, validate(userInputValidator), createUserHandler)
 userRouter.delete('/:id', basicAuthGuard, deleteUserHandler)

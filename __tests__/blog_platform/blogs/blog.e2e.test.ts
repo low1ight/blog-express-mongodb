@@ -1,4 +1,4 @@
-import {correctBasicAuthData, req} from "../../test-helpers";
+import {correctBasicAuthData, req} from "../../common/test-helpers";
 import {
     correctCreateBlogInputData,
     correctBlogUpdateData,

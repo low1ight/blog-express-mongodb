@@ -1,8 +1,8 @@
-import {generateRandomStr, reqWithBasicAuth} from "../../test-helpers";
+import {generateRandomStr, reqWithBasicAuth} from "../../common/test-helpers";
 import {PostInputModel} from "../../../src/modules/blog_platform/posts/models/post-input-model";
 import {correctPostInputData} from "./common/post-test-data";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
-import {createFieldsTests} from "../../create-field-tests";
+import {createFieldsTests} from "../../common/create-field-tests";
 import {PostViewModel} from "../../../src/modules/blog_platform/posts/models/post-view-model";
 
 

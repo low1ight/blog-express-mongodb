@@ -1,5 +1,5 @@
 import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
-import {reqWithBasicAuth, reqWithoutState} from "../../test-helpers";
+import {reqWithBasicAuth, reqWithoutState} from "../../common/test-helpers";
 import {
     correctCreateFirstUserData, correctCreateSecondUserData, correctFirstUserLoginData, correctSecondUserLoginData,
 
