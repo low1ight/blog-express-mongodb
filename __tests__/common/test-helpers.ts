@@ -1,6 +1,6 @@
 import request,{agent} from "supertest";
-import {app} from "../src/app";
-import {SETTINGS} from "../src/settings";
+import {app} from "../../src/app";
+import {SETTINGS} from "../../src/settings";
 
 export const req = agent(app)
 
