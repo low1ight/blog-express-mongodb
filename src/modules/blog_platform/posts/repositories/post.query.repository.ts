@@ -10,36 +10,40 @@ import {Paginator} from "../../../../utils/paginator/paginator";
 export const postQueryRepository = {
 
 
-    async getPosts({sortDirection,sortBy,pageNumber,pageSize}:BaseQueryMapper,blogId?:string):Promise<Paginator<PostViewModel>> {
+    async getPosts({
+                       sortDirection,
+                       sortBy,
+                       pageNumber,
+                       pageSize
+                   }: BaseQueryMapper, blogId?: string): Promise<Paginator<PostViewModel>> {
 
         const skipCount = (pageNumber - 1) * pageSize
 
-        const totalCount:number = await postCollection.countDocuments()
 
-        let id:string | null
-        if(blogId && ObjectId.isValid(blogId)) id = blogId
+        let id: string | null
+        if (blogId && ObjectId.isValid(blogId)) id = blogId
         else id = null
 
 
         const filter = id ? {blogId: new ObjectId(id)} : {}
 
-
-        const posts:PostDocumentModel[] = await postCollection
+        const totalCount: number = await postCollection.countDocuments(filter)
+        const posts: PostDocumentModel[] = await postCollection
             .find(filter)
             .skip(skipCount)
-            .sort({[sortBy]:sortDirection as SortDirection})
+            .sort({[sortBy]: sortDirection as SortDirection})
             .limit(pageSize)
             .toArray();
 
-        const postViewModel:PostViewModel[] = posts.map(post => toPostViewModel(post))
+        const postViewModel: PostViewModel[] = posts.map(post => toPostViewModel(post))
 
-        return new Paginator<PostViewModel>(pageNumber,pageSize,totalCount,postViewModel)
+        return new Paginator<PostViewModel>(pageNumber, pageSize, totalCount, postViewModel)
     },
 
-    async getPostById(id:string):Promise<PostViewModel | null>  {
+    async getPostById(id: string): Promise<PostViewModel | null> {
         const post: PostDocumentModel | null = await postCollection.findOne({_id: new ObjectId(id)})
 
-        if(!post){
+        if (!post) {
             return null
         }
 
