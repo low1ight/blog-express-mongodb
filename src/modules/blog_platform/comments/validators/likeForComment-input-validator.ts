@@ -1,9 +1,9 @@
 import {body} from "express-validator";
 import {VALIDATION_ERR_MSG} from "../../../../common/validator/validation-error-messages";
-import {LikeStatus} from "../../common/Like.type";
+import {LikeStatus, likeTypesArr} from "../../common/Like.type";
 
 const fields = ['likeStatus'];
-const availableFields = Object.values(LikeStatus)
+
 
 export const likeForCommentInputValidator = [
 
@@ -11,7 +11,7 @@ export const likeForCommentInputValidator = [
 
     body('likeStatus')
         .isString().withMessage(VALIDATION_ERR_MSG.isString)
-        .isIn(availableFields).withMessage(`Should be one of: [${availableFields}]`),
+        .isIn(likeTypesArr).withMessage(`Should be one of: [${likeTypesArr}]`),
 
 
 ]
