@@ -1,5 +1,5 @@
-export enum LikeStatus {
-    None = 'None',
-    Like = 'Like',
-    Dislike = 'Dislike'
-}
+export type LikeStatus = 'None' |'Like' | 'Dislike'
+
+export const likeTypesArr:LikeStatus[] = [
+    'None' ,'Like' ,'Dislike'
+]
