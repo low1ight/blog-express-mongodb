@@ -1,5 +1,5 @@
 import {Response} from "express";
-import {Id, RequestWithParamAndQuery, RequestWithQuery} from "../../../../../common/types/RequestTypes";
+import {Id, RequestWithParamAndQuery} from "../../../../../common/types/RequestTypes";
 import {BaseQuery, BaseQueryMapper} from "../../../../../utils/queryMapper/baseQueryMapper";
 import {Paginator} from "../../../../../utils/paginator/paginator";
 import {commentQueryRepository} from "../../../comments/repositories/commentQuery.repository";
@@ -9,7 +9,7 @@ export const getPostCommentsHandler = async (req:RequestWithParamAndQuery<Id,Bas
 
     const query = new BaseQueryMapper(req.query);
 
-    const comments: Paginator<CommentViewModel> = await commentQueryRepository.getPostComments(query,req.params.id)
+    const comments: Paginator<CommentViewModel> = await commentQueryRepository.getPostComments(query,req.params.id,req?.user?.userId || null)
 
     res.send(comments)
 }

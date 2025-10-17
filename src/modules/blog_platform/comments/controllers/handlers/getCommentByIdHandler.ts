@@ -4,7 +4,7 @@ import {commentQueryRepository} from "../../repositories/commentQuery.repository
 
 export const getCommentByIdHandler = async (req: Request, res: Response) => {
 
-    const comment = await commentQueryRepository.getCommentById(req.params.id);
+    const comment = await commentQueryRepository.getCommentById(req.params.id, req?.user?.userId || null);
 
     if(!comment){
         res.sendStatus(404)

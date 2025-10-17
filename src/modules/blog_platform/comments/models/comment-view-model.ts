@@ -1,5 +1,6 @@
 import {LikeStatus} from "../../common/Like.type";
 
+
 export type CommentViewModel = {
     id: string
     content:string

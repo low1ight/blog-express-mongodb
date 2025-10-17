@@ -1,4 +1,4 @@
-import {commentCollection, likeForCommentCollection, postCollection} from "../../../../db/db.mongodb";
+import {commentCollection, likeForCommentCollection} from "../../../../db/db.mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {toCommentViewModel} from "../features/toCommentViewModel";
 import {BaseQueryMapper} from "../../../../utils/queryMapper/baseQueryMapper";
@@ -15,15 +15,18 @@ export const commentQueryRepository = {
                               sortBy,
                               pageNumber,
                               pageSize
-                          }: BaseQueryMapper, postId: string): Promise<Paginator<CommentViewModel>> {
+                          }: BaseQueryMapper, postId: string, userId: string | null): Promise<Paginator<CommentViewModel>> {
 
         const skipCount = (pageNumber - 1) * pageSize
 
-        const totalCount: number = await postCollection.countDocuments()
+
 
 
         const filter = {postId: new ObjectId(postId)}
 
+        const totalCount: number = await commentCollection.countDocuments(filter)
+
+        console.log(totalCount)
 
         const comments: CommentDocumentModel[] = await commentCollection
             .find(filter)
@@ -41,7 +44,7 @@ export const commentQueryRepository = {
                     _id: "$commentId",
                     likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
                     dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
-                    myStatus: {$max: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, '$likeStatus', null]}}
+                    myStatus: {$max: {$cond: [{$eq: ['$userId', userId && new ObjectId(userId)]}, '$likeStatus', null]}}
                 }
             }
         ]).toArray() as LikesInfoModel[]
@@ -51,7 +54,9 @@ export const commentQueryRepository = {
 
         const commentsViewModels: CommentViewModel[] = comments.map(comment => {
 
-            const likeStatus:LikesInfoModel = likesStatuses.find(e => e._id = comment._id)!
+
+            const likeStatus:LikesInfoModel | undefined = likesStatuses.find(e => e._id.equals(comment._id))
+            //console.log(likeStatus)
             return toCommentViewModel(comment, likeStatus)
         })
 
@@ -59,8 +64,10 @@ export const commentQueryRepository = {
     },
 
 
-    async getCommentById(id: string) {
-        const comment = await commentCollection.findOne({_id: new ObjectId(id)})
+    async getCommentById(commentId: string, userId: string | null): Promise<CommentViewModel | null> {
+        const comment = await commentCollection.findOne({_id: new ObjectId(commentId)})
+
+        console.log(userId)
 
         if (!comment) return null;
 
@@ -71,7 +78,7 @@ export const commentQueryRepository = {
                     _id: "$commentId",
                     likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
                     dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
-                    myStatus: {$max: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, '$likeStatus', null]}}
+                    myStatus: {$max: {$cond: [{$eq: ['$userId',userId && new ObjectId(userId)]}, '$likeStatus', null]}}
                 }
             }
         ]).toArray() as LikesInfoModel[]

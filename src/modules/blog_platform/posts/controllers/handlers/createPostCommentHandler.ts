@@ -19,7 +19,7 @@ export const createPostCommentHandler = async (req:RequestWithParamAndBody<Id,Co
         return
     }
 
-    const comment:CommentViewModel | null = await commentQueryRepository.getCommentById(response.content!)
+    const comment:CommentViewModel | null = await commentQueryRepository.getCommentById(response.content!, null)
 
 
 

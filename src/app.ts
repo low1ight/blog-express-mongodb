@@ -23,7 +23,7 @@ app.use(cookieParser())
 //console.log(SETTINGS)
 
 
-runDB(SETTINGS.DB.URL);
+runDB(SETTINGS.DB.URL).then();
 
 
 app.get('/', (req:any, res:any) => {
