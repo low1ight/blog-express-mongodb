@@ -12,6 +12,7 @@ import {createPostCommentHandler} from "./handlers/createPostCommentHandler";
 import {commentInputValidator} from "../../comments/validators/comment-input-validator";
 import {jwtAccessTokenAuthGuard} from "../../../users_module/auth/guards/jwtAccessToken.auth.guard";
 import {getPostCommentsHandler} from "./handlers/getPostsCommentsHandler";
+import {optionalJwtAccessTokenAuthGuard} from "../../../users_module/auth/guards/optionalJwtAccessToken.auth.guard";
 
 
 
@@ -28,7 +29,7 @@ postsRouter.put('/:id',basicAuthGuard,validate(idParamValidator,postInputValidat
 
 postsRouter.delete('/:id',basicAuthGuard,validate(idParamValidator), deletePostHandler)
 
-postsRouter.get('/:id/comments',validate(idParamValidator), getPostCommentsHandler)
+postsRouter.get('/:id/comments',optionalJwtAccessTokenAuthGuard,validate(idParamValidator), getPostCommentsHandler)
 
 postsRouter.post('/:id/comments',jwtAccessTokenAuthGuard, validate(idParamValidator,commentInputValidator), createPostCommentHandler)
 
