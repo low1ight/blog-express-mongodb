@@ -5,7 +5,7 @@ import {correctPostInputData} from "../../posts/common/post-test-data";
 import {commentCorrectCreateInputData} from "../common/comment-test-data";
 import {randomUUID} from "node:crypto";
 import {userService} from "../../../../src/modules/users_module/users/application/user.service";
-import {likeForCommentService} from "../../../../src/modules/blog_platform/comments/application/likeForCommentService";
+import {likeForCommentService} from "../../../../src/modules/blog_platform/comments/application/likeForComment.service";
 import {LikeStatus} from "../../../../src/modules/blog_platform/common/Like.type";
 
 
