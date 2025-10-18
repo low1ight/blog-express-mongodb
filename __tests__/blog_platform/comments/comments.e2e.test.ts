@@ -90,6 +90,11 @@ describe('POST/PUT comments validation tests', () => {
                 userId: firstUserId,
                 userLogin: correctCreateFirstUserData.login
             },
+            likesInfo: {
+                likesCount: 0,
+                dislikesCount: 0,
+                myStatus: "None"
+            },
             createdAt:expect.any(String)
         }
 
