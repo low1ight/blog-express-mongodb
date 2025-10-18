@@ -1,5 +1,5 @@
 import {LikeStatus} from "../../common/Like.type";
 
-export type LikeForCommentInputModel = {
+export type LikeForPostInputModel = {
     likeStatus: LikeStatus
 }
