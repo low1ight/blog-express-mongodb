@@ -1,3 +1,5 @@
+import {ExtendedLikeInfoViewModel} from "./extendedLikeInfo-view-model";
+
 export type PostViewModel = {
     id: string;
     title: string;
@@ -6,4 +8,5 @@ export type PostViewModel = {
     blogId:string
     blogName:string
     createdAt: string;
+    extendedLikesInfo:ExtendedLikeInfoViewModel
 }

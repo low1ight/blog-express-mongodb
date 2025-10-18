@@ -5,6 +5,6 @@ export type ExtendedLikeInfoViewModel = {
     likeCount: number;
     dislikeCount: number;
     myStatus: LikeStatus
-    newestLikes:NewestLikeViewModel
+    newestLikes:NewestLikeViewModel[]
 
 }

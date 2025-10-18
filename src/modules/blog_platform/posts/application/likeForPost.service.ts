@@ -1,6 +1,7 @@
 import {postRepository} from "../repositories/post.repository";
 import {lifeForPostRepository} from "../repositories/lifeForPost.repository";
 import {LikeStatus} from "../../common/Like.type";
+import {userRepository} from "../../../users_module/users/repository/user.repository";
 
 export const likeForPostService = {
 
@@ -11,11 +12,17 @@ export const likeForPostService = {
            return false
        }
 
+       const user = await userRepository.getUserById(userId)
+
+       if(!user) {
+           return false
+       }
+
        const userLikeStatus = await lifeForPostRepository.getUserLikeStatus(postId, userId)
 
 
        if(!userLikeStatus) {
-           await lifeForPostRepository.setLikeStatus(postId,userId,likeStatus)
+           await lifeForPostRepository.setLikeStatus(postId,userId,likeStatus,user.login)
            return true
        }
 

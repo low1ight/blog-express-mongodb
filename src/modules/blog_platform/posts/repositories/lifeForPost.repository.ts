@@ -4,11 +4,13 @@ import {likeForPostCollection} from "../../../../db/db.mongodb";
 import {LikeForPostDocumentModel} from "../models/likeForPost-document-model";
 
 export const lifeForPostRepository = {
-    async setLikeStatus(postId: string, userId: string, likeStatus: LikeStatus) {
+    async setLikeStatus(postId: string, userId: string, likeStatus: LikeStatus, userLogin:string) {
 
         const dto = {
             userId: new ObjectId(userId),
             postId: new ObjectId(postId),
+            userLogin:userLogin,
+            addedAt: new Date().toISOString(),
             likeStatus
         } as LikeForPostDocumentModel
 
@@ -28,7 +30,7 @@ export const lifeForPostRepository = {
                 userId: new ObjectId(userId),
                 postId: new ObjectId(postId)
             },
-            {$set: {likeStatus: likeStatus}})
+            {$set: {likeStatus: likeStatus,addedAt: new Date().toISOString(),}})
 
     }
 }
