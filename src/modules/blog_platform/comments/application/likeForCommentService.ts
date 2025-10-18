@@ -2,7 +2,7 @@ import {commentRepository} from "../repositories/comment.repository";
 import {LikeStatus} from "../../common/Like.type";
 import {likeForCommentRepository} from "../repositories/likeForComment.repository";
 
-export const LikeForCommentService = {
+export const likeForCommentService = {
 
     async setLikeStatus( commentId:string, userId:string, likeStatus:LikeStatus) {
         const comment = await commentRepository.getCommentById(commentId)

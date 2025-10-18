@@ -26,7 +26,6 @@ export const commentQueryRepository = {
 
         const totalCount: number = await commentCollection.countDocuments(filter)
 
-        console.log(totalCount)
 
         const comments: CommentDocumentModel[] = await commentCollection
             .find(filter)
@@ -49,14 +48,12 @@ export const commentQueryRepository = {
             }
         ]).toArray() as LikesInfoModel[]
 
-        console.log(likesStatuses)
-
 
         const commentsViewModels: CommentViewModel[] = comments.map(comment => {
 
 
             const likeStatus:LikesInfoModel | undefined = likesStatuses.find(e => e._id.equals(comment._id))
-            //console.log(likeStatus)
+
             return toCommentViewModel(comment, likeStatus)
         })
 
@@ -67,7 +64,6 @@ export const commentQueryRepository = {
     async getCommentById(commentId: string, userId: string | null): Promise<CommentViewModel | null> {
         const comment = await commentCollection.findOne({_id: new ObjectId(commentId)})
 
-        console.log(userId)
 
         if (!comment) return null;
 

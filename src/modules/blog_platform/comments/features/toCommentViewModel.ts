@@ -6,7 +6,7 @@ export const toCommentViewModel = ({
                                        _id,
                                        content, userId, userLogin, createdAt
                                    }: CommentDocumentModel,likesInfoModel:LikesInfoModel | undefined): CommentViewModel => {
-    console.log('status:',likesInfoModel?.myStatus)
+
 
     return {
         id: _id.toString(),
