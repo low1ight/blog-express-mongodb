@@ -4,7 +4,7 @@ import {LikeStatus} from "../../common/Like.type";
 export type LikeForPostDocumentModel = {
     _id: ObjectId,
     userId: ObjectId,
-    commentId: ObjectId,
+    postId: ObjectId,
     likeStatus: LikeStatus
 }
 
