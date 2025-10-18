@@ -13,6 +13,8 @@ import {commentInputValidator} from "../../comments/validators/comment-input-val
 import {jwtAccessTokenAuthGuard} from "../../../users_module/auth/guards/jwtAccessToken.auth.guard";
 import {getPostCommentsHandler} from "./handlers/getPostsCommentsHandler";
 import {optionalJwtAccessTokenAuthGuard} from "../../../users_module/auth/guards/optionalJwtAccessToken.auth.guard";
+import {setLikeStatusForPostHandler} from "./handlers/setLikeStatusFoPostHandler";
+import {likeForPostInputValidator} from "../vlidators/likeForPost-input-validator";
 
 
 
@@ -24,6 +26,8 @@ postsRouter.get('/', getPostsHandler)
 postsRouter.get('/:id',validate(idParamValidator), getPostByIdHandler)
 
 postsRouter.post('/',basicAuthGuard,validate(postInputValidator), createPostHandler)
+
+postsRouter.post('/:id/like-status',jwtAccessTokenAuthGuard,validate(idParamValidator, likeForPostInputValidator), setLikeStatusForPostHandler)
 
 postsRouter.put('/:id',basicAuthGuard,validate(idParamValidator,postInputValidator), updatePostHandler)
 
