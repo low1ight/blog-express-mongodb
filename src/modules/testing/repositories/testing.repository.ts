@@ -1,7 +1,7 @@
 import {
     blogCollection,
     commentCollection,
-    devicesCollection,
+    devicesCollection, likeForCommentCollection, likeForPostCollection,
     postCollection,
     userCollection
 } from "../../../db/db.mongodb";
@@ -16,6 +16,8 @@ export const testingRepository = {
         await userCollection.deleteMany({});
         await commentCollection.deleteMany({});
         await devicesCollection.deleteMany({});
+        await likeForCommentCollection.deleteMany({});
+        await likeForPostCollection.deleteMany({});
 
     },
 
