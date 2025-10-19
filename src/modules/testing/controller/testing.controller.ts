@@ -6,11 +6,12 @@ import {createPostForBlogInsertData} from "../common/create-post-for-blog-insert
 import {postService} from "../../blog_platform/posts/application/post.service";
 import {createUsersInsertData} from "../common/create-users-insert-data";
 import {userService} from "../../users_module/users/application/user.service";
-import {authService} from "../../users_module/auth/application/auth.service";
 import {createCommentsForPostInsertData} from "../common/create-comments-for-post-insert-data";
 import {commentsService} from "../../blog_platform/comments/application/comments.service";
 import {likeForCommentRepository} from "../../blog_platform/comments/repositories/likeForComment.repository";
 import {LikeStatus} from "../../blog_platform/common/Like.type";
+import {lifeForPostRepository} from "../../blog_platform/posts/repositories/lifeForPost.repository";
+import {randomUUID} from "node:crypto";
 
 
 export const testingRouter = Router()
@@ -75,11 +76,20 @@ testingRouter.post('/add-data', async (req: Request, res: Response) => {
     const usersIdsForLike = likeUserRes.map(r => r.content) as string[]
     const usersIdsForDislike = dislikeUserRes.map(r => r.content) as string[]
 
+    const likesForPostsForCreation = Array.from(usersIdsForLike, async (userId) => {
+        return await lifeForPostRepository.setLikeStatus(postIds[0],userId, "Like" as LikeStatus,'test name:' +randomUUID())
+    })
+
+    const dislikesForPostsForCreation = Array.from(usersIdsForDislike, async (userId) => {
+        return await lifeForPostRepository.setLikeStatus(postIds[0],userId, "Dislike" as LikeStatus,'test name:' +randomUUID())
+    })
+
+    await Promise.all(likesForPostsForCreation)
+    await Promise.all(dislikesForPostsForCreation)
+
 
 
    //create comments
-
-    console.log('before comments')
 
 
     const commentsForCreation = Array.from(createCommentsForPostInsertData(commentCount), async (comment) => {
