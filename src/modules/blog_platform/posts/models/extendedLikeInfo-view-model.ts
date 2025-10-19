@@ -1,10 +1,10 @@
 import {LikeStatus} from "../../common/Like.type";
-import {NewestLikeViewModel} from "./newestLike-view-model";
+import {NewestLikesViewModel} from "./newest-likes-view-model";
 
 export type ExtendedLikeInfoViewModel = {
     likeCount: number;
     dislikeCount: number;
     myStatus: LikeStatus
-    newestLikes:NewestLikeViewModel[]
+    newestLikes:NewestLikesViewModel[]
 
 }
