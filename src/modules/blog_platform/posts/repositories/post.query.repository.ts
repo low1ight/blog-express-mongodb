@@ -120,7 +120,7 @@ export const postQueryRepository = {
             }
         ]).toArray() as NewestLikeDocumentModel[]
 
-        return toPostViewModel(post,lastLikes[0].newestLikes,likeStatus[0])
+        return toPostViewModel(post,lastLikes[0]?.newestLikes || [],likeStatus[0])
 
     }
 

@@ -16,7 +16,7 @@ export const createPostHandler = async (req:RequestWithBody<PostInputModel>, res
         return
     }
 
-    const post:PostViewModel | null = await postQueryRepository.getPostById(response.content!) as PostViewModel
+    const post:PostViewModel | null = await postQueryRepository.getPostById(response.content!,null) as PostViewModel
 
 
     res.status(201).send(post)
