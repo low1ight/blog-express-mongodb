@@ -10,16 +10,16 @@ import {testingRepository} from "../../../src/modules/testing/repositories/testi
 describe('/posts', () => {
 
 
-    let createPostData:PostInputModel
-    let updatePostData:PostInputModel
+    let createPostData: PostInputModel
+    let updatePostData: PostInputModel
 
-    let firstBlog:BlogViewModel
-    let secondBlog:BlogViewModel
+    let firstBlog: BlogViewModel
+    let secondBlog: BlogViewModel
 
-    let post:PostViewModel
+    let post: PostViewModel
 
-    let correctCreatedPost:PostViewModel
-    let correctUpdatedPost:PostViewModel
+    let correctCreatedPost: PostViewModel
+    let correctUpdatedPost: PostViewModel
 
     beforeAll(async () => {
 
@@ -37,46 +37,58 @@ describe('/posts', () => {
 
         secondBlog = createSecondBlogRes.body
 
-        createPostData = {...correctPostInputData,blogId: createFirstBlogRes.body.id};
-        updatePostData = {...correctPostInputData,blogId: createSecondBlogRes.body.id};
+        createPostData = {...correctPostInputData, blogId: createFirstBlogRes.body.id};
+        updatePostData = {...correctPostInputData, blogId: createSecondBlogRes.body.id};
 
 
-         correctCreatedPost = {
-            id:expect.any(String),
+        correctCreatedPost = {
+            id: expect.any(String),
             blogName: firstBlog.name,
             ...correctPostInputData,
-            createdAt:expect.any(String)
+            createdAt: expect.any(String),
+            blogId:firstBlog.id,
+            extendedLikesInfo: {
+                myStatus: "None",
+                likesCount: 0,
+                dislikesCount: 0,
+                newestLikes:[]
+            }
         }
 
         correctUpdatedPost = {
-            id:expect.any(String),
+            id: expect.any(String),
             blogName: secondBlog.name,
             ...correctPostInputData,
-            createdAt:expect.any(String)
+            createdAt: expect.any(String),
+            blogId:secondBlog.id,
+            extendedLikesInfo: {
+                myStatus: "None",
+                likesCount: 0,
+                dislikesCount: 0,
+                newestLikes:[]
+            }
         }
     })
-
-
 
 
     it('should return an empty array', async () => {
         const res = await req.get('/posts')
 
-      expect(res.status).toEqual(200)
+        expect(res.status).toEqual(200)
 
-      expect(res.body.items).toEqual([])
+        expect(res.body.items).toEqual([])
 
     })
 
 
-    it('should return 400 tyring creating post without auth data',async () => {
+    it('should return 400 tyring creating post without auth data', async () => {
         const res = await req.post('/posts').send(createPostData)
 
         expect(res.status).toEqual(401)
 
     })
 
-    it('should return 401 tyring creating post without/wrong input data',async () => {
+    it('should return 401 tyring creating post without/wrong input data', async () => {
         const res = await req.post('/posts').set('Authorization', correctBasicAuthData)
 
         expect(res.status).toEqual(400)
@@ -84,7 +96,7 @@ describe('/posts', () => {
     })
 
 
-    it('should create post with 200 status and return it',async () => {
+    it('should create post with 201 status and return it', async () => {
 
         const res = await req.post('/posts')
             .send(createPostData)
@@ -97,17 +109,15 @@ describe('/posts', () => {
         expect(res.body).toEqual(correctCreatedPost)
 
 
-
-
     })
 
     it('get by id should return 200 and post', async () => {
 
-            const res = await req.get(`/posts/${post.id}`)
+        const res = await req.get(`/posts/${post.id}`)
 
-            expect(res.status).toEqual(200)
+        expect(res.status).toEqual(200)
 
-            expect(res.body).toEqual(correctCreatedPost)
+        expect(res.body).toEqual(correctCreatedPost)
 
     })
 
@@ -144,12 +154,11 @@ describe('/posts', () => {
 
         expect(response.body.items.length).toEqual(10)
 
-        response.body.items.forEach((res:PostViewModel) => {
+        response.body.items.forEach((res: PostViewModel) => {
             expect(res).toEqual(correctCreatedPost)
         })
 
     })
-
 
 
     it('should return 401 trying update without auth', async () => {
@@ -194,7 +203,7 @@ describe('/posts', () => {
 
         expect(response.body.items.length).toEqual(10)
 
-        const updatedPost = await response.body.items.find((p:PostViewModel) => p.id === post.id)
+        const updatedPost = await response.body.items.find((p: PostViewModel) => p.id === post.id)
 
         expect(updatedPost).toEqual(correctUpdatedPost)
 
