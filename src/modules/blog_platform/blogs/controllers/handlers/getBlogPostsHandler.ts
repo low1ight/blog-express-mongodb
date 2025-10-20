@@ -9,6 +9,6 @@ export const getBlogPostsHandler = async (req:RequestWithParamAndQuery<Id,BaseQu
 
     const query = new BaseQueryMapper(req.query);
 
-    const posts: Paginator<PostViewModel> = await postQueryRepository.getPosts(query,req.params.id);
+    const posts: Paginator<PostViewModel> = await postQueryRepository.getPosts(query,req.user?.userId,req.params.id);
     res.send(posts)
 }

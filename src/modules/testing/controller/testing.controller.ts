@@ -10,8 +10,7 @@ import {createCommentsForPostInsertData} from "../common/create-comments-for-pos
 import {commentsService} from "../../blog_platform/comments/application/comments.service";
 import {likeForCommentRepository} from "../../blog_platform/comments/repositories/likeForComment.repository";
 import {LikeStatus} from "../../blog_platform/common/Like.type";
-import {lifeForPostRepository} from "../../blog_platform/posts/repositories/lifeForPost.repository";
-import {randomUUID} from "node:crypto";
+import {likeForPostService} from "../../blog_platform/posts/application/likeForPost.service";
 
 
 export const testingRouter = Router()
@@ -25,7 +24,7 @@ testingRouter.delete('/all-data', async (req: Request, res: Response) => {
 
 testingRouter.post('/add-data', async (req: Request, res: Response) => {
     const blogsCount = 30
-    const postsCount = 20
+    const postsCount = 5
     const commentCount = 20
     const likeCount = 10
     const dislikeCount = 5
@@ -60,6 +59,7 @@ testingRouter.post('/add-data', async (req: Request, res: Response) => {
     //createUsersFor LIKE/DISLIKE
 
     const likeUserInputData = createUsersInsertData(likeCount)
+
     const dislikeUserInputData = createUsersInsertData(dislikeCount)
 
     const likeUsersForCreations = Array.from(likeUserInputData, async (user) => {
@@ -70,6 +70,9 @@ testingRouter.post('/add-data', async (req: Request, res: Response) => {
         return await userService.createUser(user)
     })
 
+
+    console.log(likeUserInputData)
+
     const likeUserRes = await Promise.all(likeUsersForCreations)
     const dislikeUserRes = await Promise.all(disUsersForCreations)
 
@@ -77,15 +80,25 @@ testingRouter.post('/add-data', async (req: Request, res: Response) => {
     const usersIdsForDislike = dislikeUserRes.map(r => r.content) as string[]
 
     const likesForPostsForCreation = Array.from(usersIdsForLike, async (userId) => {
-        return await lifeForPostRepository.setLikeStatus(postIds[0],userId, "Like" as LikeStatus,'test name:' +randomUUID())
+        return await likeForPostService.setLikeStatus(postIds[0],userId, "Like" as LikeStatus)
     })
 
     const dislikesForPostsForCreation = Array.from(usersIdsForDislike, async (userId) => {
-        return await lifeForPostRepository.setLikeStatus(postIds[0],userId, "Dislike" as LikeStatus,'test name:' +randomUUID())
+        return await likeForPostService.setLikeStatus(postIds[0],userId, "Dislike" as LikeStatus)
     })
 
     await Promise.all(likesForPostsForCreation)
     await Promise.all(dislikesForPostsForCreation)
+
+    const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+    await delay(15)
+    await likeForPostService.setLikeStatus(postIds[0],usersIdsForDislike[0], "Like" as LikeStatus)
+    await delay(15)
+    await likeForPostService.setLikeStatus(postIds[0],usersIdsForDislike[1], "Like" as LikeStatus)
+    await delay(15)
+    await likeForPostService.setLikeStatus(postIds[0],usersIdsForDislike[2], "Like" as LikeStatus)
+
 
 
 
@@ -115,8 +128,6 @@ testingRouter.post('/add-data', async (req: Request, res: Response) => {
 
      await Promise.all(likesForCommentsForCreation)
      await Promise.all(dislikesForCommentsForCreation)
-
-    console.log('liked comment id:',commentIds[0])
 
 
     res.sendStatus(200)

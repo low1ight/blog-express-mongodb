@@ -21,9 +21,9 @@ import {likeForPostInputValidator} from "../vlidators/likeForPost-input-validato
 export const postsRouter = Router()
 
 
-postsRouter.get('/', getPostsHandler)
+postsRouter.get('/',optionalJwtAccessTokenAuthGuard, getPostsHandler)
 
-postsRouter.get('/:id',validate(idParamValidator), getPostByIdHandler)
+postsRouter.get('/:id',optionalJwtAccessTokenAuthGuard,validate(idParamValidator), getPostByIdHandler)
 
 postsRouter.post('/',basicAuthGuard,validate(postInputValidator), createPostHandler)
 

@@ -11,6 +11,7 @@ import {deleteBlogHandler} from "./handlers/deleteBlogHandler";
 import {postForBlogInputValidator} from "../../posts/vlidators/post-input-validator";
 import {createPostForBlogHandler} from "./handlers/createPostForBlogHandler";
 import {getBlogPostsHandler} from "./handlers/getBlogPostsHandler";
+import {optionalJwtAccessTokenAuthGuard} from "../../../users_module/auth/guards/optionalJwtAccessToken.auth.guard";
 
 
 
@@ -29,4 +30,4 @@ blogRouter.delete('/:id',basicAuthGuard,validate(idParamValidator), deleteBlogHa
 
 blogRouter.post('/:id/posts',basicAuthGuard, validate(postForBlogInputValidator), createPostForBlogHandler)
 
-blogRouter.get('/:id/posts', getBlogPostsHandler)
+blogRouter.get('/:id/posts',optionalJwtAccessTokenAuthGuard, getBlogPostsHandler)

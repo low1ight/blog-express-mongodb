@@ -9,6 +9,6 @@ export const getPostsHandler = async (req:RequestWithQuery<BaseQuery>, res:Respo
 
     const query = new BaseQueryMapper(req.query);
 
-    const posts: Paginator<PostViewModel> = await postQueryRepository.getPosts(query)
+    const posts: Paginator<PostViewModel> = await postQueryRepository.getPosts(query,req.user?.userId)
     res.send(posts)
 }

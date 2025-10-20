@@ -3,7 +3,7 @@ import {ObjectId} from "mongodb";
 import {likeForPostCollection} from "../../../../db/db.mongodb";
 import {LikeForPostDocumentModel} from "../models/likeForPost-document-model";
 
-export const lifeForPostRepository = {
+export const likeForPostRepository = {
     async setLikeStatus(postId: string, userId: string, likeStatus: LikeStatus, userLogin:string) {
 
         const dto = {
@@ -12,9 +12,9 @@ export const lifeForPostRepository = {
             userLogin:userLogin,
             addedAt: new Date().toISOString(),
             likeStatus
-        } as LikeForPostDocumentModel
+        }
 
-        await likeForPostCollection.insertOne(dto)
+        await likeForPostCollection.insertOne(dto as LikeForPostDocumentModel)
     },
 
 

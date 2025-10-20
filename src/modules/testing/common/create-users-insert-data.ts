@@ -1,13 +1,12 @@
 import {UserInputModel} from "../../users_module/users/models/user-input-model";
 import {randomUUID} from "node:crypto";
 
-export const createUsersInsertData = (blogCount:number):UserInputModel[] => {
+export const createUsersInsertData = (count:number):UserInputModel[] => {
     const inputModelsArr:UserInputModel[] = []
-    //create 30 blogs
-    for(let i = 0; i < blogCount; i++) {
+    for(let i = 0; i < count; i++) {
 
         const userInsertModel:UserInputModel = {
-            login:randomUUID() + "testLogin " + i,
+            login:"userLogin:" + i + ' ' + randomUUID() ,
             password: "qwerty",
             email: randomUUID() + `testEmail${i}@gmail.com `,
 
