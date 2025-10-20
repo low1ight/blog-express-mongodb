@@ -1,4 +1,3 @@
-import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
 import {reqWithBasicAuth, reqWithoutState} from "../../common/test-helpers";
 import {
     correctCreateFirstUserData, correctCreateSecondUserData, correctFirstUserLoginData, correctSecondUserLoginData,
@@ -9,6 +8,8 @@ import {
     JwtRefreshTokenPayloadModel
 } from "../../../src/modules/users_module/auth/models/jwt-refresh-token-payload-model";
 import {jwtHelper} from "../../common/jwt-helper";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 describe('auth tests', () => {
@@ -18,10 +19,18 @@ describe('auth tests', () => {
     let currentDeviceId: string
     let secondUserRefreshToken: string
     let anotherUserDeviceId:string
+    let mongodb:MongoMemoryServer
+
+
+
+
+
 
     beforeAll(async () => {
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
 
-        await testingRepository.deleteAllData()
 
         await reqWithBasicAuth.post('/users')
             .send(correctCreateFirstUserData)
@@ -30,6 +39,11 @@ describe('auth tests', () => {
             .send(correctCreateSecondUserData)
 
     })
+
+    afterAll(async () => {
+        await mongodb.stop()
+    })
+
 
 
     it('log in 5 times should create 5 devices for first user', async () => {

@@ -6,16 +6,25 @@ import {
     correctUpdatedBlogViewModel, correctPostForBlogInputData
 } from "./common/blog-test-data";
 import {BlogViewModel} from "../../../src/modules/blog_platform/blogs/models/blog-view-model";
-import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 describe('/blogs', () => {
 
     let blogId:string
     let secondBlogId:string
+    let mongodb:MongoMemoryServer
 
 
     beforeAll(async () => {
-        await testingRepository.deleteAllData()
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
+
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
     it('should return 200 and an empty arr', async () => {

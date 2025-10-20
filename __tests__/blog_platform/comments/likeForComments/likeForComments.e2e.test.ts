@@ -7,11 +7,13 @@ import {randomUUID} from "node:crypto";
 import {userService} from "../../../../src/modules/users_module/users/application/user.service";
 import {likeForCommentService} from "../../../../src/modules/blog_platform/comments/application/likeForComment.service";
 import {LikeStatus} from "../../../../src/modules/blog_platform/common/Like.type";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../../src/db/db.mongodb";
 
 
 describe('POST/PUT comments validation tests', () => {
 
-
+    let mongodb:MongoMemoryServer
     let blogId: string
     let postId: string
 
@@ -49,7 +51,16 @@ describe('POST/PUT comments validation tests', () => {
     }
 
 
+
+
+
+
+
     beforeAll(async () => {
+
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
 
         //delete all data
         await reqWithBasicAuth.delete('/testing/all-data')
@@ -96,6 +107,10 @@ describe('POST/PUT comments validation tests', () => {
         firstJwtAccessToken = userLogin.body
 
 
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
 

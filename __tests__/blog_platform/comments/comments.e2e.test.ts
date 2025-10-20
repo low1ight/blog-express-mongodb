@@ -11,6 +11,8 @@ import {
     correctFirstUserLoginData, correctSecondUserLoginData
 } from "../../users_module/auth/common/auth-test-data";
 import {correctPostInputData} from "../posts/common/post-test-data";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 
@@ -28,12 +30,20 @@ describe('POST/PUT comments validation tests', () => {
 
     let firstJwtAccessToken:string
     let secondJwtAccessToken:string
+    let mongodb:MongoMemoryServer
+
+
+
+
+
 
 
     beforeAll(async () => {
 
-        //delete all data
-        await reqWithBasicAuth.delete('/testing/all-data')
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
+
 
         //create users
         const firstUser = await reqWithBasicAuth.post('/users')
@@ -99,6 +109,10 @@ describe('POST/PUT comments validation tests', () => {
         }
 
 
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
 

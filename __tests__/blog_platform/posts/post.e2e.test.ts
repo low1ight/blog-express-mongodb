@@ -4,7 +4,8 @@ import {PostViewModel} from "../../../src/modules/blog_platform/posts/models/pos
 import {correctBasicAuthData, req, reqWithBasicAuth} from "../../common/test-helpers";
 import {correctBlogUpdateData, correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {correctPostInputData} from "./common/post-test-data";
-import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 describe('/posts', () => {
@@ -20,10 +21,19 @@ describe('/posts', () => {
 
     let correctCreatedPost: PostViewModel
     let correctUpdatedPost: PostViewModel
+    let mongodb:MongoMemoryServer
+
+
+
+
+
 
     beforeAll(async () => {
 
-        await testingRepository.deleteAllData()
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
+
 
         const createFirstBlogRes = await reqWithBasicAuth.post('/blogs')
             .send(correctCreateBlogInputData)
@@ -68,6 +78,10 @@ describe('/posts', () => {
                 newestLikes:[]
             }
         }
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
 

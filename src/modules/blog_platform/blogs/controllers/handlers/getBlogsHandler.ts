@@ -8,7 +8,6 @@ import {Paginator} from "../../../../../utils/paginator/paginator";
 export const getBlogsHandler = async (req:RequestWithQuery<BlogQuery>, res:Response<Paginator<BlogViewModel>>) => {
 
     const mappedQuery = new BlogQueryMapper(req.query);
-    console.log('work?')
 
     const blogs:Paginator<BlogViewModel> = await blogsQueryRepository.getBlogs(mappedQuery)
 

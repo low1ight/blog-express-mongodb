@@ -1,4 +1,3 @@
-import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
 import {req, reqWithBasicAuth} from "../../common/test-helpers";
 import {Paginator} from "../../../src/utils/paginator/paginator";
 import {UserViewModel} from "../../../src/modules/users_module/users/models/user-view-model";
@@ -6,18 +5,29 @@ import {
     correctUserInputData,
     correctCreatedUsersViewModels
 } from "./common/users-test-data";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 describe('users tests', () => {
 
 
     let firstUserId:string
+    let mongodb:MongoMemoryServer
+
+
+
 
 
     beforeAll(async () => {
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
 
-        await testingRepository.deleteAllData()
+    })
 
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
     it('should return 401 trying get user without base auth', async () => {

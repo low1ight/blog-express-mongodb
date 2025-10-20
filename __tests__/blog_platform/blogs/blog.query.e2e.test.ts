@@ -1,17 +1,26 @@
-import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
 import {req, reqWithBasicAuth} from "../../common/test-helpers";
 import {
     correctBlogsInputDataArr, createdBlogsViewModelArr,
 } from "./common/blog-test-data";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 describe('/blogs', () => {
 
 
+    let mongodb:MongoMemoryServer
+
+
     beforeAll(async () => {
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
 
-        await testingRepository.deleteAllData()
+    })
 
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
     it('should create 11 blogs', async () => {

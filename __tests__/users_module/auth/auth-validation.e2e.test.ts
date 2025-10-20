@@ -1,8 +1,9 @@
 
 import {correctCreateFirstUserData, correctFirstUserLoginData} from "./common/auth-test-data";
-import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
 import {correctBasicAuthData, req} from "../../common/test-helpers";
 import {createFieldsTests} from "../../common/create-field-tests";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 const invalidLoginOrEmailValues = [
@@ -18,14 +19,28 @@ const invalidPasswordsValues = [
 
 describe('"/blog_platform" POST validation tests', () => {
 
+    let mongodb:MongoMemoryServer
+
+
+
+
+
+
     beforeAll(async () => {
 
-        await testingRepository.deleteAllData()
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
+
 
          await req.post('/users')
             .set('Authorization', correctBasicAuthData)
             .send(correctCreateFirstUserData)
 
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
 

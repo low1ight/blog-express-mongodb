@@ -4,6 +4,8 @@ import {correctPostInputData} from "./common/post-test-data";
 import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {createFieldsTests} from "../../common/create-field-tests";
 import {PostViewModel} from "../../../src/modules/blog_platform/posts/models/post-view-model";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 const invalidPostTitleArr = [
@@ -36,13 +38,27 @@ describe('"/posts" POST validation tests', () => {
 
     let correctBlogId:string
     let createPostCorrectData:PostInputModel
+    let mongodb:MongoMemoryServer
+
+
+
+
+
 
     beforeAll(async () => {
+
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
 
         const res = await reqWithBasicAuth.post('/blogs').send(correctCreateBlogInputData).expect(201)
         correctBlogId = res.body.id
         createPostCorrectData = {...correctPostInputData,blogId:correctBlogId}
 
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
 
@@ -60,21 +76,32 @@ describe('"/posts" POST validation tests', () => {
 
 describe('"/posts" PUT validation tests', () => {
 
-    let correctBlogId:string
     let createPostCorrectData:PostInputModel
     let createdPost:PostViewModel
+    let mongodb:MongoMemoryServer
+
+
+
+
+
 
     beforeAll(async () => {
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
 
         const res = await reqWithBasicAuth.post('/blogs').send(correctCreateBlogInputData).expect(201)
-        correctBlogId = res.body.id
-        createPostCorrectData = {...correctPostInputData,blogId:correctBlogId}
+        createPostCorrectData = {...correctPostInputData,blogId:res.body.id}
 
 
         const postRes = await reqWithBasicAuth.post('/posts').send(createPostCorrectData).expect(201)
         createdPost = postRes.body
 
 
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
 

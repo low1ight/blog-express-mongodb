@@ -7,6 +7,8 @@ import {
 import {testingRepository} from "../../../src/modules/testing/repositories/testing.repository";
 import {emailManager} from "../../../src/modules/users_module/auth/application/email.manager";
 import {req, reqWithBasicAuth, reqWithoutState} from "../../common/test-helpers";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 
@@ -17,14 +19,27 @@ describe('auth tests', () => {
     let correctConfirmationCode :string
     const changedPassword = 'newPassword1356'
     let firstRefreshToken:string
+    let mongodb:MongoMemoryServer
+
+
+
+
+
 
     beforeAll(async () => {
 
-        await testingRepository.deleteAllData()
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
+
 
         await reqWithBasicAuth.post('/users')
             .send(correctCreateFirstUserData)
 
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
     })
 
 

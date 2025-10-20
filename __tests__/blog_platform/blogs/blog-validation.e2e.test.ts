@@ -2,6 +2,8 @@ import {generateRandomStr, reqWithBasicAuth} from "../../common/test-helpers";
 import {BlogViewModel} from "../../../src/modules/blog_platform/blogs/models/blog-view-model";
 import {correctCreateBlogInputData} from "./common/blog-test-data";
 import {createFieldsTests} from "../../common/create-field-tests";
+import {MongoMemoryServer} from "mongodb-memory-server";
+import {runDB} from "../../../src/db/db.mongodb";
 
 
 const invalidBlogNameArr = [
@@ -29,6 +31,22 @@ const invalidBlogUrlArr = [
 
 describe('"/blog_platform" POST validation tests', () => {
 
+
+    let mongodb:MongoMemoryServer
+
+
+    beforeAll(async () => {
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
+
+    })
+
+    afterAll(async () => {
+        await mongodb.stop()
+    })
+
+
     const createBlogsTest = createFieldsTests(correctCreateBlogInputData, reqWithBasicAuth, "post", '/blogs')
 
 
@@ -45,19 +63,37 @@ describe('"/blog_platform" POST validation tests', () => {
 
 describe('"/blog" PUT validation tests',  () => {
 
+
     let blog: BlogViewModel | undefined
+
+
+    let mongodb:MongoMemoryServer
 
 
     beforeAll(async () => {
 
+
+        mongodb = await MongoMemoryServer.create();
+        const uri = mongodb.getUri();
+        await runDB(uri)
+
+
+
         const res = await reqWithBasicAuth.post('/blogs')
             .send(correctCreateBlogInputData).expect(201)
-
 
         blog = res.body
 
 
+
     })
+
+    afterAll(async () => {
+        await mongodb.stop()
+    })
+
+
+
 
    const createTests = createFieldsTests(correctCreateBlogInputData, reqWithBasicAuth, "put", () => `/blogs/${blog?.id}`)
 
