@@ -11,7 +11,7 @@ import mongoose, {Model} from "mongoose";
 
 
 
-const POST_COLLECTION_NAME = 'posts';
+
 const USER_COLLECTION_NAME = 'users';
 const COMMENT_COLLECTION_NAME = 'comments';
 const LIKE_FOR_COMMENT_COLLECTION_NAME = 'likeForComments';
@@ -20,14 +20,12 @@ const DEVICE_COLLECTION_NAME = 'devices';
 
 
 export let client: MongoClient;
-//export let blogCollection: Collection<BlogDocumentModel>;
-export let postCollection: Collection<PostDocumentModel>;
 export let likeForPostCollection: Collection<LikeForPostDocumentModel>;
 export let userCollection: Collection<UserDocumentModel>;
 export let commentCollection: Collection<CommentDocumentModel>;
 export let likeForCommentCollection: Collection<LikeForCommentDocumentModel>;
 export let devicesCollection: Collection<DeviceDocumentModel>;
-export let Blog : Model<BlogDocumentModel>
+
 
 export async function runDB(url: string): Promise<void> {
 
@@ -37,8 +35,6 @@ export async function runDB(url: string): Promise<void> {
     const db: Db = client.db(SETTINGS.DB.NAME);
 
 
-    //blogCollection = db.collection<BlogDocumentModel>(BLOG_COLLECTION_NAME);
-    postCollection = db.collection<PostDocumentModel>(POST_COLLECTION_NAME);
     likeForPostCollection = db.collection<LikeForPostDocumentModel>(LIKE_FOR_POST_COLLECTION_NAME);
     userCollection = db.collection<UserDocumentModel>(USER_COLLECTION_NAME);
     commentCollection = db.collection<CommentDocumentModel>(COMMENT_COLLECTION_NAME);
