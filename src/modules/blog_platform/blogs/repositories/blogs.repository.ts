@@ -1,43 +1,43 @@
-import {blogCollection} from "../../../../db/mongodb";
 import {BlogInputModel} from "../models/blog-input-model";
 import {BlogDocumentModel} from "../models/blog-document-model";
-import {ObjectId} from "mongodb";
+import {Blog} from "../../../../db/models/blog.model";
 
- type BlogInsertModel = {
-   name: string
-   description: string
-   websiteUrl: string
-   createdAt: string
-   isMembership: boolean
+type BlogInsertModel = {
+    name: string
+    description: string
+    websiteUrl: string
+    createdAt: string
+    isMembership: boolean
 }
 
 export const blogsRepository = {
-   async createBlog(blog:BlogInsertModel) {
+   async createBlog(dto:BlogInsertModel) {
 
+       const blog:BlogDocumentModel = await Blog.create(dto)
 
-       const result = await blogCollection.insertOne(blog as BlogDocumentModel);
-
-       return result.insertedId.toString()
+       return blog._id.toString()
 
    },
 
 
    async updateBlog(blogId:string,updateBlogInputModel:BlogInputModel):Promise<boolean> {
 
-    const result = await blogCollection.updateOne({_id: new ObjectId(blogId)},{$set:updateBlogInputModel})
+    const result = await Blog.updateOne({_id: blogId},{$set:updateBlogInputModel})
 
     return result.matchedCount === 1
    },
 
    async deleteBlog(blogId:string):Promise<boolean> {
-       const result = await blogCollection.deleteOne({_id:new ObjectId(blogId)})
+       const result = await Blog.deleteOne({_id:blogId})
 
        return result.deletedCount === 1
 
    },
 
    async isBlogExists(blogId:string): Promise<boolean> {
-      const blog = await blogCollection.findOne({_id: new ObjectId(blogId)})
+       console.log(blogId)
+      const blog = await Blog.exists({_id: blogId})
+
 
        return !!blog
    }
