@@ -26,7 +26,6 @@ export const commentsService = {
             userId: userId,
             userLogin: user.login,
             postId: postId,
-            createdAt: new Date().toISOString()
         }
 
 

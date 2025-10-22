@@ -4,5 +4,4 @@ export type  CommentInsertModel = {
     userId: string
     userLogin: string
     postId: string
-    createdAt:string
 }

@@ -1,4 +1,4 @@
-import {commentCollection, likeForCommentCollection} from "../../../../db/mongodb";
+import {likeForCommentCollection} from "../../../../db/mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {toCommentViewModel} from "../features/toCommentViewModel";
 import {BaseQueryMapper} from "../../../../utils/queryMapper/baseQueryMapper";
@@ -6,6 +6,7 @@ import {Paginator} from "../../../../utils/paginator/paginator";
 import {CommentDocumentModel} from "../models/comment-document-model";
 import {CommentViewModel} from "../models/comment-view-model";
 import {LikesInfoModel} from "../models/likes-info-model";
+import {Comment} from "../../../../db/models/comment.model";
 
 export const commentQueryRepository = {
 
@@ -24,15 +25,15 @@ export const commentQueryRepository = {
 
         const filter = {postId: new ObjectId(postId)}
 
-        const totalCount: number = await commentCollection.countDocuments(filter)
+        const totalCount: number = await Comment.countDocuments(filter)
 
 
-        const comments: CommentDocumentModel[] = await commentCollection
+        const comments: CommentDocumentModel[] = await Comment
             .find(filter)
             .skip(skipCount)
             .sort({[sortBy]: sortDirection as SortDirection})
             .limit(pageSize)
-            .toArray();
+            .lean();
 
         const commentsIds = Array.from(comments,(i) => i._id );
 
@@ -62,7 +63,7 @@ export const commentQueryRepository = {
 
 
     async getCommentById(commentId: string, userId: string | null): Promise<CommentViewModel | null> {
-        const comment = await commentCollection.findOne({_id: new ObjectId(commentId)})
+        const comment:CommentDocumentModel | null = await Comment.findOne({_id: commentId}).lean()
 
 
         if (!comment) return null;

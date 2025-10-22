@@ -1,7 +1,7 @@
-import {commentCollection} from "../../../../db/mongodb";
 import {CommentInsertModel} from "../models/comment-insert-model";
 import {CommentDocumentModel} from "../models/comment-document-model";
 import {ObjectId} from "mongodb";
+import {Comment} from "../../../../db/models/comment.model";
 
 export const commentRepository = {
 
@@ -13,26 +13,26 @@ export const commentRepository = {
             postId: new ObjectId(dto.postId),
         }
 
-        const result = await commentCollection.insertOne(newComment as CommentDocumentModel)
+        const result:CommentDocumentModel = await Comment.create(newComment)
 
-        return result.insertedId.toString()
+        return result._id.toString()
 
     },
 
     async deleteComment(id:string) {
-        await commentCollection.deleteOne({_id:new ObjectId(id)})
+        await Comment.deleteOne({_id:id})
 
     },
 
 
 
     async getCommentById(id:string):Promise<CommentDocumentModel | null> {
-         return await commentCollection.findOne({_id:new ObjectId(id)})
+        return Comment.findOne({_id: (id)}).lean()
 
     },
 
     async commentUpdate(commentId:string, commentContent:string) {
-        await commentCollection.updateOne({_id:new ObjectId(commentId)},{$set:{content:commentContent}})
+        await Comment.updateOne({_id:commentId},{$set:{content:commentContent}})
     }
 
 
