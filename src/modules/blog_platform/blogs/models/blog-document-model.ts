@@ -5,6 +5,7 @@ export type BlogDocumentModel = {
     name: string
     description: string
     websiteUrl: string
-    createdAt: string
     isMembership: boolean
+    createdAt: string
+    updatedAt: string
 }

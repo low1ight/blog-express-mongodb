@@ -8,4 +8,5 @@ export type PostDocumentModel = {
     blogId: ObjectId;
     blogName:string;
     createdAt: string;
+    updatedAt: string;
 }
