@@ -1,10 +1,11 @@
 import {
-    commentCollection,
+
     devicesCollection, likeForCommentCollection, likeForPostCollection,
     userCollection
 } from "../../../db/mongodb";
 import {Blog} from "../../../db/models/blog.model";
 import {Post} from "../../../db/models/post.model";
+import {Comment} from "../../../db/models/comment.model";
 
 
 export const testingRepository = {
@@ -14,7 +15,7 @@ export const testingRepository = {
         await Blog.deleteMany();
         await Post.deleteMany();
         await userCollection.deleteMany({});
-        await commentCollection.deleteMany({});
+        await Comment.deleteMany();
         await devicesCollection.deleteMany({});
         await likeForCommentCollection.deleteMany({});
         await likeForPostCollection.deleteMany({});
