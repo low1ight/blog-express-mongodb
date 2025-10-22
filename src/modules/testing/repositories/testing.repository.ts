@@ -1,10 +1,10 @@
 import {
     commentCollection,
     devicesCollection, likeForCommentCollection, likeForPostCollection,
-    postCollection,
     userCollection
 } from "../../../db/mongodb";
 import {Blog} from "../../../db/models/blog.model";
+import {Post} from "../../../db/models/post.model";
 
 
 export const testingRepository = {
@@ -12,7 +12,7 @@ export const testingRepository = {
 
     async deleteAllData() {
         await Blog.deleteMany();
-        await postCollection.deleteMany({});
+        await Post.deleteMany();
         await userCollection.deleteMany({});
         await commentCollection.deleteMany({});
         await devicesCollection.deleteMany({});
@@ -22,20 +22,19 @@ export const testingRepository = {
     },
 
 
-    async getUserEmailConfirmationCodeByEmail(email:string):Promise<string> {
-        const user =  await userCollection.findOne({email});
+    async getUserEmailConfirmationCodeByEmail(email: string): Promise<string> {
+        const user = await userCollection.findOne({email});
         return user?.confirmationData?.confirmationCode || ""
 
 
     },
 
-    async getUserPasswordRecoveryCodeByEmail(email:string):Promise<string> {
-        const user =  await userCollection.findOne({email});
+    async getUserPasswordRecoveryCodeByEmail(email: string): Promise<string> {
+        const user = await userCollection.findOne({email});
         return user?.passwordRecovery?.code || ""
 
 
     }
-
 
 
 }
