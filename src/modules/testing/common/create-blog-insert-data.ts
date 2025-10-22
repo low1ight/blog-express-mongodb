@@ -10,7 +10,6 @@ export const createBlogInsertData = (blogCount:number):BlogInsertModel[] => {
             description: "Blog desc " + i,
             websiteUrl: "https://www.youtube.com/" + i,
             isMembership:false,
-            createdAt: new Date().toISOString()
         }
         blogsInsertModels.push(blogInsertModel)
     }
