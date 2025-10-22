@@ -7,6 +7,7 @@ import {CommentDocumentModel} from "../modules/blog_platform/comments/models/com
 import {DeviceDocumentModel} from "../modules/users_module/devices/models/device-document-model";
 import {LikeForCommentDocumentModel} from "../modules/blog_platform/comments/models/likeForComment-document-model";
 import {LikeForPostDocumentModel} from "../modules/blog_platform/posts/models/likeForPost-document-model";
+import * as mongoose from "mongoose";
 
 
 const BLOG_COLLECTION_NAME = 'blogs';
@@ -44,9 +45,12 @@ export async function runDB(url: string): Promise<void> {
     try {
         await client.connect();
         await db.command({ping: 1});
+        await mongoose.connect(`url/${SETTINGS.DB.NAME}`);
         console.log('✅ Connected to the database');
+
     } catch (e) {
         await client.close();
+        await mongoose.disconnect()
         throw new Error(`❌ Database not connected: ${e}`);
     }
 }

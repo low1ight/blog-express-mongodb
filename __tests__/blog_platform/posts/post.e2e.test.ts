@@ -5,7 +5,7 @@ import {correctBasicAuthData, req, reqWithBasicAuth} from "../../common/test-hel
 import {correctBlogUpdateData, correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {correctPostInputData} from "./common/post-test-data";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 
 describe('/posts', () => {

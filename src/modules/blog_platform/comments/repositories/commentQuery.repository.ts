@@ -1,4 +1,4 @@
-import {commentCollection, likeForCommentCollection} from "../../../../db/db.mongodb";
+import {commentCollection, likeForCommentCollection} from "../../../../db/mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {toCommentViewModel} from "../features/toCommentViewModel";
 import {BaseQueryMapper} from "../../../../utils/queryMapper/baseQueryMapper";

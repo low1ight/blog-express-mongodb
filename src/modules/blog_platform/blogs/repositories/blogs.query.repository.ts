@@ -1,5 +1,5 @@
 import {BlogViewModel} from "../models/blog-view-model";
-import {blogCollection} from "../../../../db/db.mongodb";
+import {blogCollection} from "../../../../db/mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {toBlogViewModel} from "../features/toBlogViewModel";
 import {BlogDocumentModel} from "../models/blog-document-model";

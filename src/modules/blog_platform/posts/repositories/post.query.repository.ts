@@ -1,5 +1,5 @@
 import {PostViewModel} from "../models/post-view-model";
-import {likeForPostCollection, postCollection} from "../../../../db/db.mongodb";
+import {likeForPostCollection, postCollection} from "../../../../db/mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {PostDocumentModel} from "../models/post-document-model";
 import {toPostViewModel} from "../features/toPostViewModel";

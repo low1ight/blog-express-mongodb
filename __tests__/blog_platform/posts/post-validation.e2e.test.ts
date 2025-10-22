@@ -5,7 +5,7 @@ import {correctCreateBlogInputData} from "../blogs/common/blog-test-data";
 import {createFieldsTests} from "../../common/create-field-tests";
 import {PostViewModel} from "../../../src/modules/blog_platform/posts/models/post-view-model";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 
 const invalidPostTitleArr = [

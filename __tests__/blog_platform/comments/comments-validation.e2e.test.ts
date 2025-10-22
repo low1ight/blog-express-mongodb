@@ -5,7 +5,7 @@ import {commentCorrectCreateInputData} from "./common/comment-test-data";
 import {correctCreateFirstUserData, correctFirstUserLoginData} from "../../users_module/auth/common/auth-test-data";
 import {correctPostInputData} from "../posts/common/post-test-data";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 const invalidContent = [
     {value: "message", case: "cant be less than 20 symbols"},

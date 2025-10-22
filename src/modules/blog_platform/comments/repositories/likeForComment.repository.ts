@@ -1,5 +1,5 @@
 import {LikeStatus} from "../../common/Like.type";
-import {likeForCommentCollection} from "../../../../db/db.mongodb";
+import {likeForCommentCollection} from "../../../../db/mongodb";
 import {ObjectId} from "mongodb";
 import {LikeForCommentDocumentModel} from "../models/likeForComment-document-model";
 

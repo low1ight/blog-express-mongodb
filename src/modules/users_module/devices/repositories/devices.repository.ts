@@ -1,5 +1,5 @@
 import {DeviceInsertModel} from "../models/device-insert-model";
-import {devicesCollection} from "../../../../db/db.mongodb";
+import {devicesCollection} from "../../../../db/mongodb";
 import {DeviceDocumentModel} from "../models/device-document-model";
 import {ObjectId} from "mongodb";
 

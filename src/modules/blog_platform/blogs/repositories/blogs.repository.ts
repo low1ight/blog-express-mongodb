@@ -1,4 +1,4 @@
-import {blogCollection} from "../../../../db/db.mongodb";
+import {blogCollection} from "../../../../db/mongodb";
 import {BlogInputModel} from "../models/blog-input-model";
 import {BlogDocumentModel} from "../models/blog-document-model";
 import {ObjectId} from "mongodb";

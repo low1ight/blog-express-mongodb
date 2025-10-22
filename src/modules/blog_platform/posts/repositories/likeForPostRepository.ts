@@ -1,6 +1,6 @@
 import {LikeStatus} from "../../common/Like.type";
 import {ObjectId} from "mongodb";
-import {likeForPostCollection} from "../../../../db/db.mongodb";
+import {likeForPostCollection} from "../../../../db/mongodb";
 import {LikeForPostDocumentModel} from "../models/likeForPost-document-model";
 
 export const likeForPostRepository = {

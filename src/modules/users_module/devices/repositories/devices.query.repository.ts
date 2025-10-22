@@ -1,4 +1,4 @@
-import {devicesCollection} from "../../../../db/db.mongodb";
+import {devicesCollection} from "../../../../db/mongodb";
 import {ObjectId} from "mongodb";
 import {DeviceDocumentModel} from "../models/device-document-model";
 import {toDeviceViewModel} from "../features/toDeviceViewModel";

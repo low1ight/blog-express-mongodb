@@ -1,4 +1,4 @@
-import {commentCollection} from "../../../../db/db.mongodb";
+import {commentCollection} from "../../../../db/mongodb";
 import {CommentInsertModel} from "../models/comment-insert-model";
 import {CommentDocumentModel} from "../models/comment-document-model";
 import {ObjectId} from "mongodb";

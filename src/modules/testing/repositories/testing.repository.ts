@@ -4,7 +4,7 @@ import {
     devicesCollection, likeForCommentCollection, likeForPostCollection,
     postCollection,
     userCollection
-} from "../../../db/db.mongodb";
+} from "../../../db/mongodb";
 
 
 export const testingRepository = {

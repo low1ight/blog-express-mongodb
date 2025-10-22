@@ -1,4 +1,4 @@
-import {userCollection} from "../../../../db/db.mongodb";
+import {userCollection} from "../../../../db/mongodb";
 import {UserDocumentModel} from "../models/user-document-model";
 import {UserInsertModel} from "../models/user-insert-model";
 import {ObjectId} from "mongodb";

@@ -8,7 +8,7 @@ import {testingRepository} from "../../../src/modules/testing/repositories/testi
 import {emailManager} from "../../../src/modules/users_module/auth/application/email.manager";
 import {req, reqWithBasicAuth, reqWithoutState} from "../../common/test-helpers";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 
 

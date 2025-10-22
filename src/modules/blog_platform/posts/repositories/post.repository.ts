@@ -1,4 +1,4 @@
-import {postCollection} from "../../../../db/db.mongodb";
+import {postCollection} from "../../../../db/mongodb";
 import {PostDocumentModel} from "../models/post-document-model";
 import {ObjectId} from "mongodb";
 import {PostCreateModel} from "../models/post-create-model";

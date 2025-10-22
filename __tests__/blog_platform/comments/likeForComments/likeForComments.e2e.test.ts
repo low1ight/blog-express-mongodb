@@ -8,7 +8,7 @@ import {userService} from "../../../../src/modules/users_module/users/applicatio
 import {likeForCommentService} from "../../../../src/modules/blog_platform/comments/application/likeForComment.service";
 import {LikeStatus} from "../../../../src/modules/blog_platform/common/Like.type";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../../src/db/db.mongodb";
+import {runDB} from "../../../../src/db/mongodb";
 
 
 describe('POST/PUT comments validation tests', () => {

@@ -9,7 +9,7 @@ import {
 } from "../../../src/modules/users_module/auth/models/jwt-refresh-token-payload-model";
 import {jwtHelper} from "../../common/jwt-helper";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 
 describe('auth tests', () => {

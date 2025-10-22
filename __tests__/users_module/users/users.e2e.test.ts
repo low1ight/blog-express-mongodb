@@ -6,7 +6,7 @@ import {
     correctCreatedUsersViewModels
 } from "./common/users-test-data";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 
 describe('users tests', () => {

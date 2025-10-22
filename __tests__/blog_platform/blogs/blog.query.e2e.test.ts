@@ -3,7 +3,7 @@ import {
     correctBlogsInputDataArr, createdBlogsViewModelArr,
 } from "./common/blog-test-data";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 
 describe('/blogs', () => {

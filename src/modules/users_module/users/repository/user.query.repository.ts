@@ -1,5 +1,5 @@
 import {UserViewModel} from "../models/user-view-model";
-import {userCollection} from "../../../../db/db.mongodb";
+import {userCollection} from "../../../../db/mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {UserDocumentModel} from "../models/user-document-model";
 import {toUserViewModel} from "../features/toUserViewModel";

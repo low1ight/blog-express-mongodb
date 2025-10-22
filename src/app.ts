@@ -4,7 +4,7 @@ import cors from 'cors'
 import {blogRouter} from "./modules/blog_platform/blogs/controllers/blogs.controller";
 import {postsRouter} from "./modules/blog_platform/posts/controllers/posts.controller";
 import {SETTINGS} from "./settings";
-import {runDB} from "./db/db.mongodb";
+import {runDB} from "./db/mongodb";
 import {testingRouter} from "./modules/testing/controller/testing.controller";
 import {userRouter} from "./modules/users_module/users/controllers/users.controller";
 import {authRouter} from "./modules/users_module/auth/controllers/auth.controller";

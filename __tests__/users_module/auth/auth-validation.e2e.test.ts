@@ -3,7 +3,7 @@ import {correctCreateFirstUserData, correctFirstUserLoginData} from "./common/au
 import {correctBasicAuthData, req} from "../../common/test-helpers";
 import {createFieldsTests} from "../../common/create-field-tests";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 
 const invalidLoginOrEmailValues = [

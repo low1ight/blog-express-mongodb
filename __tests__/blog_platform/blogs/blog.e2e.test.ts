@@ -7,7 +7,7 @@ import {
 } from "./common/blog-test-data";
 import {BlogViewModel} from "../../../src/modules/blog_platform/blogs/models/blog-view-model";
 import {MongoMemoryServer} from "mongodb-memory-server";
-import {runDB} from "../../../src/db/db.mongodb";
+import {runDB} from "../../../src/db/mongodb";
 
 describe('/blogs', () => {
 
