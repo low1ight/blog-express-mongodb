@@ -10,7 +10,6 @@ export const blogService = {
     async createBlog(dto:BlogInputModel):Promise<string> {
         const insertData: BlogInsertModel = {
             ...dto,
-            createdAt: new Date().toISOString(),
             isMembership: false
         };
 

@@ -1,14 +1,8 @@
 import {BlogInputModel} from "../models/blog-input-model";
 import {BlogDocumentModel} from "../models/blog-document-model";
 import {Blog} from "../../../../db/models/blog.model";
+import {BlogInsertModel} from "../models/blog-insert-model";
 
-type BlogInsertModel = {
-    name: string
-    description: string
-    websiteUrl: string
-    createdAt: string
-    isMembership: boolean
-}
 
 export const blogsRepository = {
    async createBlog(dto:BlogInsertModel) {
