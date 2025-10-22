@@ -7,6 +7,5 @@ export type  CommentDocumentModel = {
     userLogin: string
     postId: ObjectId
     createdAt:string
-
-
+    updatedAt:string
 }
