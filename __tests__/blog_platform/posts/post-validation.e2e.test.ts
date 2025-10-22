@@ -6,6 +6,7 @@ import {createFieldsTests} from "../../common/create-field-tests";
 import {PostViewModel} from "../../../src/modules/blog_platform/posts/models/post-view-model";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {runDB} from "../../../src/db/mongodb";
+import mongoose from "mongoose";
 
 
 const invalidPostTitleArr = [
@@ -59,6 +60,7 @@ describe('"/posts" POST validation tests', () => {
 
     afterAll(async () => {
         await mongodb.stop()
+        await mongoose.disconnect()
     })
 
 
@@ -102,6 +104,7 @@ describe('"/posts" PUT validation tests', () => {
 
     afterAll(async () => {
         await mongodb.stop()
+        await mongoose.disconnect()
     })
 
 

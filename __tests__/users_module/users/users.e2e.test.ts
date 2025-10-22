@@ -7,6 +7,7 @@ import {
 } from "./common/users-test-data";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {runDB} from "../../../src/db/mongodb";
+import mongoose from "mongoose";
 
 
 describe('users tests', () => {
@@ -28,6 +29,7 @@ describe('users tests', () => {
 
     afterAll(async () => {
         await mongodb.stop()
+        await mongoose.disconnect()
     })
 
     it('should return 401 trying get user without base auth', async () => {

@@ -4,6 +4,7 @@ import {correctCreateBlogInputData} from "./common/blog-test-data";
 import {createFieldsTests} from "../../common/create-field-tests";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {runDB} from "../../../src/db/mongodb";
+import mongoose from "mongoose";
 
 
 const invalidBlogNameArr = [
@@ -44,6 +45,7 @@ describe('"/blog_platform" POST validation tests', () => {
 
     afterAll(async () => {
         await mongodb.stop()
+        await mongoose.disconnect()
     })
 
 
@@ -90,6 +92,7 @@ describe('"/blog" PUT validation tests',  () => {
 
     afterAll(async () => {
         await mongodb.stop()
+        await mongoose.disconnect()
     })
 
 

@@ -6,6 +6,7 @@ import {correctCreateFirstUserData, correctFirstUserLoginData} from "../../users
 import {correctPostInputData} from "../posts/common/post-test-data";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {runDB} from "../../../src/db/mongodb";
+import mongoose from "mongoose";
 
 const invalidContent = [
     {value: "message", case: "cant be less than 20 symbols"},
@@ -78,6 +79,7 @@ describe('POST/PUT comments validation tests', () => {
 
     afterAll(async () => {
         await mongodb.stop()
+        await mongoose.disconnect()
     })
 
 

@@ -6,6 +6,7 @@ import {correctBlogUpdateData, correctCreateBlogInputData} from "../blogs/common
 import {correctPostInputData} from "./common/post-test-data";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {runDB} from "../../../src/db/mongodb";
+import mongoose from "mongoose";
 
 
 describe('/posts', () => {
@@ -82,6 +83,7 @@ describe('/posts', () => {
 
     afterAll(async () => {
         await mongodb.stop()
+        await mongoose.disconnect()
     })
 
 
@@ -261,6 +263,3 @@ describe('/posts', () => {
 
 })
 
-it('', async () => {
-
-})

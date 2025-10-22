@@ -8,6 +8,7 @@ import {
 import {BlogViewModel} from "../../../src/modules/blog_platform/blogs/models/blog-view-model";
 import {MongoMemoryServer} from "mongodb-memory-server";
 import {runDB} from "../../../src/db/mongodb";
+import mongoose from "mongoose";
 
 describe('/blogs', () => {
 
@@ -25,6 +26,7 @@ describe('/blogs', () => {
 
     afterAll(async () => {
         await mongodb.stop()
+        await mongoose.disconnect()
     })
 
     it('should return 200 and an empty arr', async () => {
