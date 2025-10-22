@@ -1,5 +1,5 @@
 import {PostViewModel} from "../models/post-view-model";
-import {likeForPostCollection, postCollection} from "../../../../db/mongodb";
+import {likeForPostCollection} from "../../../../db/mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {PostDocumentModel} from "../models/post-document-model";
 import {toPostViewModel} from "../features/toPostViewModel";
@@ -7,6 +7,7 @@ import {BaseQueryMapper} from "../../../../utils/queryMapper/baseQueryMapper";
 import {Paginator} from "../../../../utils/paginator/paginator";
 import {LikeInfoDocumentModel} from "../models/like-info-document-model";
 import {NewestLikeDocumentModel} from "../models/newestLike-document-model";
+import {Post} from "../../../../db/models/post.model";
 
 
 export const postQueryRepository = {
@@ -32,13 +33,14 @@ export const postQueryRepository = {
 
         const filter = id ? {blogId: new ObjectId(id)} : {}
 
-        const totalCount: number = await postCollection.countDocuments(filter)
-        const posts: PostDocumentModel[] = await postCollection
+        const totalCount: number = await Post.countDocuments(filter)
+
+        const posts: PostDocumentModel[] = await Post
             .find(filter)
             .skip(skipCount)
             .sort({[sortBy]: sortDirection as SortDirection})
             .limit(pageSize)
-            .toArray();
+            .lean();
 
         const postsIds:ObjectId[] = posts.map(p => p._id)
 
@@ -83,7 +85,7 @@ export const postQueryRepository = {
     },
 
     async getPostById(id: string, userId: string | null): Promise<PostViewModel | null> {
-        const post: PostDocumentModel | null = await postCollection.findOne({_id: new ObjectId(id)})
+        const post: PostDocumentModel | null = await Post.findOne({_id: id})
 
 
         if (!post) {

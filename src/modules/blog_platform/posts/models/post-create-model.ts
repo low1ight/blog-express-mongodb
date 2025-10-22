@@ -7,6 +7,4 @@ export type PostCreateModel = {
     content: string;
     blogId: ObjectId;
     blogName:string
-    createdAt: string
-
 }

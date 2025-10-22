@@ -27,7 +27,6 @@ export const postService = {
             ...postInputData,
             blogId: new ObjectId(postInputData.blogId),
             blogName: blog.name,
-            createdAt: new Date().toISOString()
         }
 
         const createdPostId:string = await postRepository.createPost(postInsertDto)
