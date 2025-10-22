@@ -31,7 +31,7 @@ export const SETTINGS = {
     DB: {
         PORT:27017,
         NAME: "Blog",
-        URL: 'mongodb://localhost:27017',
+        URL: 'mongodb://localhost:27017/',
     }
 
 
