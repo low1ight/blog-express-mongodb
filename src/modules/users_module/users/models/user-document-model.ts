@@ -6,13 +6,14 @@ export type UserDocumentModel = {
     password:string,
     email:string,
     createdAt:string
+    updatedAt:string
     confirmationData:{
         isConfirmed: boolean,
         confirmationCode:string
         confirmationCodeExpirationDate:string
     }
     passwordRecovery: {
-        code:string
-        expirationDate:string
+        code:string | null
+        expirationDate:string | null
     }
 }
