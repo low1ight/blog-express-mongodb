@@ -9,22 +9,18 @@ import {authRouter} from "./modules/users_module/auth/controllers/auth.controlle
 import {commentsRouter} from "./modules/blog_platform/comments/controllers/comments.controller";
 import cookieParser from "cookie-parser";
 import {deviceRouter} from "./modules/users_module/devices/controllers/devices.controller";
-
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger/swagger.json'
+import {swaggerOptions} from "./swagger/options";
 
 
 export const app = express()
 
+
 app.use(express.json())
 app.use(cors())
 app.use(cookieParser())
-
-//console.log(SETTINGS)
-
-
-app.get('/', (req:any, res:any) => {
-    res.send(`Hello world`)
-})
-
+app.use(express.static('public'));
 
 
 app.use('/blogs', blogRouter)
@@ -34,3 +30,6 @@ app.use('/comments', commentsRouter)
 app.use('/testing', testingRouter)
 app.use('/auth', authRouter)
 app.use('/security/devices', deviceRouter)
+
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
