@@ -9,14 +9,12 @@ export const devicesService = {
 
         const deviceDto = {
             ip,
-            userId:userId,
+            userId,
             sessionCode,
             title,
-            lastSeenDate: new Date().toISOString(),
         }
 
         return await devicesRepository.create(deviceDto)
-
 
     },
 
@@ -44,8 +42,7 @@ export const devicesService = {
 
 
     async updateDeviceSessionCode(deviceId:string,sessionCode:string) {
-        const newDate = new Date().toISOString();
-        await devicesRepository.updateDeviceSessionCodeById(deviceId,sessionCode,newDate)
+        await devicesRepository.updateDeviceSessionCodeById(deviceId,sessionCode)
 
     },
 

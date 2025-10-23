@@ -1,26 +1,25 @@
 import {DeviceInsertModel} from "../models/device-insert-model";
-import {devicesCollection} from "../../../../db/mongodb";
 import {DeviceDocumentModel} from "../models/device-document-model";
 import {ObjectId} from "mongodb";
+import {Device} from "../../../../db/models/device.model";
 
 
 export const devicesRepository = {
 
     async create(dto:DeviceInsertModel): Promise<string> {
 
-        const result = await devicesCollection.insertOne(
-            {...dto,userId:new ObjectId(dto.userId)} as DeviceDocumentModel)
+        const result = await Device.create(
+            {...dto,userId:new ObjectId(dto.userId)})
 
-        return result.insertedId.toString()
+        return result._id.toString()
 
     },
 
-    async updateDeviceSessionCodeById(deviceId:string,sessionCode:string,newDate:string)  {
-        await devicesCollection.updateOne(
-            {_id:new ObjectId(deviceId)},
+    async updateDeviceSessionCodeById(deviceId:string,sessionCode:string)  {
+        await Device.updateOne(
+            {_id:deviceId},
             {$set: {
                     sessionCode:sessionCode,
-                    lastSeenDate:newDate
                 }
 
             })
@@ -29,17 +28,17 @@ export const devicesRepository = {
     },
 
     async getDeviceById(deviceId:string):Promise<DeviceDocumentModel | null> {
-        return await devicesCollection.findOne({_id:new ObjectId(deviceId)})
+        return Device.findOne({_id:deviceId})
     },
 
     async deleteDeviceById(deviceId:string) {
-        await devicesCollection.deleteOne({_id:new ObjectId(deviceId)})
+        await Device.deleteOne({_id:deviceId})
     },
 
     async deleteAllOtherUserDevices(deviceId:string,userId:string) {
-        await devicesCollection.deleteMany({
-            _id:{$ne:new ObjectId(deviceId)},
-            userId: new ObjectId(userId)})
+        await Device.deleteMany({
+            _id:{$ne:deviceId},
+            userId: userId})
     }
 
 
