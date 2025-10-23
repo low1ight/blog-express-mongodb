@@ -1,4 +1,3 @@
-import {likeForCommentCollection} from "../../../../db/mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {toCommentViewModel} from "../features/toCommentViewModel";
 import {BaseQueryMapper} from "../../../../utils/queryMapper/baseQueryMapper";
@@ -7,6 +6,7 @@ import {CommentDocumentModel} from "../models/comment-document-model";
 import {CommentViewModel} from "../models/comment-view-model";
 import {LikesInfoModel} from "../models/likes-info-model";
 import {Comment} from "../../../../db/models/comment.model";
+import {LikeForComment} from "../../../../db/models/likeForComment.model";
 
 export const commentQueryRepository = {
 
@@ -37,17 +37,16 @@ export const commentQueryRepository = {
 
         const commentsIds = Array.from(comments,(i) => i._id );
 
-        const likesStatuses = await likeForCommentCollection.aggregate([
-            {$match: {commentId: {$in:commentsIds}}},
-            {
-                $group: {
-                    _id: "$commentId",
-                    likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
-                    dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
-                    myStatus: {$max: {$cond: [{$eq: ['$userId', userId && new ObjectId(userId)]}, '$likeStatus', null]}}
-                }
-            }
-        ]).toArray() as LikesInfoModel[]
+
+        const likesStatuses = await LikeForComment.aggregate()
+            .match({commentId: {$in:commentsIds}})
+            .group({
+                _id: "$commentId",
+                likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
+                dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
+                myStatus: {$max: {$cond: [{$eq: ['$userId', userId && new ObjectId(userId)]}, '$likeStatus', null]}}
+            }).exec() as LikesInfoModel[]
+
 
 
         const commentsViewModels: CommentViewModel[] = comments.map(comment => {
@@ -68,18 +67,16 @@ export const commentQueryRepository = {
 
         if (!comment) return null;
 
-        const likeStatus = await likeForCommentCollection.aggregate([
-            {$match: {commentId: comment._id}},
-            {
-                $group: {
-                    _id: "$commentId",
-                    likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
-                    dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
-                    myStatus: {$max: {$cond: [{$eq: ['$userId',userId && new ObjectId(userId)]}, '$likeStatus', null]}}
-                }
-            }
-        ]).toArray() as LikesInfoModel[]
 
+        const likeStatus = await LikeForComment
+            .aggregate()
+            .match({commentId: comment._id})
+            .group({
+                _id: "$commentId",
+                likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
+                dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
+                myStatus: {$max: {$cond: [{$eq: ['$userId',userId && new ObjectId(userId)]}, '$likeStatus', null]}}
+            }).exec() as LikesInfoModel[]
 
 
         return toCommentViewModel(comment,likeStatus[0])
