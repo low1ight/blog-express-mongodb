@@ -7,8 +7,8 @@ export type LikeForPostDocumentModel = {
     userLogin: string,
     postId: ObjectId,
     likeStatus: LikeStatus
-    addedAt: string,
-
+    createdAt:string,
+    updatedAt:string,
 }
 
 
