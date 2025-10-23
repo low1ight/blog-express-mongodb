@@ -5,7 +5,7 @@ export const toDeviceViewModel = ({
                                       _id,
                                       title,
                                       ip,
-                                      lastSeenDate
+                                      updatedAt
 
 
                                   }: DeviceDocumentModel): DeviceViewModel => {
@@ -15,6 +15,6 @@ export const toDeviceViewModel = ({
         deviceId: _id.toString(),
         title,
         ip,
-        lastSeenDate
+        lastSeenDate:updatedAt
     }
 }
