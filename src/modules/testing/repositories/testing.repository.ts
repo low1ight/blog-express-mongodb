@@ -1,12 +1,11 @@
-import {
 
-    devicesCollection, likeForPostCollection
-} from "../../../db/mongodb";
 import {Blog} from "../../../db/models/blog.model";
 import {Post} from "../../../db/models/post.model";
 import {Comment} from "../../../db/models/comment.model";
 import {User} from "../../../db/models/user.model";
 import {LikeForComment} from "../../../db/models/likeForComment.model";
+import {Device} from "../../../db/models/device.model";
+import {LikeForPost} from "../../../db/models/likeForPost.model";
 
 
 export const testingRepository = {
@@ -17,9 +16,9 @@ export const testingRepository = {
         await Post.deleteMany();
         await User.deleteMany();
         await Comment.deleteMany();
-        await devicesCollection.deleteMany({});
+        await Device.deleteMany();
         await LikeForComment.deleteMany();
-        await likeForPostCollection.deleteMany({});
+        await LikeForPost.deleteMany();
 
     },
 

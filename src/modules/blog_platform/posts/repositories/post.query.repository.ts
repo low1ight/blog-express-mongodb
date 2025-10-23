@@ -1,5 +1,4 @@
 import {PostViewModel} from "../models/post-view-model";
-import {likeForPostCollection} from "../../../../db/mongodb";
 import {ObjectId, SortDirection} from "mongodb";
 import {PostDocumentModel} from "../models/post-document-model";
 import {toPostViewModel} from "../features/toPostViewModel";
@@ -8,6 +7,7 @@ import {Paginator} from "../../../../utils/paginator/paginator";
 import {LikeInfoDocumentModel} from "../models/like-info-document-model";
 import {NewestLikeDocumentModel} from "../models/newestLike-document-model";
 import {Post} from "../../../../db/models/post.model";
+import {LikeForPost} from "../../../../db/models/likeForPost.model";
 
 
 export const postQueryRepository = {
@@ -45,34 +45,39 @@ export const postQueryRepository = {
         const postsIds:ObjectId[] = posts.map(p => p._id)
 
 
-        const likeStatuses = await likeForPostCollection.aggregate([
-            {$match: {postId:{$in:postsIds}}},
-            {
-                $group: {
-                    _id: "$postId",
-                    likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
-                    dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
-                    myStatus: {$max: {$cond: [{$eq: ['$userId', userId && new ObjectId(userId)]}, '$likeStatus', null]}},
-                }
-            }
-        ]).toArray() as LikeInfoDocumentModel[]
+        const likeStatuses = await LikeForPost
+            .aggregate()
+            .match({postId:{$in:postsIds}})
+            .group({
+                _id: "$postId",
+                likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
+                dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
+                myStatus: {$max: {$cond: [{$eq: ['$userId', userId && new ObjectId(userId)]}, '$likeStatus', null]}},
+            })
+            .exec() as LikeInfoDocumentModel[]
+
+        // await LikeForPost
+        //     .aggregate()
+        //     .match()
+        //     .group()
+        //     .exec()
 
 
-        const lastsLikes = await likeForPostCollection.aggregate([
-            {$match: {postId: {$in:postsIds}, likeStatus: "Like"},},
-            {
-                $group: {
-                    _id: "$postId",
-                    newestLikes: {
-                        $topN: {
-                            sortBy: {addedAt: -1},
-                            output: {login: "$userLogin", userId: "$userId", addedAt: "$addedAt"},
-                            n: 5,
-                        }
+        const lastsLikes = await LikeForPost
+            .aggregate()
+            .match({postId: {$in:postsIds}, likeStatus: "Like"})
+            .group({
+                _id: "$postId",
+                newestLikes: {
+                    $topN: {
+                        sortBy: {addedAt: -1},
+                        output: {login: "$userLogin", userId: "$userId", addedAt: "$addedAt"},
+                        n: 5,
                     }
                 }
-            }
-        ]).toArray() as NewestLikeDocumentModel[]
+            })
+            .exec() as NewestLikeDocumentModel[]
+
 
 
         const postViewModel: PostViewModel[] = posts.map(post =>
@@ -93,34 +98,33 @@ export const postQueryRepository = {
         }
 
 
-        const likeStatus = await likeForPostCollection.aggregate([
-            {$match: {postId: post._id}},
-            {
-                $group: {
-                    _id: "$postId",
-                    likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
-                    dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
-                    myStatus: {$max: {$cond: [{$eq: ['$userId', userId && new ObjectId(userId)]}, '$likeStatus', null]}},
-                }
-            }
-        ]).toArray() as LikeInfoDocumentModel[]
+        const likeStatus = await LikeForPost
+            .aggregate()
+            .match({postId: post._id})
+            .group({
+                _id: "$postId",
+                likesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Like"]}, 1, 0]}},
+                dislikesCount: {$sum: {$cond: [{$eq: ['$likeStatus', "Dislike"]}, 1, 0]}},
+                myStatus: {$max: {$cond: [{$eq: ['$userId', userId && new ObjectId(userId)]}, '$likeStatus', null]}},
+            })
+            .exec() as LikeInfoDocumentModel[]
 
 
-        const lastLikes = await likeForPostCollection.aggregate([
-            {$match: {postId: post._id, likeStatus: "Like"},},
-            {
-                $group: {
-                    _id: "$postId",
-                    newestLikes: {
-                        $topN: {
-                            sortBy: {addedAt: -1},
-                            output: {login: "$userLogin", userId: "$userId", addedAt: "$addedAt"},
-                            n: 5,
-                        }
+        const lastLikes = await LikeForPost
+            .aggregate()
+            .match({postId: post._id, likeStatus: "Like"})
+            .group({
+                _id: "$postId",
+                newestLikes: {
+                    $topN: {
+                        sortBy: {addedAt: -1},
+                        output: {login: "$userLogin", userId: "$userId", addedAt: "$addedAt"},
+                        n: 5,
                     }
                 }
-            }
-        ]).toArray() as NewestLikeDocumentModel[]
+            })
+            .exec() as NewestLikeDocumentModel[]
+
 
         return toPostViewModel(post,lastLikes[0]?.newestLikes || [],likeStatus[0])
 

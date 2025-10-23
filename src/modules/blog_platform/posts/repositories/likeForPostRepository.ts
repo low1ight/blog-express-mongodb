@@ -1,7 +1,7 @@
 import {LikeStatus} from "../../common/Like.type";
 import {ObjectId} from "mongodb";
-import {likeForPostCollection} from "../../../../db/mongodb";
 import {LikeForPostDocumentModel} from "../models/likeForPost-document-model";
+import {LikeForPost} from "../../../../db/models/likeForPost.model";
 
 export const likeForPostRepository = {
     async setLikeStatus(postId: string, userId: string, likeStatus: LikeStatus, userLogin:string) {
@@ -10,27 +10,26 @@ export const likeForPostRepository = {
             userId: new ObjectId(userId),
             postId: new ObjectId(postId),
             userLogin:userLogin,
-            addedAt: new Date().toISOString(),
             likeStatus
         }
 
-        await likeForPostCollection.insertOne(dto as LikeForPostDocumentModel)
+        await LikeForPost.create(dto as LikeForPostDocumentModel)
     },
 
 
     async getUserLikeStatus(postId: string, userId: string) {
-        return await likeForPostCollection.findOne({
-            userId: new ObjectId(userId),
-            postId: new ObjectId(postId)
-        })
+        return LikeForPost.findOne({
+            userId: userId,
+            postId: postId
+        }).lean()
     },
 
     async updateLikeStatus(postId: string, userId: string, likeStatus: LikeStatus) {
-        await likeForPostCollection.updateOne({
-                userId: new ObjectId(userId),
-                postId: new ObjectId(postId)
+        await LikeForPost.updateOne({
+                userId: userId,
+                postId: postId
             },
-            {$set: {likeStatus: likeStatus,addedAt: new Date().toISOString(),}})
+            {$set: {likeStatus: likeStatus}})
 
     }
 }
