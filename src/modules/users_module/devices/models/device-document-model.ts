@@ -6,5 +6,6 @@ export type DeviceDocumentModel = {
     sessionCode:string
     title:string
     ip:string
-    lastSeenDate: string
+    createdAt: string
+    updatedAt: string
 }
