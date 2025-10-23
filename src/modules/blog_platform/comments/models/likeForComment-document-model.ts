@@ -5,7 +5,9 @@ export type LikeForCommentDocumentModel = {
     _id: ObjectId,
     userId: ObjectId,
     commentId: ObjectId,
-    likeStatus: LikeStatus
+    likeStatus: LikeStatus,
+    createdAt: string,
+    updatedAt: string,
 }
 
 
