@@ -144,13 +144,19 @@ export const authService = {
             return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, "Incorrect recovery code")
         }
 
+        const userId = user._id.toString()
+
         if(expirationDateHelper.isDateExpired(user.passwordRecovery.expirationDate as string)) {
             return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, "Recovery code has already expired")
         }
 
         const hashedPassword = await passwordHelper.hashPassword(newPassword)
 
-        await userRepository.setNewPasswordById(user._id.toString(), hashedPassword)
+        await userRepository.setNewPasswordById(userId, hashedPassword)
+
+        await userRepository.expirePasswordRecoveryCode(userId)
+
+
 
         return new CustomResponse(true, null ,"successful")
     },

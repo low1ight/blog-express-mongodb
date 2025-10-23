@@ -74,6 +74,18 @@ export const userRepository = {
     },
 
 
+    async expirePasswordRecoveryCode(userId: string) {
+        return User.updateOne(
+            {_id: userId},
+            {
+                $set: {
+                    'passwordRecovery.code': null,
+                    'passwordRecovery.expirationDate': null
+                }
+            });
+    },
+
+
     async getUserById(id: string): Promise<UserDocumentModel | null> {
         return  User.findOne({_id: id});
     },
