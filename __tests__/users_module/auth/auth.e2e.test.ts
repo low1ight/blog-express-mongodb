@@ -325,6 +325,17 @@ describe('auth tests', () => {
     })
 
 
+    it("should return 400 trying using same password refresh token again after successful password change", async () => {
+
+        const recoveryCode = await testingRepository.getUserPasswordRecoveryCodeByEmail(correctCreateFirstUserData.email)
+
+        const res = await req.post('/auth/new-password').send({newPassword:changedPassword,recoveryCode:recoveryCode})
+
+        expect(res.status).toEqual(400)
+
+    })
+
+
     it("should return 401 trying login with old password", async () => {
 
         const res = await req.post('/auth/login')
