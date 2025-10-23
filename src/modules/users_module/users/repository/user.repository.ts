@@ -1,64 +1,57 @@
-import {userCollection} from "../../../../db/mongodb";
 import {UserDocumentModel} from "../models/user-document-model";
 import {UserInsertModel} from "../models/user-insert-model";
-import {ObjectId} from "mongodb";
+import {User} from "../../../../db/models/user.model";
 
 export const userRepository = {
 
     async getUserByEmail(email: string): Promise<UserDocumentModel | null> {
-        return await userCollection.findOne({email: email});
+        return User.findOne({email: email}).lean();
     },
 
     async isUserExistByLogin(login: string): Promise<boolean> {
-        const result = await userCollection.findOne({login: login});
+        const result = await User.findOne({login: login});
 
         return !!result
     },
 
-    async createUser(userDto: UserInsertModel) {
-        const result = await userCollection.insertOne(userDto as UserDocumentModel);
+    async createUser(createUserDto: UserInsertModel) {
+        const result: UserDocumentModel = await User.create(createUserDto);
 
-
-        return result.insertedId.toString()
+        return result._id.toString()
     },
 
     async isUserExistById(id: string): Promise<boolean> {
-        const result = await userCollection.findOne({_id: new ObjectId(id)});
+        const result = await User.findOne({_id: id});
 
         return !!result
     },
 
     async deleteUser(id: string): Promise<void> {
-        await userCollection.deleteOne({_id: new ObjectId(id)});
+        await User.deleteOne({_id: id});
     },
 
     async getUserByEmailConfirmationCode(code: string): Promise<UserDocumentModel | null> {
-
-        return await userCollection.findOne({'confirmationData.confirmationCode': code});
-
+        return User.findOne({'confirmationData.confirmationCode': code});
     },
 
-    async getUserByPasswordConfirmationCode(code: string): Promise<UserDocumentModel | null> {
-
-        return  await userCollection.findOne({'passwordRecovery.code': code});
-
-
-
-
+    async getUserByPasswordRecoveryCode(code: string): Promise<UserDocumentModel | null> {
+        return User.findOne({'passwordRecovery.code': code});
     },
 
     async setNewPasswordById(userId: string, newPassword: string) {
-        return await userCollection.updateOne(
-            {_id: new ObjectId(userId)},
+        return User.updateOne(
+            {_id: userId},
             {$set: {password: newPassword}})
     },
 
     async confirmEmailByConfirmationCode(code: string) {
-        return await userCollection.updateOne({'confirmationData.confirmationCode': code}, {$set: {'confirmationData.isConfirmed': true}});
+        return User.updateOne(
+            {'confirmationData.confirmationCode': code},
+            {$set: {'confirmationData.isConfirmed': true}});
     },
 
     async setNewConfirmationCodeByEmail(email: string, code: string, date: string) {
-        return await userCollection.updateOne(
+        return User.updateOne(
             {email: email},
             {
                 $set: {
@@ -70,7 +63,7 @@ export const userRepository = {
 
 
     async setNewPasswordRecoveryCode(email: string, code: string, date: string) {
-        return await userCollection.updateOne(
+        return User.updateOne(
             {email: email},
             {
                 $set: {
@@ -82,11 +75,11 @@ export const userRepository = {
 
 
     async getUserById(id: string): Promise<UserDocumentModel | null> {
-        return await userCollection.findOne({_id: new ObjectId(id)});
+        return  User.findOne({_id: id});
     },
 
     async getUserByEmailOrLogin(loginOrEmail: string): Promise<UserDocumentModel | null> {
-        return await userCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
+        return User.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]})
 
     }
 

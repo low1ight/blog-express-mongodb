@@ -40,7 +40,6 @@ export const authService = {
             login,
             email,
             password: hashedPassword,
-            createdAt: new Date().toISOString(),
             confirmationData: {
                 isConfirmed: false,
                 confirmationCode: confirmationCode,
@@ -139,13 +138,13 @@ export const authService = {
 
     async setNewPasswordByRecoveryCode({newPassword,recoveryCode}:NewPasswordInputModel):Promise<CustomResponse<string>> {
 
-        const user = await userRepository.getUserByPasswordConfirmationCode(recoveryCode)
+        const user = await userRepository.getUserByPasswordRecoveryCode(recoveryCode)
 
         if(!user) {
             return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, "Incorrect recovery code")
         }
 
-        if(expirationDateHelper.isDateExpired(user.passwordRecovery.expirationDate)) {
+        if(expirationDateHelper.isDateExpired(user.passwordRecovery.expirationDate as string)) {
             return new CustomResponse(false,CustomResponseEnum.INVALID_INPUT_DATA, "Recovery code has already expired")
         }
 
