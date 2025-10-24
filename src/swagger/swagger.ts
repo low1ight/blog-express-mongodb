@@ -1,10 +1,20 @@
-const swaggerAutogen = require("swagger-autogen")({ openapi: "3.0.0" });
+import swaggerAutogen from 'swagger-autogen';
+
 
 const doc = {
     info: {
         title: 'Blog API',
         description: 'Auto-generated Swagger',
     },
+    tags: [
+        { name: 'Auth', description: 'Auth related endpoints' },
+        { name: 'Blogs', description: 'Blog related endpoints' },
+        { name: 'Posts', description: 'Posts related endpoints' },
+        { name: 'Comments', description: 'Comments related endpoints' },
+        { name: 'Users', description: 'Users related endpoints' },
+        { name: 'Devices', description: 'Devices related endpoints' },
+        { name: 'Testing', description: 'Testing related endpoints' },
+    ],
     host: 'localhost:3000',
     schemes: ['http'],
     basePath: '/',

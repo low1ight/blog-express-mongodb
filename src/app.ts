@@ -23,13 +23,33 @@ app.use(cookieParser())
 app.use(express.static('public'));
 
 
-app.use('/blogs', blogRouter)
-app.use('/posts', postsRouter)
-app.use('/users', userRouter)
-app.use('/comments', commentsRouter)
-app.use('/testing', testingRouter)
-app.use('/auth', authRouter)
-app.use('/security/devices', deviceRouter)
+app.use('/blogs',
+    // #swagger.tags = ['Blogs']
+    blogRouter)
+
+app.use('/posts',
+    // #swagger.tags = ['Posts']
+    postsRouter)
+
+app.use('/users',
+    // #swagger.tags = ['Users']
+    userRouter)
+
+app.use('/comments',
+    // #swagger.tags = ['Comments']
+    commentsRouter)
+
+app.use('/testing',
+    // #swagger.tags = ['Testing']
+    testingRouter)
+
+app.use('/auth',
+    // #swagger.tags = ['Auth']
+    authRouter)
+
+app.use('/security/devices',
+    // #swagger.tags = ['Devices']
+    deviceRouter)
 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument, swaggerOptions));
